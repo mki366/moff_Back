@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="bit.com.a.dao.WishCartDao">
+
+<select id="getWish" parameterType="java.lang.String" 
+					resultType="bit.com.a.dto.WishCartDto">
+	SELECT P.PRODNUM, P.PRODNAME, P.COLOR, P.PRODOPTION, P.PRICE, P.FILENAME, WC.CNUM, WC.QUANTITY
+	FROM PRODUCT P, CART WC
+	WHERE P.PRODNUM=WC.PRODNUM
+	AND WC.ID=#{id} AND WC.CARTORWISH=0		
+</select>
+
+
+<select id="getCart" parameterType="java.lang.String" 
+					resultType="bit.com.a.dto.WishCartDto">
+	SELECT P.PRODNUM, P.PRODNAME, P.COLOR, P.PRODOPTION, P.PRICE, P.FILENAME, WC.CNUM, WC.QUANTITY, P.WEIGHT
+	FROM PRODUCT P, CART WC
+	WHERE P.PRODNUM=WC.PRODNUM
+	AND WC.ID=#{id} AND WC.CARTORWISH=1				
+</select>
+
+
+<update id="wishToCart" parameterType="java.lang.Integer">
+	UPDATE CART
+	SET CARTORWISH=1
+	WHERE CNUM=#{cNum}
+</update>
+
+
+<delete id="delWishCart" parameterType="java.lang.Integer">
+	DELETE FROM CART
+	WHERE CNUM=#{cNum}
+</delete>
+
+</mapper>

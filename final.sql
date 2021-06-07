@@ -353,13 +353,14 @@ CASCADE CONSTRAINTS;
 DROP SEQUENCE RNUMSEQ;
 
 CREATE TABLE REVIEW(
-    RNUM   	NUMBER   		NOT NULL,    --리뷰번호
-    ID    	VARCHAR2(50)   	NOT NULL,    --회원아이디 
-    PRODNUM NUMBER   		NOT NULL,    --상품번호 
-    STAR   	NUMBER  		NOT NULL ,   --별점 
-    TITLE 	VARCHAR2(400) 	NOT NULL,    --제목
-    CONTENT VARCHAR2(1000) 	NOT NULL,  	 --내용
-    RDATE	DATE			NOT NULL
+    RNUM      NUMBER         NOT NULL,    --리뷰번호
+    ID       VARCHAR2(50)      NOT NULL,    --회원아이디 
+    PRODNUM NUMBER         NOT NULL,    --상품번호 
+    STAR      NUMBER        NOT NULL ,   --별점 
+    CONTENT VARCHAR2(1000)    NOT NULL,      --내용
+    RDATE   DATE         NOT NULL,    --작성날짜
+    IMAGE    VARCHAR2(100)   NULL,
+    DEL      NUMBER         NULL
 );
 --회원아이디 외래키생성
 ALTER TABLE REVIEW
@@ -372,12 +373,10 @@ REFERENCES PRODUCT(PRODNUM);
 
 
 
---리뷰시퀀스 생성
+—리뷰시퀀스 생성
 CREATE SEQUENCE RNUMSEQ
 START WITH 1
 INCREMENT BY 1;
-
-
 
 --------------------------------------------------------
 — 컬러테이블 드랍

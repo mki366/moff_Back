@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="bit.com.a.dao.OrderDao">
+
+<!-- 주문내역리스트 -->
+<select id="getPurchases" parameterType="java.lang.String" 
+					resultType="bit.com.a.dto.PurchasesDto">
+	SELECT DISTINCT B.OBNUM, B.OBDATE, C.STATUS	
+	FROM ORDER_BUY B, ORDER_DETAIL D, DELIVERY_CHECK C  <!-- D 나중에 쓸 일 있을수도.. -->
+	WHERE B.OBNUM=D.OBNUM AND C.OBNUM=B.OBNUM		
+		AND B.ID=#{id}
+	ORDER BY B.OBDATE DESC 
+</select>
+
+<!-- 주문 counter -->
+<select id="purchasesCNT" parameterType="java.lang.String" 
+					resultType="bit.com.a.dto.PurchasesDto">
+	SELECT STATUS, COUNT(*) CNT
+	FROM DELIVERY_CHECK
+	WHERE MEMID=#{id}
+	GROUP BY STATUS
+</select>
+
+<!-- 주문 counter별 list -->
+<select id="getStatusList" parameterType="bit.com.a.dto.PurchasesDto" 
+					resultType="bit.com.a.dto.PurchasesDto">
+SELECT B.OBNUM, B.OBDATE, C.STATUS	
+	FROM ORDER_BUY B, ORDER_DETAIL D, DELIVERY_CHECK C
+	WHERE B.OBNUM=D.OBNUM
+		AND B.ID=#{id} AND C.OBNUM=B.OBNUM AND C.STATUS=#{status}
+	GROUP by B.OBNUM, B.OBDATE, C.STATUS	
+	ORDER BY B.OBDATE DESC
+</select>
+
+<!-- 주문 결제정보 -->
+<select id="getCheckout" parameterType="java.lang.Integer" 
+					resultType="bit.com.a.dto.PurchasesDto">
+	SELECT B.OBNUM, B.OBDATE, B.OBWAY, B.OBCARDN, B.TOTALPRICE, C.STATUS	
+	FROM ORDER_BUY B, DELIVERY_CHECK C
+	WHERE C.OBNUM=B.OBNUM
+		AND B.OBNUM=#{obNum}
+</select>
+
+
+<!-- 주문내역상세 -->
+<select id="purchasesDetail" parameterType="java.lang.Integer" 
+					resultType="bit.com.a.dto.PurchasesDto">
+	SELECT D.PRODNUM, D.PRODNAME, D.QUANTITY, D.PRICE, D.COLOR, D.PRODOPTION, D.FILENAME, C.STATUS	
+	FROM  ORDER_DETAIL D, DELIVERY_CHECK C
+	WHERE D.OBNUM=C.OBNUM 
+		AND D.OBNUM=#{obNum}
+</select>
+
+
+<!-- 배송조회 -->
+<select id="trackDelivery" parameterType="java.lang.Integer" 
+					resultType="bit.com.a.dto.PurchasesDto">
+	SELECT  B.OBNAME, B.OBPHONE, B.OBADDRESS, B.OBMES, C.STATUS, C.NAME, C.PHONE
+	FROM ORDER_BUY B JOIN DELIVERY_CHECK C ON (B.OBNUM=C.OBNUM)
+	WHERE B.OBNUM=#{obNum}
+</select>
+
+
+
+</mapper>
