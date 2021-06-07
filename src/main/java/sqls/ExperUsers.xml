@@ -167,13 +167,10 @@
 			  </if>
 				
 		  		</if>
-		    <if test="part == 1">
+		 <if test="part != null and part !=''">
 			  		AND PART=#{part}
 			  </if>
-			  <if test="part == 2">
-			  		AND PART=#{part}
-			  </if>	
-			  <!-- 현재위치검색 -->
+			  <!-- 현재와 가까운 업체 -->
 			  <if test="locationI != null and locationI != '' 
 			  			and location != null and location != '' ">
 			  <if test="locationI == 'current'">
@@ -187,15 +184,16 @@
   				
   				WHERE RNUM BETWEEN ${start} AND ${end} 
   				<!-- 정렬필터 -->
-  				
+  				<!-- 필터 선택이 없을시 -->
   				<if test="filter == null and filter == ''">
   				ORDER BY ENUM DESC
   				</if>
-  				
+  				<!-- 최근 계약순 -->
   				<if test="filter != null and filter != ''">
   				<if test="filter == 'recent' ">
   				ORDER BY RECENTCON DESC
   				</if>
+  				<!-- 업체 이름순-->
   				<if test="filter == 'korasc' ">
   				ORDER BY REGISNAME ASC
   				</if>
@@ -220,12 +218,9 @@
 			  </if>
 				
 		  		</if>
-		    <if test="part == 1">
+		    <if test="part != null and part !=''">
 			  		AND PART=#{part}
 			  </if>
-			  <if test="part == 2">
-			  		AND PART=#{part}
-			  </if>	
 			  
 			   <!-- 현재위치검색 -->
 			  <if test="locationI != null and locationI != '' 

@@ -104,11 +104,36 @@
 		    <artifactId>json-simple</artifactId>
 		    <version>1.1.1</version>
 		</dependency>
-		
-		
+		<!-- 웹소캣 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
 
-	      	
-	      	
+		<!-- 로그 -->	      	
+	      <dependency>
+        	<groupId>org.springframework.boot</groupId>
+        	<artifactId>spring-boot-starter-log4j2</artifactId>
+    	</dependency>
+	      	<!-- getter setter -->
+	      	<dependency>
+			
+				<groupId>org.projectlombok</groupId>
+			
+				<artifactId>lombok</artifactId>
+			
+				<version>1.16.20</version>
+			
+			</dependency>
+			
+			<!--json  -->
+			<dependency>
+			  <groupId>com.googlecode.json-simple</groupId>
+			  <artifactId>json-simple</artifactId>
+			  <version>1.1.1</version>
+			</dependency>
+
+
 	</dependencies>
 
 	<build>
@@ -119,5 +144,7 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	
 
 </project>

@@ -20,7 +20,7 @@ CREATE TABLE ALL_MEMBER
     BDATE        VARCHAR2(30)   NOT NULL,     --생년월일(배달원일시 만 19세 미만X)
     JDATE        DATE            NULL,        --회원가입일
     MEMDEL       NUMBER          NULL,        --회원탈퇴유무
-    MEMPOINT     NUMBER          NULL,        --포인트 칼럼생성
+    MEMPOINT     NUMBER          DEFAULT 0 NULL,        --포인트 칼럼생성
     MEMBERTYPE   NUMBER          NULL,        -- 0 번은 회원, 1번은 배달원, 2번은 관리자
     DELIVERYADMI     NUMBER          NULL,   --배달원일시승인여부 칼럼생성
     LICENSE      VARCHAR2(400)        NULL,        --운전면허증사진
@@ -69,7 +69,7 @@ CREATE TABLE PRODUCT
     RDATE         DATE            NULL,         --상품등록일
     DELIVERYCOST      NUMBER          NULL,         --배송비
    	FILENAME	VARCHAR(50)		NOT NULL, --대표사진
-   	READCOUNT 		NUMBER  		NOT NULL,	 —조회수
+   	READCOUNT 		NUMBER  		NOT NULL,	 --조회수
 
     CONSTRAINT PRODUCT_PK PRIMARY KEY (PRODNUM)
 );
@@ -243,7 +243,11 @@ CREATE TABLE ORDER_DETAIL
     PRODOPTION      VARCHAR2(50)    NULL,
     FILENAME      VARCHAR2(50)   NOT NULL,
 
-    WEIGHT       NUMBER            NULL   --상품무게
+    WEIGHT       NUMBER            NULL,   --상품무게
+    OBTAKEBACK   NUMBER   NULL,          --반품여부 반품 안할시 0-> 1
+    OBEXCHANGE   NUMBER   NULL,
+      REASON      VARCHAR2(50)  NULL      --사유
+
 );
 
 INSERT INTO ORDER_DETAIL(ODNUM, OBNUM, PRODNUM, PRODNAME, QUANTITY , PRICE,COLOR, PRODOPTION, FILENAME, WEIGHT)
@@ -280,89 +284,6 @@ INCREMENT BY 1;
 
 
 
-----------------------------------------------------
---의자 주문제작테이블
-
---의자 주문제작테이블 드랍
-
-DROP TABLE CHAIR_ORDER
-CASCADE CONSTRAINTS;
---의자 주문제작테이블 시퀀스 드랍
-DROP SEQUENCE CHAIR_NUM_SEQ;
-
-CREATE TABLE CHAIR_ORDER
-(
-    CHAIRNUM   NUMBER   NOT NULL,    --의자주문번호
-    OBNUM    NUMBER   NOT NULL,    --주문번호F
-    TOP       VARCHAR2(400)     NULL,     --등받이
-    BOTTOM       VARCHAR2(400)     NULL,    --의자다리
-    
-    
-    CONSTRAINT CHAIR_FK  FOREIGN KEY (OBNUM)
-    REFERENCES ORDER_BUY(OBNUM)
-    
-);
---의자 주문제작시퀀스 생성
-CREATE SEQUENCE CHAIR_NUM_SEQ
-START WITH 1
-INCREMENT BY 1;
-
-
-----------------------------------------------------
---침대 주문제작테이블
-
---침대 주문제작테이블 드랍
-
-DROP TABLE BED_ORDER
-CASCADE CONSTRAINTS;
---침대 주문제작테이블 시퀀스 드랍
-DROP SEQUENCE BEDNUM_SEQ;
-
-CREATE TABLE BED_ORDER
-(
-    BEDNUM   NUMBER   NOT NULL,    --침대주문번호
-    OBNUM    NUMBER   NOT NULL,    --주문번호F
-    FRAME       VARCHAR2(400)     NULL,     --침대프레임
-    MATT       VARCHAR2(400)     NULL,     --침대매트리스
-    BOX       VARCHAR2(400)     NULL,    --침대수납함
-    SHEET     VARCHAR2(400)     NULL,    --침대시트
-    
-    CONSTRAINT BED_FK  FOREIGN KEY (OBNUM)
-    REFERENCES ORDER_BUY(OBNUM)
-    
-);
---침대 주문제작시퀀스 생성
-CREATE SEQUENCE BEDNUM_SEQ
-START WITH 1
-INCREMENT BY 1;
-
-----------------------------------------------------
---소파 주문제작테이블
-
---소파 주문제작테이블 드랍
-
-DROP TABLE SOFA_ORDER
-CASCADE CONSTRAINTS;
---소파 주문제작테이블 시퀀스 드랍
-DROP SEQUENCE SOFANUM_SEQ;
-
-CREATE TABLE SOFA_ORDER
-(
-    SOFANUM   NUMBER   NOT NULL,    --소파주문번호
-    OBNUM    NUMBER   NOT NULL,    --주문번호F
-    SEAT       VARCHAR2(400)     NULL,     --몇인용
-    STOOL       VARCHAR2(400)     NULL,     --수납스툴
-    SOFAHEAD       VARCHAR2(400)     NULL,    --머리받침
-    
-    
-    CONSTRAINT SOFA_FK  FOREIGN KEY (OBNUM)
-    REFERENCES ORDER_BUY(OBNUM)
-    
-);
---소파 주문제작시퀀스 생성
-CREATE SEQUENCE SOFANUM_SEQ
-START WITH 1
-INCREMENT BY 1;
 
 
 
@@ -586,7 +507,8 @@ CREATE TABLE ALL_COMMENT
 	CMNUM NUMBER(8) NOT NULL,  --커뮤니티 글번호
 	ID VARCHAR2(50) NOT NULL, --회원 아이디
 	WDATE DATE NOT NULL,  --댓글 작성일자
-	CONTENT VARCHAR2(4000) NOT NULL  --댓글내용
+	CONTENT VARCHAR2(4000) NOT NULL , --댓글내용
+	DEL		NUMBER			NULL
 
 
 );
@@ -776,7 +698,7 @@ CREATE TABLE EXPERT_USERS
 ALTER TABLE EXPERT_USERS MODIFY REGADDRESS VARCHAR2(200);
 ALTER TABLE EXPERT_USERS ADD REVIEW  NUMBER NULL; --최근계약갯수
 
-UPDATE EXPERT_USERS SET REGADDRESS = '서울 강남구 도곡동 957-14 강남빌딩'
+UPDATE EXPERT_USERS SET REGADDRESS = '서울특별시 양천구 신월동 962-10'
 WHERE ENUM = 9
 
 
@@ -797,3 +719,69 @@ CREATE SEQUENCE EXPERT_SEQ
 START WITH 1
 INCREMENT BY 1;
 
+----------------------------------------------
+--채팅 테이블
+
+--채팅테이블 드랍
+
+DROP TABLE CHAT
+CASCADE CONSTRAINTS;
+--고객센터 시퀀스 드랍
+DROP SEQUENCE CHATSEQ;
+
+--CUSTOMER_SERVICES
+CREATE TABLE CHAT
+(
+    ROOMNUM   NUMBER         NOT NULL,    --채팅방번호
+    SENDER    VARCHAR2(50)   NOT NULL,    --보낸이 
+    CONTENT   NUMBER  NOT NULL,    --  보낸내용
+    WDATE   NUMBER NOT  NULL, 	-- 보낸날짜
+    SENDTYPE NUMBER NULL
+  
+    
+);
+--회원아이디 외래키생성
+ALTER TABLE CHAT
+ADD CONSTRAINT CHAT_FK FOREIGN KEY(SENDER)
+REFERENCES ALL_MEMBER(ID);
+
+
+
+
+--고객센터시퀀스 생성
+CREATE SEQUENCE CSNUMSEQ
+START WITH 1
+INCREMENT BY 1;
+------------------------------------------------------
+
+----------------------------------------------
+----- 좋아요 테이블
+
+-- 테이블 드랍
+DROP TABLE BOARDLIKE
+CASCADE CONSTRAINTS;
+-- 테이블 시퀀스 드랍
+DROP SEQUENCE LNUM;
+
+CREATE TABLE BOARDLIKE(
+	LIKENUM	NUMBER			NOT NULL,		-- 좋아요seq
+	CMNUM	NUMBER			NOT NULL,		-- 커뮤eq
+	ID		VARCHAR2(50)	NOT NULL,		-- 멤버ID
+	CONSTRAINT BOARDLIKE_PK PRIMARY KEY(LIKENUM)
+);
+
+
+-- 커뮤seq 외래키생성
+ALTER TABLE BOARDLIKE
+ADD CONSTRAINT BOARDLIKE_FK FOREIGN KEY(CMNUM)
+REFERENCES COMMU(CMNUM);
+
+-- 멤버seq 외래키생성
+ALTER TABLE BOARDLIKE
+ADD CONSTRAINT BOARDLIKE_FK2 FOREIGN KEY(ID)
+REFERENCES ALL_MEMBER(ID);
+
+— 좋아요seq 생성
+CREATE SEQUENCE LNUM
+START WITH 1
+INCREMENT BY 1;
