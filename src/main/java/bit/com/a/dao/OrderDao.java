@@ -5,6 +5,11 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import bit.com.a.dto.ColorDto;
+import bit.com.a.dto.DeliveryCheckDto;
+import bit.com.a.dto.MemberDto;
+import bit.com.a.dto.OrderBuyDto;
+import bit.com.a.dto.OrderDetailDto;
 import bit.com.a.dto.PurchasesDto;
 
 @Mapper
@@ -17,4 +22,20 @@ public interface OrderDao {
 	public PurchasesDto trackDelivery(int obNum);
 	public List<PurchasesDto> purchasesCNT(String id);
 	public List<PurchasesDto> getStatusList(PurchasesDto dto);
+	
+	public int updatePoint(MemberDto dto);
+	public int setOrder(OrderBuyDto dto);
+	public void OrderDelCart(String id);
+	public OrderDetailDto getProdInfo(OrderDetailDto dto);
+	public int setOrderDetail(OrderDetailDto dto);
+	public int setDeliveryCheck(DeliveryCheckDto dto);
+	public List<OrderBuyDto> getOrderBuyInfo(OrderBuyDto dto);
+	public List<OrderDetailDto> getOrderDetailInfo(OrderDetailDto dto);
+	public List<OrderDetailDto> getOrderDetailOdNum(OrderDetailDto dto);
+	
+	
+	public List<ColorDto> getColorList(ColorDto dto); 
+	public int setExColor(OrderDetailDto dto);
+	public int setTakeback(OrderDetailDto dto);
+	public int updateOrderPoint(MemberDto dto);
 }

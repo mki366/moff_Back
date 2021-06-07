@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="bit.com.a.dao.BuyBackDao">
+
+<!-- 폐가구 - 카테고리로 불러오기(product)  -->
+<select id="getSubcategoryList" parameterType="bit.com.a.dto.ProductDto" 
+	resultType="bit.com.a.dto.ProductDto">
+	SELECT PRODNUM,CATEGORY,SUBCATEGORY,PRODNAME,COLOR,PRODOPTION,INFO,WEIGHT,ORIPRICE,PRICE,QUANTITY,RDATE,DELIVERYCOST,FILENAME
+	FROM PRODUCT
+	WHERE SUBCATEGORY = #{subCategory}
+</select> 
+
+<!-- 폐가구 - prodnum으로 detail 불러오기 -->
+<select id="getdetail" parameterType="bit.com.a.dto.ProductDto" 
+	resultType="bit.com.a.dto.ProductDto">
+	SELECT PRODNUM,CATEGORY,SUBCATEGORY,PRODNAME,COLOR,PRODOPTION,INFO,WEIGHT,ORIPRICE,PRICE,QUANTITY,RDATE,DELIVERYCOST,FILENAME
+	FROM PRODUCT
+	WHERE PRODNUM = #{prodNum}
+</select> 
+
+
+
+<!--멤버 정보 가져오기  -->
+<select id="getMemDetail" parameterType="bit.com.a.dto.MemberDto" resultType="bit.com.a.dto.MemberDto">
+	SELECT *
+	FROM ALL_MEMBER
+	WHERE ID = #{id}
+</select>
+
+<!-- 바이백에 추가 -->
+<insert id="addBuyBack" parameterType="bit.com.a.dto.BuybackDto">
+		
+
+		INSERT INTO BUY_BACK(BNUM,ID,CONDITION,BDATE,BADDRESS,CATEGORY,SUBCATEGORY,PRODNUM,PRICE)
+		VALUES(BNUMSEQ.NEXTVAL,#{id},#{condition},#{bDate},#{bAddress},#{category},#{subCategory},#{prodNum},#{price} )
+	   <selectKey keyProperty="bNum" resultType="int" order="AFTER">
+		SELECT BNUMSEQ.CURRVAL  FROM DUAL
+		</selectKey>
+</insert>
+
+<!-- 추가한 신청의 정보 가져오기 -->
+<select id="getMyBuyBack" parameterType="bit.com.a.dto.BuybackDto" resultType="bit.com.a.dto.BuybackDto">
+	SELECT B.BNUM,B.ID,B.CATEGORY,B.SUBCATEGORY,B.PRODNUM,B.PRICE,B.CONDITION,B.BDATE,B.BADDRESS,B.BRESULT,B.BID,B.BNAME,B.BPHONE,
+		   P.COLOR,P.PRODOPTION,P.INFO,P.FILENAME
+	FROM BUY_BACK B, PRODUCT P
+	WHERE B.PRODNUM=P.PRODNUM AND
+		  B.BNUM=#{bNum}
+</select>
+
+
+
+</mapper>
