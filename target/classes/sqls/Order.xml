@@ -64,5 +64,91 @@ SELECT B.OBNUM, B.OBDATE, C.STATUS
 </select>
 
 
+<update id="updatePoint" parameterType="bit.com.a.dto.MemberDto">
+	UPDATE ALL_MEMBER
+	SET MEMPOINT=0
+	WHERE ID=#{id}
+</update>
+
+<insert id="setOrder"  parameterType="bit.com.a.dto.OrderBuyDto">
+	INSERT INTO ORDER_BUY(OBNUM, ID, NAME, QUANTITY, PRICE, OBNAME, OBPHONE,OBADDRESS,
+							OBMES, OBWAY, OBCARDN, OBDATE, OBTAKEBACK, OBEXCHANGE,DELIVERYCOST)
+	VALUES(OBNUM_SEQ.NEXTVAL,#{id},#{name},#{quantity},#{price},#{obName},#{obPhone},#{obAddress},
+			#{obMes},#{obWay},#{obCardN},SYSDATE,#{obTakeback},#{obExchange},#{deliveryCost})
+	<selectKey keyProperty="obNum" resultType="int" order="AFTER">
+		SELECT OBNUM_SEQ.CURRVAL  FROM DUAL
+	</selectKey>
+</insert>
+
+<delete id="OrderDelCart" parameterType="bit.com.a.dto.OrderBuyDto">
+	DELETE FROM CART
+	WHERE ID=#{id}
+</delete>
+
+<select id="getProdInfo" parameterType="bit.com.a.dto.OrderDetailDto" resultType="bit.com.a.dto.OrderDetailDto">
+	SELECT PRODNAME,QUANTITY,PRICE,COLOR,FILENAME,WEIGHT
+	FROM PRODUCT
+	WHERE PRODNUM=#{prodNum}
+</select>
+
+
+<insert id="setOrderDetail" parameterType="bit.com.a.dto.OrderDetailDto">
+	INSERT INTO ORDER_DETAIL(ODNUM, OBNUM, PRODNUM, PRODNAME, QUANTITY , PRICE,COLOR, PRODOPTION, FILENAME, WEIGHT)
+	VALUES(ODNUM_SEQ.NEXTVAL, #{obNum}, #{prodNum}, #{prodName}, #{quantity}, #{price},#{color},'',#{filename}, #{weight} )
+	<selectKey keyProperty="odNum" resultType="int" order="AFTER">
+		SELECT ODNUM_SEQ.CURRVAL  FROM DUAL
+	</selectKey>
+</insert>
+
+<insert id="setDeliveryCheck" parameterType="bit.com.a.dto.DeliveryCheckDto">
+	INSERT INTO DELIVERY_CHECK(DCNUM,OBNUM,MEMID,STATUS,CHECKDATE)
+	VALUES(DCNUM_SEQ.NEXTVAL, #{obNum}, #{memId}, #{status},SYSDATE)
+	<selectKey keyProperty="dcNum" resultType="int" order="AFTER">
+		SELECT DCNUM_SEQ.CURRVAL  FROM DUAL
+	</selectKey>
+</insert>
+
+<select id="getOrderBuyInfo" parameterType="bit.com.a.dto.OrderBuyDto" resultType="bit.com.a.dto.OrderBuyDto">
+	SELECT OBNUM, ID,NAME,QUANTITY,PRICE,OBNAME,OBPHONE,OBADDRESS,OBMES,OBWAY,OBCARDN,OBDATE,OBTAKEBACK,OBEXCHANGE,DELIVERYCOST
+	FROM ORDER_BUY
+	WHERE OBNUM=#{obNum}
+</select>
+
+<select id="getOrderDetailInfo" parameterType="bit.com.a.dto.OrderDetailDto" resultType="bit.com.a.dto.OrderDetailDto">
+	SELECT ODNUM,OBNUM,PRODNUM,PRODNAME,QUANTITY,PRICE, COLOR,PRODOPTION,FILENAME,WEIGHT
+	FROM ORDER_DETAIL
+	WHERE OBNUM=#{obNum}
+</select>
+
+<select id="getOrderDetailOdNum" parameterType="bit.com.a.dto.OrderDetailDto" resultType="bit.com.a.dto.OrderDetailDto">
+	SELECT ODNUM,OBNUM,PRODNUM,PRODNAME,QUANTITY,PRICE, COLOR,PRODOPTION,FILENAME,WEIGHT
+	FROM ORDER_DETAIL
+	WHERE ODNUM=#{odNum}
+</select>
+
+
+<select id="getColorList" parameterType="bit.com.a.dto.ColorDto" resultType="bit.com.a.dto.ColorDto">
+	SELECT COLORSEQ,PRODNUM,COLOR,COLORFILENAME
+	FROM COLOR
+	WHERE PRODNUM=#{prodNum}
+</select>
+
+<update id="setExColor" parameterType="bit.com.a.dto.OrderDetailDto">
+	UPDATE ORDER_DETAIL
+	SET OBEXCHANGE=1,REASON=#{reason},EXCOLORSEQ=#{exColorSeq}
+	WHERE ODNUM=#{odNum}
+</update>
+
+<update id="setTakeback" parameterType="bit.com.a.dto.OrderDetailDto">
+	UPDATE ORDER_DETAIL
+	SET OBTAKEBACK=1
+	WHERE ODNUM=#{odNum}
+</update>
+
+<update id="updateOrderPoint" parameterType="bit.com.a.dto.MemberDto">
+	UPDATE ALL_MEMBER
+	SET MEMPOINT=#{memPoint}
+	WHERE ID=#{id}
+</update>
 
 </mapper>

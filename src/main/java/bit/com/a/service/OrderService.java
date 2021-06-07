@@ -120,4 +120,18 @@ public class OrderService {
 		int len = dao.setExColor(dto);
 		return len>0?true:false;
 	}
+	
+	public boolean setTakeback(OrderDetailDto dto){
+	      System.out.println("service-setTakeback: "+dto.getOdNum());
+
+	      int len = dao.setTakeback(dto);
+	      return len>0?true:false;
+	   }
+	   
+	   public boolean updateOrderPoint(MemberDto dto){
+	      System.out.println("service-updateOrderPoint: "+dto.getId());
+
+	      int len = dao.updateOrderPoint(dto);
+	      return len>0?true:false;
+	   }
 }

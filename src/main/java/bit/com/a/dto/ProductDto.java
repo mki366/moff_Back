@@ -19,7 +19,20 @@ public class ProductDto {
 	
 	public ProductDto() {
 	}
+	
+	//subcategory만    
+	   public ProductDto(String subCategory) {
+	      super();
+	      this.subCategory = subCategory;
+	   }
 
+	   //prodNum만 
+	   public ProductDto(int prodNum) {
+	      super();
+	      this.prodNum = prodNum;
+	   }
+	
+	
 	public ProductDto(int prodNum, String category, String subCategory, String prodName, String color,
 			String prodOption, String info, int weight, int oriPrice, int price, int quantity, String rdate,
 			int deliveryCost, String filename) {
