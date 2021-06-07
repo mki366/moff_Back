@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="bit.com.a.dao.CustomDao">
+  
+<select id="getPrice" parameterType="java.lang.Integer" 
+					resultType="java.lang.Integer">
+	SELECT PRICE
+	FROM PRODUCT
+	WHERE PRODNUM=#{prodNum}
+</select>
+  
+<insert id="addChairCart" parameterType="bit.com.a.dto.WishCartDto">
+	INSERT INTO CART(CNUM, ID, PRODNUM, QUANTITY, CARTORWISH)
+	VALUES(CNUMSEQ.NEXTVAL, #{id}, #{prodNum}, 1, 1)
+</insert>
+
+<insert id="addChairWish" parameterType="bit.com.a.dto.WishCartDto">
+	INSERT INTO CART(CNUM, ID, PRODNUM, QUANTITY, CARTORWISH)
+	VALUES(CNUMSEQ.NEXTVAL, #{id}, #{prodNum}, 1, 0)
+</insert>
+
+<select id="getProduct" parameterType="java.lang.Integer" 
+					resultType="bit.com.a.dto.ProductDto">
+	SELECT PRODNAME, COLOR, PRICE, FILENAME
+	FROM PRODUCT 
+	WHERE PRODNUM=#{prodNum}
+</select>
+
+<select id="getBedList" parameterType="java.lang.String" 
+					resultType="bit.com.a.dto.ProductDto">
+	SELECT PRODNUM, PRODNAME, COLOR, PRICE, INFO, FILENAME
+	FROM PRODUCT 
+	WHERE SUBCATEGORY=#{type}
+</select>
+
+</mapper>
