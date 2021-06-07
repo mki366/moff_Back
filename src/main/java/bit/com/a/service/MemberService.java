@@ -24,6 +24,11 @@ public class MemberService {
 		return len>0?true:false;
 	}
 	
+	public boolean snsCheck(String email) {
+		int n = dao.snsCheck(email);
+		return n>0?true:false;
+	}
+ 
 	public MemberDto login(MemberDto dto) {
 		MemberDto mem = dao.login(dto);
 		return mem;

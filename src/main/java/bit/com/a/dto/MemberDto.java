@@ -46,6 +46,11 @@ public class MemberDto {
 		this.carNum = carNum;
 	}
 
+	public MemberDto(String id) {
+		   super();
+		   this.id = id;
+	}
+	
 	public MemberDto(String id, String pwd, String name, String nickname, String email, String address, String phone,
 			String bdate) {
 		super();

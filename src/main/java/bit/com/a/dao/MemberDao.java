@@ -9,9 +9,10 @@ import bit.com.a.dto.MemberDto;
 @Repository
 public interface MemberDao {
 
-
 	public int idCheck(String id);
 	public int addmember(MemberDto dto);	
+	
+	public int snsCheck(String email);
 	
 	public MemberDto login(MemberDto dto);
 	public MemberDto getMem(MemberDto dto);

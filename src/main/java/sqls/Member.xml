@@ -24,7 +24,14 @@
 	resultType="bit.com.a.dto.MemberDto">
 	SELECT *
 	FROM ALL_MEMBER
-	WHERE ID=#{id} AND PWD=#{pwd}	
+	WHERE ID=#{id} AND PWD=#{pwd} AND MEMDEL=0
+</select>
+
+<select id="snsCheck" parameterType="java.lang.String" 
+						resultType="java.lang.Integer">
+	SELECT NVL(COUNT(*), 0) 
+	FROM ALL_MEMBER
+	WHERE EMAIL=#{email}
 </select>
 
 <select id="getMem" parameterType="bit.com.a.dto.MemberDto"
@@ -58,5 +65,6 @@
 	SET ADDRESS=#{address}
 	WHERE MEMNUM=#{memNum}
 </update>
+
 
 </mapper>

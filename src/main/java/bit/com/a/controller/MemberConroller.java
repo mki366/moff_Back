@@ -40,8 +40,45 @@ public class MemberConroller {
 	}
 	
 	
+	@RequestMapping(value = "/snsCheck", method = RequestMethod.POST)
+	public String snsCheck(String email) {
+		System.out.println("MemberConroller snsCheck()");
+
+		boolean b = service.snsCheck(email);
+		if(b == true) {
+			return "NO";
+		}else {		
+			return "YES";
+		}
+	}
+ 
+
+	@RequestMapping(value = "/snsSignup", method = RequestMethod.POST)
+	public MemberDto snsSignup(MemberDto dto) {
+		System.out.println("MemberController snsSignup()");
+		service.addmember(dto);
+
+		return service.login(new MemberDto( dto.getId(), dto.getPwd(), null, null, null, null, null, null));
+	}
+	
+	
+	@RequestMapping(value = "/googleLogin", method = RequestMethod.POST)
+	public String googleLogin(MemberDto dto) {
+		System.out.println("MemberController signup()");
+		System.out.println("메머추가ㅏㅏㅏㅏㅏㅏㅏㅏ"+dto.toString());
+		
+		boolean b = service.addmember(dto);
+		if(b) {
+			return "YES";
+		}else {
+			return "NO";
+		}
+	}
+	
+	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public MemberDto login(String id, String pwd) {
+		System.err.println(id+ "d" + pwd);
 		System.out.println("MemberController login()");		
 		MemberDto dto = service.login(new MemberDto(id, pwd, null, null, null, null, null, null));
 		return dto;
@@ -94,6 +131,8 @@ public class MemberConroller {
 		}
 		return mem;
 	}
+	
+	
 }
 
 
