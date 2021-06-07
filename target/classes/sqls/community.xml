@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="bit.com.a.dao.CommunityDao">
+ 	
+ 	
+ 	<!-- 리스트 -->
+ 	<select id="getAllCommunity" parameterType="bit.com.a.dto.CommunityParam" resultType="bit.com.a.dto.CommunityDto">
+		SELECT *
+		FROM 	(SELECT ROW_NUMBER()OVER(ORDER BY CMNUM DESC) AS SEQ
+						, CMNUM
+						, ID
+						, IMAGE1
+						, IMAGE2
+						, TITLE
+						, CONTENT
+						, WDATE
+						, READCOUNT
+						, CMLIKE
+				FROM COMMU
+				WHERE 1=1 AND COMMUDEL=0
+				<if test="choice != null and choice != ''
+						and search != null and search != ''">
+						
+					<if test="choice == 'title'">
+						AND TITLE LIKE '%' || #{search} || '%'
+					</if>
+					<if test="choice == 'content'">
+						AND CONTENT LIKE '%' || #{search} || '%'
+					</if>
+					<if test="choice == 'writer'">
+						AND ID=#{search}
+					</if>
+				</if>
+				ORDER BY CMNUM DESC)
+		WHERE SEQ BETWEEN #{start} AND #{end}
+ 	</select>
+ 	
+ 	
+ 	<!-- 리스트 총 수 불러오기 -->
+ 	<select id="getAllCommunityCount" parameterType="bit.com.a.dto.CommunityParam" resultType="java.lang.Integer">
+	 	SELECT NVL(COUNT(*), 0)
+		FROM COMMU
+		WHERE 1=1 AND COMMUDEL=0
+			<if test="choice != null and choice != ''
+					and search != null and search != ''">
+					
+				<if test="choice == 'title'">
+					AND TITLE LIKE '%' || #{search} || '%'
+				</if>
+				<if test="choice == 'content'">
+					AND CONTENT LIKE '%' || #{search} || '%'
+				</if>
+				<if test="choice == 'writer'">
+					AND ID=#{search}
+				</if>
+			</if>
+ 	</select>
+ 	
+ 	
+ 	<!-- 필터검색 리스트 -->
+ 	<select id="getFilterCommunity" parameterType="map" resultType="bit.com.a.dto.CommunityDto">
+	 	SELECT *
+		FROM 	(SELECT ROW_NUMBER()OVER(ORDER BY CMNUM DESC) AS SEQ
+						, CMNUM
+						, ID
+						, IMAGE1
+						, IMAGE2
+						, TITLE
+						, CONTENT
+						, WDATE
+						, READCOUNT
+						, CMLIKE
+				FROM COMMU
+				WHERE 1=1 AND COMMUDEL=0
+				<if test="cmLike != null and cmLike !=''">
+					<if test="cmLike == 'cmLike' ">
+						ORDER BY CMLIKE DESC
+					</if>
+				</if>
+				<if test="readCount != null and readCount != ''">
+					<if test="readCount == 'readCount' ">
+						ORDER BY READCOUNT DESC
+					</if>
+				</if>
+				)
+		WHERE SEQ BETWEEN #{start} AND #{end}
+ 	</select>
+
+ 	
+ 	<!-- 필터검색 글 총 수 불러오기 -->
+ 	<select id="getCommunityCount" parameterType="map" resultType="java.lang.Integer">
+ 		SELECT NVL(COUNT(*), 0)
+		FROM COMMU
+		WHERE 1=1 AND COMMUDEL=0
+		<if test="cmLike != null and cmLike !=''">
+			<if test="cmLike == 'cmLike' ">
+				ORDER BY CMLIKE DESC
+			</if>
+		</if>
+		<if test="readCount != null and readCount != ''">
+			<if test="readCount == 'readCount' ">
+				ORDER BY READCOUNT DESC
+			</if>
+		</if>
+ 	</select>
+ 
+ 
+ 	<!--오늘 인기사진 리스트 -->
+ 	<select id="todayList" parameterType="bit.com.a.dto.CommunityDto" resultType="bit.com.a.dto.CommunityDto">
+	 	SELECT CMNUM
+	 		, ID
+	 		, IMAGE1
+	 		, IMAGE2
+	 		, TITLE
+	 		, CONTENT
+	 		, WDATE
+	 		, READCOUNT
+	 		, CMLIKE
+		 	
+		FROM 	(SELECT ROW_NUMBER()OVER(ORDER BY CMNUM DESC) AS SEQ
+						, CMNUM
+						, ID
+						, IMAGE1
+						, IMAGE2
+						, TITLE
+						, CONTENT
+						, WDATE
+						, READCOUNT
+						, CMLIKE
+				FROM COMMU
+				WHERE COMMUDEL=0 AND TO_CHAR(WDATE, 'yyyymmdd') = TO_CHAR(SYSDATE, 'yyyymmdd')
+				ORDER BY CMLIKE DESC)
+		WHERE SEQ BETWEEN 1 AND 3
+	</select>
+	
+	
+	<!-- 글쓰기 -->
+	<insert id="writeCommunity" parameterType="bit.com.a.dto.CommunityDto">
+		INSERT INTO COMMU(CMNUM
+						, ID
+						, IMAGE1
+						, IMAGE2
+						, TITLE
+						, CONTENT
+						, WDATE
+						, READCOUNT
+						, CMLIKE
+						, COMMUDEL)
+		VALUES(CMMUSEQ.NEXTVAL
+						, #{id}
+						, #{image1}
+						, #{image2}
+						, #{title}
+						, #{content}
+						, SYSDATE
+						, 0
+						, 0
+						, 0)
+	</insert>
+	
+	
+	<!-- 포인트주기 -->
+	<update id="addPoint" parameterType="bit.com.a.dto.MemberDto">
+		UPDATE ALL_MEMBER 
+		SET MEMPOINT = MEMPOINT+500
+		WHERE ID=#{id}
+	</update>
+	
+	
+ 	<!-- 디테일 -->
+ 	<select id="getCommunity" parameterType="java.lang.Integer" resultType="bit.com.a.dto.CommunityDto">
+ 		SELECT CMNUM
+ 			, ID
+ 			, IMAGE1
+ 			, IMAGE2
+ 			, TITLE
+ 			, CONTENT
+ 			, WDATE
+ 			, READCOUNT
+ 			, CMLIKE
+ 			, COMMUDEL
+ 		FROM COMMU
+ 		WHERE CMNUM=#{cmNum}
+ 	</select>
+ 	
+ 	
+ 	<!-- 조회수 증가 -->
+ 	<update id="readCountCommunity" parameterType="java.lang.Integer">
+ 		UPDATE COMMU
+ 		SET READCOUNT=READCOUNT+1
+ 		WHERE CMNUM=#{cmNum}
+ 	</update>
+ 	
+
+ 	<!-- 수정 -->
+ 	<update id="updateCommunity" parameterType="bit.com.a.dto.CommunityDto">
+		UPDATE COMMU
+		SET	TITLE=#{title}
+			, CONTENT=#{content}
+			, IMAGE1=#{image1}
+			, IMAGE2=#{image2}
+			, WDATE=SYSDATE
+		WHERE CMNUM=#{cmNum}
+	</update>
+
+ 	
+ 	<!-- 삭제 -->
+ 	<update id="deleteCommunity" parameterType="java.lang.Integer">
+ 		UPDATE COMMU
+ 		SET COMMUDEL=1
+ 		WHERE CMNUM =#{cmNum}
+ 	</update>
+ 	
+ 	
+ 	<!-- 디테일 -->
+ 	<select id="getCommunityDetail" parameterType="java.lang.Integer" resultType="bit.com.a.dto.CommunityDto">
+ 		SELECT CMNUM
+ 			, ID
+ 			, IMAGE1
+ 			, IMAGE2
+ 			, TITLE
+ 			, CONTENT
+ 			, WDATE
+ 			, READCOUNT
+ 			, CMLIKE
+ 			, COMMUDEL
+ 		FROM COMMU
+ 		WHERE CMNUM=#{cmNum}
+ 	</select>
+ 	
+ 	
+ 	
+ </mapper>

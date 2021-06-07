@@ -1,21 +1,38 @@
 package bit.com.a.dto;
 
+import java.util.Date;
+
 public class ProductDto {
 
-	private int prodNum;
-	private String category;
-	private String subCategory;
-	private String prodName;
-	private String color;
-	private String prodOption;
-	private String info;
-	private int weight;
-	private int oriPrice;
-	private int price;
-	private int quantity;
-	private String rdate;
-	private int deliveryCost;
-	private String filename;
+	 private int prodNum;      // 상품분류
+	   
+	   private String category;      // 상품분류
+	   private String subCategory;      // 상품세분류
+	   
+	   private String prodName;      // 상품이름
+	   private String color;         // 상품색상
+	   private String prodOption;      // 상품옵션
+	   private String info;
+	   
+	   private int weight;            // 상품무게
+	   private int oriPrice;         // 상품정가
+	   
+	   private int price;            // 상품판매가격
+	   private int quantity;         // 상품재고(수량)
+	   private String rdate;            // 상품등록일
+	   
+	   private int deliveryCost;      // 배송비
+	   private String filename;
+	   private int readCount;      // 조회수 
+	   
+	   private String choice;
+	   private String search;
+	   
+	   private int page;
+	   private int start;
+	   private int end;   
+	  
+	   private double star;
 	
 	public ProductDto() {
 	}
@@ -51,6 +68,36 @@ public class ProductDto {
 		this.rdate = rdate;
 		this.deliveryCost = deliveryCost;
 		this.filename = filename;
+	}
+	
+	
+
+	public ProductDto(int prodNum, String category, String subCategory, String prodName, String color,
+			String prodOption, String info, int weight, int oriPrice, int price, int quantity, String rdate,
+			int deliveryCost, String filename, int readCount, String choice, String search, int page, int start,
+			int end, double star) {
+		super();
+		this.prodNum = prodNum;
+		this.category = category;
+		this.subCategory = subCategory;
+		this.prodName = prodName;
+		this.color = color;
+		this.prodOption = prodOption;
+		this.info = info;
+		this.weight = weight;
+		this.oriPrice = oriPrice;
+		this.price = price;
+		this.quantity = quantity;
+		this.rdate = rdate;
+		this.deliveryCost = deliveryCost;
+		this.filename = filename;
+		this.readCount = readCount;
+		this.choice = choice;
+		this.search = search;
+		this.page = page;
+		this.start = start;
+		this.end = end;
+		this.star = star;
 	}
 
 	public int getProdNum() {
@@ -163,6 +210,63 @@ public class ProductDto {
 
 	public void setFilename(String filename) {
 		this.filename = filename;
+	}
+
+	
+	public int getReadCount() {
+		return readCount;
+	}
+
+	public void setReadCount(int readCount) {
+		this.readCount = readCount;
+	}
+
+	public String getChoice() {
+		return choice;
+	}
+
+	public void setChoice(String choice) {
+		this.choice = choice;
+	}
+
+	public String getSearch() {
+		return search;
+	}
+
+	public void setSearch(String search) {
+		this.search = search;
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	public int getStart() {
+		return start;
+	}
+
+	public void setStart(int start) {
+		this.start = start;
+	}
+
+	public int getEnd() {
+		return end;
+	}
+
+	public void setEnd(int end) {
+		this.end = end;
+	}
+
+	public double getStar() {
+		return star;
+	}
+
+	public void setStar(double star) {
+		this.star = star;
 	}
 
 	@Override
