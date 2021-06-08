@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="bit.com.a.dao.CsDao">
+
+<select id="csList" parameterType="bit.com.a.dto.CsParam" 
+						resultType="bit.com.a.dto.CsDto">
+	SELECT CSNUM, ID, REF, STEP, DEPTH, TITLE, CONTENT, WDATE, CSDEL, READCOUNT, CATEGORY
+	FROM (SELECT ROW_NUMBER()OVER(ORDER BY REF DESC, STEP ASC) AS RNUM,
+			CSNUM, ID, REF, STEP, DEPTH, TITLE, CONTENT, WDATE, CSDEL, READCOUNT, CATEGORY
+		  FROM CS
+		  WHERE CSDEL = 0
+		  <if test="choice != null and choice != ''
+		  		and search != null and search != ''">
+		  	  <!-- AND DEL=0 -->		
+			  <if test="choice == 'title'">
+			  		AND TITLE LIKE '%'||#{search}||'%'		  
+			  </if>
+			  <if test="choice == 'content'">
+			  		AND CONTENT LIKE '%'||#{search}||'%'			  
+			  </if>
+			  <if test="choice == 'writer'">
+			  		AND ID=#{search}  
+			  </if>	
+		  </if>
+		ORDER BY REF DESC, STEP ASC)
+		WHERE RNUM BETWEEN ${start} AND ${end} 
+</select> 
+<!-- 글의 총수 --> 
+<select id="csCount" parameterType="bit.com.a.dto.CsParam"
+	resultType="java.lang.Integer">
+	SELECT NVL(COUNT(*), 0)
+	FROM CS
+	WHERE CSDEL = 0
+	<if test="choice != null and choice != ''
+	  		and search != null and search != ''">	  	  		
+		  <if test="choice == 'title'">
+		  		AND TITLE LIKE '%'||#{search}||'%'		  
+		  </if>
+		  <if test="choice == 'content'">
+		  		AND CONTENT LIKE '%'||#{search}||'%'			  
+		  </if>
+		  <if test="choice == 'writer'">
+		  		AND ID=#{search}  
+		  </if>	
+	  </if>
+</select>
+
+<insert id="csWrite" parameterType="bit.com.a.dto.CsDto">
+	INSERT INTO CS(CSNUM, ID, REF, STEP, DEPTH, TITLE, CONTENT, WDATE, CSDEL, READCOUNT, CATEGORY)
+	VALUES(CSNUMSEQ.NEXTVAL, #{id}, (SELECT NVL(MAX(REF), 0)+1 FROM CS), 0, 0, 
+			#{title}, #{content}, SYSDATE, 0, 0, #{category})
+</insert>
+
+<select id="getCs" parameterType="java.lang.Integer"
+	resultType="bit.com.a.dto.CsDto">
+	SELECT CSNUM, ID, REF, STEP, DEPTH, TITLE, CONTENT, WDATE, CSDEL, READCOUNT, CATEGORY
+	FROM CS
+	WHERE CSNUM=#{csnum}
+</select>
+
+<update id="readCount" parameterType="java.lang.Integer">
+	UPDATE CS
+	SET READCOUNT=READCOUNT+1
+	WHERE CSNUM=#{csnum}
+</update>
+
+<update id="csDelete" parameterType="java.lang.Integer">
+	UPDATE CS
+	SET CSDEL = 1
+	WHERE CSNUM=#{csnum}
+</update>
+
+<update id="csUpdate"
+	parameterType="bit.com.a.dto.CsDto">
+		UPDATE CS SET
+		TITLE=#{title}, CONTENT=#{content}, WDATE=SYSDATE
+		WHERE CSNUM=#{csnum}
+</update>
+
+
+<!-- 답글 -->
+<insert id="replyCsInsert"
+	parameterType="bit.com.a.dto.CsDto">
+	INSERT INTO CS
+		(CSNUM, ID, REF, STEP, DEPTH, 
+		TITLE, CONTENT, WDATE, CSDEL, READCOUNT, CATEGORY)
+	VALUES(CSNUMSEQ.NEXTVAL, #{id},
+		(SELECT REF FROM CS WHERE CSNUM=#{csnum}),
+		(SELECT STEP FROM CS WHERE CSNUM=#{csnum})+1,
+		(SELECT DEPTH FROM CS WHERE CSNUM=#{csnum})+1,
+		#{title}, #{content}, SYSDATE,
+		0, 0, 0)	
+</insert>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>
