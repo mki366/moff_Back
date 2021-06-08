@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import bit.com.a.dto.CartDto;
@@ -211,6 +211,7 @@ public class ProductController {
 			service.setWishList(cartDto);
 			return "success";
 		} else {
+			service.deleteWish(cartDto);
 			return "failed";
 		}
 	}
@@ -307,6 +308,9 @@ public class ProductController {
 		
 	}
 	
+	 
+	 
+	/*
 	// 리스트에서 위시리스트 두번 클릭 시 데이터 삭제
 	@RequestMapping(value = "/deleteWish", method = {RequestMethod.GET, RequestMethod.POST})
 	public String deleteWish(CartDto cartDto) {
@@ -318,6 +322,7 @@ public class ProductController {
 		
 	}
 	
+	*/
 	
 	///////// 다솜 //////////////////
 
@@ -369,7 +374,7 @@ public class ProductController {
       
    }
    
-	   
+	
 	
 	
 	

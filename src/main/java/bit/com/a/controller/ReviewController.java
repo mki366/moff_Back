@@ -23,6 +23,7 @@ import bit.com.a.dto.MemberDto;
 import bit.com.a.dto.ProductDto;
 import bit.com.a.dto.ReviewDto;
 import bit.com.a.service.ReviewService;
+import bit.com.a.util.FileUtil;
 
 @RestController
 public class ReviewController {
@@ -98,58 +99,64 @@ public class ReviewController {
 								HttpServletRequest req) throws IOException {
 		
 		System.out.println("writeReview() Controller");
-		
+		System.out.println(rDto);
 		String uploadPath = req.getServletContext().getRealPath("/review");
 		
-		String image = fileload.getOriginalFilename();
-		String filepath = uploadPath + File.separator + image;
+		String image = "";
 		
-		System.out.println("review Img upload: " + filepath);
+		boolean check = false;
 		
-		int prodNum = rDto.getProdNum();
-		String id = rDto.getId();
-		int star = rDto.getStar();
-		String content = rDto.getContent();
-		
-//		ReviewDto qqq = new ReviewDto(prodNum, id, star, content, image);
-//		service.writeReview(qqq);
-//		System.out.println("스타확인!!!!!!!!!!!!! " + qqq.getStar());
-		
-		boolean a = service.writeReview(new ReviewDto(prodNum, id, star, content, image));
-		System.out.println("star: " + star);
-		System.out.println("img: " + image);
-		
-		// 이미지 등록 시 포인트 600/ 미등록 300
-		if(image != null && !image.equals("")) {
-			service.photoPoint(mem);
-		}else {
-			service.reviewPoint(mem);
-		}
-		
-		if(a == true) {
+				if(rDto.getImage()==null) {
+					rDto.setImage("");
+					
+					check= service.writeReview(rDto);
+					service.reviewPoint(mem);
+					
+					
+				}else {
+			
 				
-				try {
-					BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
+				image = fileload.getOriginalFilename();
+				String newFilename = FileUtil.newFilenames(image);
+				
+				String filepath = uploadPath + File.separator + newFilename;
+				
+				System.out.println("------파일업로드 경로--------");
+				System.out.println("Review image: " + filepath);
+				
+				String myPath = "http://localhost:3000//community//";
+				
+				rDto.setImage(myPath+newFilename);
+				
+				
 					
-					stream.write(fileload.getBytes());
-					stream.close();
+					try {
+						BufferedOutputStream bStream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
+						
+						bStream.write(fileload.getBytes());
+						bStream.close();
+						
+						check = service.writeReview(rDto);
+						service.photoPoint(mem);
+						return "YES";
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+						
+					}
 					
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
+				
+				
+				}if(check) {
+					return "YES";
+					
+				}else {
+					return "NO";
 				}
 				
-				return "YES";
 			
-		}else {
-			
-			return "NO";
-			
-		}
-		
-		
-		
-		
 	}
+	
 	
 	// 상품정보
 	@RequestMapping(value = "/getProductInfo", method = {RequestMethod.GET, RequestMethod.POST})

@@ -2,13 +2,17 @@ package bit.com.a.controller;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +27,7 @@ import bit.com.a.dto.CommunityDto;
 import bit.com.a.dto.CommunityParam;
 import bit.com.a.dto.MemberDto;
 import bit.com.a.service.CommunityService;
-import bit.com.a.util.CommunityUtil;
+import bit.com.a.util.FileUtil;
 
 @RestController
 public class CommunityController {
@@ -138,41 +142,58 @@ public class CommunityController {
 		
 		String uploadPath = req.getServletContext().getRealPath("/community");
 		
-		String image1 = fileload.getOriginalFilename();
-		String filepath = uploadPath + File.separator + image1;
+		String image1 = "";
+		image1 = fileload.getOriginalFilename();
 		
-		String image2 = fileload2.getOriginalFilename();
-		String filepath2 = uploadPath + File.separator + image2;
+		
+		String image2 = "";
+		image2 = fileload2.getOriginalFilename();
+		
+		
+		String newFilename1 = FileUtil.getNewFilename(image1,1); 
+	    String newFilename2 = FileUtil.getNewFilename(image2,2); 
+	    
+	    String filepath = uploadPath + File.separator + newFilename1;
+	    String filepath2 = uploadPath + File.separator + newFilename2;
 		
 		System.out.println("------파일업로드 경로------");
 		System.out.println("filepath1" + filepath);
 		System.out.println("filepath2" + filepath2);
 		
 		// xml에 넣기 위한 데이터 처리
-		String id = dto.getId();
+/*		String id = dto.getId();
 		String title = dto.getTitle();
-		String content = dto.getContent();
+		String content = dto.getContent();*/
 		
-		boolean a = service.writeCommunity(new CommunityDto(id, image1, image2, title, content));
+		String myPath = "http://localhost:3000//community//";
+		
+		dto.setImage1(myPath+newFilename1);
+	    dto.setImage2(myPath+newFilename2); 
+	    
+	    
+	    
+	//	boolean a = service.writeCommunity(new CommunityDto(id, image1, image2, title, content));
+	    String id = dto.getId();
 		System.out.println("write Id: " + id);
+
+		try {
+			BufferedOutputStream bStream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
+			BufferedOutputStream bStream2 = new BufferedOutputStream(new FileOutputStream(new File(filepath2)));
+			
+			bStream.write(fileload.getBytes());
+			bStream2.write(fileload2.getBytes());
+			
+			bStream.close();
+			bStream2.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
 		
-		if(a == true) {
+		if(service.writeCommunity(dto) == true) {
 			service.addPoint(mem);
 			
-			try {
-				BufferedOutputStream bStream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
-				BufferedOutputStream bStream2 = new BufferedOutputStream(new FileOutputStream(new File(filepath2)));
-				
-				bStream.write(fileload.getBytes());
-				bStream2.write(fileload2.getBytes());
-				
-				bStream.close();
-				bStream2.close();
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				
-			}
 			return "YES";
 						
 		}else {
@@ -194,50 +215,6 @@ public class CommunityController {
 		return dto;
 	}
 	
-	// 파일 삭제
-	@RequestMapping(value = "/deletFile", method = RequestMethod.POST)
-	public String deletFile(		@ModelAttribute CommunityDto dto, 
-									@RequestParam("oldFile")
-									MultipartFile oldFile,
-									@RequestParam("oldFile2")
-									MultipartFile oldFile2,
-									HttpServletRequest req) {
-		
-		String uploadPath = req.getServletContext().getRealPath("/community");
-		
-		dto.setImage1(oldFile.getOriginalFilename());
-		dto.setImage2(oldFile2.getOriginalFilename());
-		
-		String image1 = oldFile.getOriginalFilename();
-		String filepath = uploadPath + File.separator + image1;
-		
-		String image2 = oldFile2.getOriginalFilename();
-		String filepath2 = uploadPath + File.separator + image2;
-		System.out.println("삭제파일 경로: " + filepath);
-		System.out.println("삭제파일 경로: " + filepath2);
-		
-		int cmNum = dto.getCmNum();
-		String id = dto.getId();
-		String title = dto.getTitle();
-		String content = dto.getContent();
-		
-		
-		boolean a = service.updateCommunity(new CommunityDto(cmNum, id, image1, image2, title, content)); 
-		
-		if(a==true) {
-			File file = new File(filepath, filepath2);
-			
-			file.delete();
-			service.updateCommunity(dto);
-			System.out.println("파일삭제 성공");
-					
-			return "YES";	
-			
-		}else {
-			return "NO";
-		}
-		
-	}
 	
 	// 글 수정
 	@RequestMapping(value = "/updateCommunity", method = RequestMethod.POST)
@@ -254,51 +231,79 @@ public class CommunityController {
 		dto.setImage1(fileload.getOriginalFilename());
 		dto.setImage2(fileload2.getOriginalFilename());
 		
+		String image1 = "";
+	//	image1 = fileload.getOriginalFilename();
+		
+		String image2 = "";
+	//	image2 = fileload2.getOriginalFilename();
+		
+		System.out.println("-------image1" + image1);
+		System.out.println("-------image2" + image2);
+		
 		// 파일 경로
 		String uploadPath = req.getServletContext().getRealPath("/community");
 		
-		// 수정할 파일이 있음
-		if(dto.getImage1() != null && dto.getImage2().equals("")) {
-			String f = dto.getImage1();
-			String f1 = dto.getImage2();
+		if(image1 != fileload.getOriginalFilename() ||
+			image2 != fileload2.getOriginalFilename()) {
 			
-			String newfilename = CommunityUtil.getNewFilename(f);
-			String newfilename2 = CommunityUtil.getNewFilename(f1);
+			image1 = fileload.getOriginalFilename();
+			image2 = fileload2.getOriginalFilename();
 			
+			System.out.println("------if문 들어옴");
+			String newFilename1 = FileUtil.getNewFilename(image1,1); 
+		    String newFilename2 = FileUtil.getNewFilename(image2,2); 
+		    
+		    String filepath = uploadPath + File.separator + newFilename1;
+		    String filepath2 = uploadPath + File.separator + newFilename2;
 			
-			dto.setImage1(f);
-			dto.setNewFilename(newfilename);
+			System.out.println("------파일업로드 경로------");
+			System.out.println("filepath1" + filepath);
+			System.out.println("filepath2" + filepath2);
 			
-			dto.setImage2(f1);
-			dto.setNewFilename(newfilename2);
+			String myPath = "http://localhost:3000//community//";
+			    
+			dto.setImage1(myPath+newFilename1);
+			dto.setImage2(myPath+newFilename2); 
 			
-			File file = new File(uploadPath + "/" + newfilename);
-			File file2 = new File(uploadPath + "/" + newfilename2);
-			
+			boolean check = false;
 			try {
-				FileUtils.writeByteArrayToFile(file, fileload.getBytes());
-				FileUtils.writeByteArrayToFile(file2, fileload2.getBytes());
+				BufferedOutputStream bStream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
+				BufferedOutputStream bStream2 = new BufferedOutputStream(new FileOutputStream(new File(filepath2)));
 				
-				service.updateCommunity(dto);
+				bStream.write(fileload.getBytes());
+				bStream2.write(fileload2.getBytes());
 				
-			}catch (Exception e) {
+				bStream.close();
+				bStream2.close();
+				
+				check = service.updateCommunity(dto);
+				
+				
+			} catch (Exception e) {
 				e.printStackTrace();
+				
 			}
 			
-			return "YES";
-
+			if(check) {
+				return "YES";
+			}else {
+				return "NO";
+			}
+			
 		}else {
 			dto.setImage1(namefile);
 			dto.setImage2(namefile2);
 			
 			service.updateCommunity(dto);
+			
+			return "YES";
+			
 		}
 		
-		return "NO";
 
 	}
 	
-	
+             
 	// 글삭제
 	@RequestMapping(value = "/deleteCommunity", method = {RequestMethod.GET, RequestMethod.POST})
 	public String deleteCommunity(int cmNum) {
@@ -321,54 +326,14 @@ public class CommunityController {
 		
 	}
 	
-	
-	
-}
-
-
-
-
-
-/*		String image1 = fileload.getOriginalFilename();
-String filepath = uploadPath + File.separator + image1;
-
-String image2 = fileload2.getOriginalFilename();
-String filepath2 = uploadPath + File.separator + image2;
-
-System.out.println("------파일업로드 경로------");
-System.out.println("filepath1" + filepath);
-System.out.println("filepath2" + filepath2);
-
-// xml에 넣기 위한 데이터 처리
-String id = dto.getId();
-String title = dto.getTitle();
-String content = dto.getContent();
-
-boolean a = service.writeCommunity(new CommunityDto(id, image1, image2, title, content));
-System.out.println("write Id: " + id);
-if(a == true) {
-
-try {
-BufferedOutputStream bStream = new BufferedOutputStream(new FileOutputStream(new File(filepath)));
-BufferedOutputStream bStream2 = new BufferedOutputStream(new FileOutputStream(new File(filepath2)));
-
-bStream.write(fileload.getBytes());
-bStream2.write(fileload2.getBytes());
-
-bStream.close();
-bStream2.close();
-
-} catch (Exception e) {
-e.printStackTrace();
 
 }
-return "YES";
-	
-}else {
-return "NO";
-}
 
-*/
+
+
+
+
+
 
 
 
