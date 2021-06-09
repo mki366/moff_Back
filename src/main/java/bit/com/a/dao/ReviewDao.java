@@ -35,5 +35,8 @@ public interface ReviewDao {
 	// 포토포인트
 	void photoPoint(MemberDto mem);
 	
+	// 평균리뷰
+	public List<ReviewDto> avgReview(int prodNum);
+		
 	
 }

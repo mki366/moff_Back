@@ -72,6 +72,7 @@ public class CommunityService {
 	
 	// 글 수정
 	public boolean updateCommunity(CommunityDto dto) {
+		System.out.println(dto.getImage1());
 		int count = dao.updateCommunity(dto);
 		
 		return count>0?true:false;
@@ -92,6 +93,14 @@ public class CommunityService {
 	public void addPoint(MemberDto mem) {
 		dao.addPoint(mem);
 	}
+	
+	// 커뮤니티 인기순 (메인)
+	public List<CommunityDto> commuList(CommunityDto dto) {
+	     return dao.commuList(dto);
+	}
+
+	
+	
 	
 }
 

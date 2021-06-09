@@ -58,7 +58,10 @@ public class ReviewService {
 		rDao.photoPoint(mem);
 	}
 	
-	
+	// 평균평점
+	public List<ReviewDto> avgReview(int prodNum) {
+		return rDao.avgReview(prodNum);
+	}
 	
 }
 
