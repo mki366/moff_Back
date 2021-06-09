@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="bit.com.a.dao.OrderDao">
+
+<!-- 주문내역리스트 -->
+<select id="getPurchases" parameterType="java.lang.String" 
+					resultType="bit.com.a.dto.PurchasesDto">
+	SELECT DISTINCT B.OBNUM, B.OBDATE, C.STATUS	
+	FROM ORDER_BUY B, ORDER_DETAIL D, DELIVERY_CHECK C  <!-- D 나중에 쓸 일 있을수도.. -->
+	WHERE B.OBNUM=D.OBNUM AND C.OBNUM=B.OBNUM		
+		AND B.ID=#{id}
+	ORDER BY B.OBDATE DESC 
+</select>
+
+<!-- 주문 counter -->
+<select id="purchasesCNT" parameterType="java.lang.String" 
+					resultType="bit.com.a.dto.PurchasesDto">
+	SELECT STATUS, COUNT(*) CNT
+	FROM DELIVERY_CHECK
+	WHERE MEMID=#{id}
+	GROUP BY STATUS
+</select>
+
+<!-- 주문 counter별 list -->
+<select id="getStatusList" parameterType="bit.com.a.dto.PurchasesDto" 
+					resultType="bit.com.a.dto.PurchasesDto">
+SELECT B.OBNUM, B.OBDATE, C.STATUS	
+	FROM ORDER_BUY B, ORDER_DETAIL D, DELIVERY_CHECK C
+	WHERE B.OBNUM=D.OBNUM
+		AND B.ID=#{id} AND C.OBNUM=B.OBNUM AND C.STATUS=#{status}
+	GROUP by B.OBNUM, B.OBDATE, C.STATUS	
+	ORDER BY B.OBDATE DESC
+</select>
+
+<!-- 주문 결제정보 -->
+<select id="getCheckout" parameterType="java.lang.Integer" 
+					resultType="bit.com.a.dto.PurchasesDto">
+	SELECT B.OBNUM, B.OBDATE, B.OBWAY, B.OBCARDN, B.TOTALPRICE, C.STATUS	
+	FROM ORDER_BUY B, DELIVERY_CHECK C
+	WHERE C.OBNUM=B.OBNUM
+		AND B.OBNUM=#{obNum}
+</select>
+
+
+<!-- 주문내역상세 -->
+<select id="purchasesDetail" parameterType="java.lang.Integer" 
+					resultType="bit.com.a.dto.PurchasesDto">
+	SELECT D.PRODNUM, D.PRODNAME, D.QUANTITY, D.PRICE, D.COLOR, D.PRODOPTION, D.FILENAME, C.STATUS	
+	FROM  ORDER_DETAIL D, DELIVERY_CHECK C
+	WHERE D.OBNUM=C.OBNUM 
+		AND D.OBNUM=#{obNum}
+</select>
+
+
+<!-- 배송조회 -->
+<select id="trackDelivery" parameterType="java.lang.Integer" 
+					resultType="bit.com.a.dto.PurchasesDto">
+	SELECT  B.OBNAME, B.OBPHONE, B.OBADDRESS, B.OBMES, C.STATUS, C.NAME, C.PHONE
+	FROM ORDER_BUY B JOIN DELIVERY_CHECK C ON (B.OBNUM=C.OBNUM)
+	WHERE B.OBNUM=#{obNum}
+</select>
+
+
+<update id="updatePoint" parameterType="bit.com.a.dto.MemberDto">
+	UPDATE ALL_MEMBER
+	SET MEMPOINT=0
+	WHERE ID=#{id}
+</update>
+
+<insert id="setOrder"  parameterType="bit.com.a.dto.OrderBuyDto">
+	INSERT INTO ORDER_BUY(OBNUM, ID, NAME, QUANTITY, PRICE, OBNAME, OBPHONE,OBADDRESS,
+							OBMES, OBWAY, OBCARDN, OBDATE, OBTAKEBACK, OBEXCHANGE,DELIVERYCOST)
+	VALUES(OBNUM_SEQ.NEXTVAL,#{id},#{name},#{quantity},#{price},#{obName},#{obPhone},#{obAddress},
+			#{obMes},#{obWay},#{obCardN},SYSDATE,#{obTakeback},#{obExchange},#{deliveryCost})
+	<selectKey keyProperty="obNum" resultType="int" order="AFTER">
+		SELECT OBNUM_SEQ.CURRVAL  FROM DUAL
+	</selectKey>
+</insert>
+
+<delete id="OrderDelCart" parameterType="bit.com.a.dto.OrderBuyDto">
+	DELETE FROM CART
+	WHERE ID=#{id}
+</delete>
+
+<select id="getProdInfo" parameterType="bit.com.a.dto.OrderDetailDto" resultType="bit.com.a.dto.OrderDetailDto">
+	SELECT PRODNAME,QUANTITY,PRICE,COLOR,FILENAME,WEIGHT
+	FROM PRODUCT
+	WHERE PRODNUM=#{prodNum}
+</select>
+
+
+<insert id="setOrderDetail" parameterType="bit.com.a.dto.OrderDetailDto">
+	INSERT INTO ORDER_DETAIL(ODNUM, OBNUM, PRODNUM, PRODNAME, QUANTITY , PRICE,COLOR, PRODOPTION, FILENAME, WEIGHT)
+	VALUES(ODNUM_SEQ.NEXTVAL, #{obNum}, #{prodNum}, #{prodName}, #{quantity}, #{price},#{color},'',#{filename}, #{weight} )
+	<selectKey keyProperty="odNum" resultType="int" order="AFTER">
+		SELECT ODNUM_SEQ.CURRVAL  FROM DUAL
+	</selectKey>
+</insert>
+
+<insert id="setDeliveryCheck" parameterType="bit.com.a.dto.DeliveryCheckDto">
+	INSERT INTO DELIVERY_CHECK(DCNUM,OBNUM,MEMID,STATUS,CHECKDATE)
+	VALUES(DCNUM_SEQ.NEXTVAL, #{obNum}, #{memId}, #{status},SYSDATE)
+	<selectKey keyProperty="dcNum" resultType="int" order="AFTER">
+		SELECT DCNUM_SEQ.CURRVAL  FROM DUAL
+	</selectKey>
+</insert>
+
+<select id="getOrderBuyInfo" parameterType="bit.com.a.dto.OrderBuyDto" resultType="bit.com.a.dto.OrderBuyDto">
+	SELECT OBNUM, ID,NAME,QUANTITY,PRICE,OBNAME,OBPHONE,OBADDRESS,OBMES,OBWAY,OBCARDN,OBDATE,OBTAKEBACK,OBEXCHANGE,DELIVERYCOST
+	FROM ORDER_BUY
+	WHERE OBNUM=#{obNum}
+</select>
+
+<select id="getOrderDetailInfo" parameterType="bit.com.a.dto.OrderDetailDto" resultType="bit.com.a.dto.OrderDetailDto">
+	SELECT ODNUM,OBNUM,PRODNUM,PRODNAME,QUANTITY,PRICE, COLOR,PRODOPTION,FILENAME,WEIGHT
+	FROM ORDER_DETAIL
+	WHERE OBNUM=#{obNum}
+</select>
+
+<select id="getOrderDetailOdNum" parameterType="bit.com.a.dto.OrderDetailDto" resultType="bit.com.a.dto.OrderDetailDto">
+	SELECT ODNUM,OBNUM,PRODNUM,PRODNAME,QUANTITY,PRICE, COLOR,PRODOPTION,FILENAME,WEIGHT
+	FROM ORDER_DETAIL
+	WHERE ODNUM=#{odNum}
+</select>
+
+
+<select id="getColorList" parameterType="bit.com.a.dto.ColorDto" resultType="bit.com.a.dto.ColorDto">
+	SELECT COLORSEQ,PRODNUM,COLOR,COLORFILENAME
+	FROM COLOR
+	WHERE PRODNUM=#{prodNum}
+</select>
+
+<update id="setExColor" parameterType="bit.com.a.dto.OrderDetailDto">
+	UPDATE ORDER_DETAIL
+	SET OBEXCHANGE=1,REASON=#{reason},EXCOLORSEQ=#{exColorSeq}
+	WHERE ODNUM=#{odNum}
+</update>
+
+<update id="setTakeback" parameterType="bit.com.a.dto.OrderDetailDto">
+	UPDATE ORDER_DETAIL
+	SET OBTAKEBACK=1
+	WHERE ODNUM=#{odNum}
+</update>
+
+<update id="updateOrderPoint" parameterType="bit.com.a.dto.MemberDto">
+	UPDATE ALL_MEMBER
+	SET MEMPOINT=#{memPoint}
+	WHERE ID=#{id}
+</update>
+
+</mapper>

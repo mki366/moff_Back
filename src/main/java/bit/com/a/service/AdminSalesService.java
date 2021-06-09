@@ -13,7 +13,7 @@ public class AdminSalesService {
 	@Autowired
 	private AdminSalesDao dao;
 	
-	
+
 	public int dailySales() {
 		return dao.dailySales();
 	}
@@ -25,5 +25,23 @@ public class AdminSalesService {
 	}
 	public int totalSales() {
 		return dao.totalSales();
+	}
+	//주문 건 수 - 오늘 
+	public int CountDailySales() {
+		return dao.CountDailySales();
+	}
+	
+	//주문 건 수 - 이번달 
+	public int CountMonthlySales() {
+		return dao.CountMonthlySales();
+	}
+	//주문 건 수 - 올해 
+	public int CountAnnualSales() {
+		return dao.CountAnnualSales();
+	}
+	//주문 건 수 - 총
+	public int CountTotalSales() {
+		return dao.CountTotalSales();
+
 	}
 }

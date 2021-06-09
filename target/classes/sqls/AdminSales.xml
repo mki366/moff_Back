@@ -28,4 +28,29 @@
 	FROM ORDER_BUY
 </select>
 
+<!--주문 건수 (오늘/ 이번달/ 이번년도/ 총)  -->
+<select id="CountDailySales" resultType="java.lang.Integer">
+	SELECT COUNT(PRICE)
+	FROM(SELECT PRICE FROM ORDER_BUY
+		 WHERE SUBSTR(OBDATE,1,8)=SUBSTR(SYSDATE,1,10))
+</select>
+
+<select id="CountMonthlySales" resultType="java.lang.Integer">
+	SELECT COUNT(PRICE)
+	FROM(SELECT PRICE FROM ORDER_BUY
+		 WHERE SUBSTR(OBDATE,1,5)=SUBSTR(SYSDATE,1,5))
+</select>
+
+<select id="CountAnnualSales" resultType="java.lang.Integer">
+	SELECT COUNT(PRICE)
+	FROM(SELECT PRICE FROM ORDER_BUY
+		 WHERE SUBSTR(OBDATE,1,2)=SUBSTR(SYSDATE,1,2))
+</select>
+
+<select id="CountTotalSales" resultType="java.lang.Integer">
+	SELECT COUNT(PRICE)
+	FROM ORDER_BUY
+</select>
+
+
 </mapper>
