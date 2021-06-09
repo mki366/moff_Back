@@ -19,7 +19,7 @@ CREATE TABLE ALL_MEMBER
     PHONE        NUMBER          NULL,        --전화번호
     BDATE        VARCHAR2(30)   NOT NULL,     --생년월일(배달원일시 만 19세 미만X)
     JDATE        DATE            NULL,        --회원가입일
-    MEMDEL       NUMBER          NULL,        --회원탈퇴유무
+    MEMDEL       NUMBER          DEFAULT 0 NULL,        --회원탈퇴유무
     MEMPOINT     NUMBER          DEFAULT 0 NULL,        --포인트 칼럼생성
     MEMBERTYPE   NUMBER          NULL,        -- 0 번은 회원, 1번은 배달원, 2번은 관리자
     DELIVERYADMI     NUMBER          NULL,   --배달원일시승인여부 칼럼생성
@@ -28,6 +28,15 @@ CREATE TABLE ALL_MEMBER
     CARNUM       VARCHAR2(400)        NULL,        --차번호판
     CONSTRAINT MEMBER_PK PRIMARY KEY (ID)
 );
+
+UPDATE ALL_MEMBER SET MEMDEL = 0
+WHERE MEMDEL IS NULL
+
+	SELECT *
+	FROM ALL_MEMBER
+	WHERE ID='test060801' AND PWD='test060801!' AND MEMDEL=0
+
+
 
 ALTER TABLE ALL_MEMBER MODIFY PHONE VARCHAR2(50);
 --멤버시퀀스 생성
@@ -462,16 +471,17 @@ DROP SEQUENCE CMMUSEQ;
 
 CREATE TABLE COMMU
 (
-    CMNUM   NUMBER        PRIMARY KEY,    --커뮤니티번호
-    ID    VARCHAR2(50)   NOT NULL,    --회원아이디 
-    IMAGE1   VARCHAR2(50)   NULL,    --이미지등록1
-    IMAGE2   VARCHAR2(50)   NULL ,   --이미지등록2
-    TITLE VARCHAR2(100) NOT    NULL,    --제목
-    CONTENT VARCHAR2(4000) NOT    NULL,  --내용
-    WDATE DATE NOT NULL, --작성날짜
-    READCOUNT NUMBER  NOT    NULL, --조회수
-    CMLIKE NUMBER NULL --좋아요 
-   
+    CMNUM   	NUMBER        	PRIMARY KEY,    --커뮤니티번호
+    ID   		VARCHAR2(50)   	NOT NULL,    --회원아이디 
+    IMAGE1   	VARCHAR2(2000)   	NULL,    --이미지등록1
+    IMAGE2   	VARCHAR2(2000)   	NULL ,   --이미지등록2
+    TITLE 		VARCHAR2(100) 	NOT NULL,    --제목
+    CONTENT 	VARCHAR2(4000) 	NOT NULL,  --내용
+    WDATE 		DATE 			NOT NULL, --작성날짜
+    READCOUNT 	NUMBER  		NOT NULL, --조회수
+    CMLIKE 		NUMBER 			NULL, --좋아요
+  	COMMUDEL    NUMBER          NULL 
+    
 );
 --회원아이디 외래키생성
 ALTER TABLE COMMU
@@ -479,15 +489,12 @@ ADD CONSTRAINT COMMU_FK FOREIGN KEY(ID)
 REFERENCES ALL_MEMBER(ID);
 
 
-
-
---커뮤니티시퀀스 생성
+—커뮤니티시퀀스 생성
 CREATE SEQUENCE CMMUSEQ
 START WITH 1
 INCREMENT BY 1;
 
-
-
+SELECT * FROM commu;
 
 ----------------------------------------------
 --댓글 테이블
@@ -780,7 +787,24 @@ ALTER TABLE BOARDLIKE
 ADD CONSTRAINT BOARDLIKE_FK2 FOREIGN KEY(ID)
 REFERENCES ALL_MEMBER(ID);
 
-— 좋아요seq 생성
+-- 좋아요seq 생성
 CREATE SEQUENCE LNUM
 START WITH 1
 INCREMENT BY 1;
+
+---------------------------------------------
+--채팅 방을 저장
+DROP TABLE CHATROOM
+CASCADE CONSTRAINTS;
+
+SELECT * FROM CHATROOM;
+
+CREATE TABLE CHATROOM(
+	EXPERTNUM	NUMBER			NOT NULL,		-- 업체 번호
+	ROOMNUM		NUMBER			NOT NULL,		-- 방번호
+	ID		VARCHAR2(50)	NULL,		--보낸이
+	MES		 VARCHAR2(50) NULL,	--메세지
+	MESTYPE NUMBER NULL
+	
+);
+---------------------------------------------

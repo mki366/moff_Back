@@ -46,4 +46,10 @@ public class ExperUsersService {
 		return dao.ExpertDetail(eNUM);
 	}
 
+	
+		//업체 디테일 나의 업체
+		public ExpertUsersDto ExpertMyDetail(String id) {
+			return dao.ExpertMyDetail(id);
+		}
+		
 }

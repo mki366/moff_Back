@@ -9,7 +9,7 @@ import bit.com.a.dto.MemberDto;
 import bit.com.a.service.MemberService;
 
 @RestController
-public class MemberConroller {
+public class MemberController {
 
 	@Autowired
 	MemberService service;
@@ -78,9 +78,12 @@ public class MemberConroller {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public MemberDto login(String id, String pwd) {
-		System.err.println(id+ "d" + pwd);
+		System.err.println(id+ "/" + pwd);
 		System.out.println("MemberController login()");		
 		MemberDto dto = service.login(new MemberDto(id, pwd, null, null, null, null, null, null));
+		
+		System.out.println("로그인 정보:" + dto.toString());
+		
 		return dto;
 	}
 	

@@ -254,4 +254,17 @@ public class ExpertUsersController {
 		
 		return Detail;
 	}
+	
+	
+
+	@RequestMapping(value = "/ExpertMyDetail", method = RequestMethod.POST)
+	public ExpertUsersDto ExpertMyDetail(String id) {
+		System.out.println("---start--ExpertMyDetail");
+		
+		System.out.println("들어온아이디:" + id);
+		
+		ExpertUsersDto Detail = ExperService.ExpertMyDetail(id);
+		
+		return Detail;
+	}
 }
