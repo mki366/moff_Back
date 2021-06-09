@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   <mapper namespace="bit.com.a.dao.ChatDao">
+   
+   <insert id="CreateRoom" parameterType="bit.com.a.WebSocket.Room">
+   INSERT INTO CHATROOM(EXPERTNUM, ROOMNUM)
+   VALUES(#{expertNum}, #{RoomNum})
+   
+   </insert>
+   
+   <select id="ExpertChatRoom" parameterType="bit.com.a.WebSocket.ChatParam" resultType="bit.com.a.WebSocket.Room">
+   SELECT EXPERTNUM, ROOMNUM, ID, MES, MESTYPE
+   FROM(SELECT ROW_NUMBER()OVER(ORDER BY EXPERTNUM ASC) AS RNUM, EXPERTNUM, ROOMNUM, ID, MES, MESTYPE
+   	FROM CHATROOM 
+   	WHERE EXPERTNUM=#{expertNum}
+   	ORDER BY EXPERTNUM ASC)
+   	WHERE RNUM BETWEEN ${start} AND ${end}
+   
+   
+   </select>
+   
+   <select id="ExpertChatRoomCOUNT" parameterType="bit.com.a.WebSocket.ChatParam" resultType="int">
+   SELECT NVL(COUNT(*),0)
+   FROM CHATROOM
+   WHERE EXPERTNUM=#{expertNum}
+   
+   </select>
+   
+   
+   </mapper> 

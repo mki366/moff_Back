@@ -29,4 +29,7 @@ public interface ExpertUsersDao {
 	//업체 디테일
 	public ExpertUsersDto ExpertDetail(int eNUM);
 	
+	//업체 디테일 나의 업체
+	public ExpertUsersDto ExpertMyDetail(String id);
+	
 }

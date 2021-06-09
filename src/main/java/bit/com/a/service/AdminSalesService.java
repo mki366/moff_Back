@@ -13,4 +13,17 @@ public class AdminSalesService {
 	@Autowired
 	private AdminSalesDao dao;
 	
+	
+	public int dailySales() {
+		return dao.dailySales();
+	}
+	public int monthlySales() {
+		return dao.monthlySales();
+	}
+	public int annualSales() {
+		return dao.annualSales();
+	}
+	public int totalSales() {
+		return dao.totalSales();
+	}
 }

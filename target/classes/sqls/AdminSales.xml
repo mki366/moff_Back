@@ -6,25 +6,25 @@
 <mapper namespace="bit.com.a.dao.AdminSalesDao">
 
 <select id="dailySales" resultType="java.lang.Integer">
-	SELECT SUM(TOTALPRICE)
-	FROM(SELECT TOTALPRICE FROM ORDER_BUY
+	SELECT SUM(PRICE)
+	FROM(SELECT PRICE FROM ORDER_BUY
 		 WHERE SUBSTR(OBDATE,1,8)=SUBSTR(SYSDATE,1,10))
 </select>
 
-<select id="monthlySales">
-	SELECT SUM(TOTALPRICE)
-	FROM(SELECT TOTALPRICE FROM ORDER_BUY
+<select id="monthlySales" resultType="java.lang.Integer">
+	SELECT SUM(PRICE)
+	FROM(SELECT PRICE FROM ORDER_BUY
 		 WHERE SUBSTR(OBDATE,1,5)=SUBSTR(SYSDATE,1,5))
 </select>
 
-<select id="annualSales">
-	SELECT SUM(TOTALPRICE)
-	FROM(SELECT TOTALPRICE FROM ORDER_BUY
+<select id="annualSales" resultType="java.lang.Integer">
+	SELECT SUM(PRICE)
+	FROM(SELECT PRICE FROM ORDER_BUY
 		 WHERE SUBSTR(OBDATE,1,2)=SUBSTR(SYSDATE,1,2))
 </select>
 
-<select id="totalSales">
-	SELECT SUM(TOTALPRICE)
+<select id="totalSales" resultType="java.lang.Integer">
+	SELECT SUM(PRICE)
 	FROM ORDER_BUY
 </select>
 

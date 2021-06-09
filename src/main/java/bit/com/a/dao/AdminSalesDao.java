@@ -7,4 +7,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AdminSalesDao {
 
+	public int dailySales();
+	public int monthlySales();
+	public int annualSales();
+	public int totalSales();
+	
 }

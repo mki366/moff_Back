@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+   <mapper namespace="bit.com.a.dao.AdminMemberDao">
+   <!-- 월별가입자수 -->
+   <select id="MonthlyMember" resultType="bit.com.a.dto.MonthlyMember">
+    select TO_CHAR(jdate, 'YYYYMM') as 날짜,
+	 count(*) as 월별가입자 
+ 	from all_member 
+ 	where jdate >='20210101' and jdate  <![CDATA[ < ]]> to_char(sysdate,'YYYYMMDD')
+ 	GROUP BY to_char(jdate, 'YYYYMM')
+   
+   </select>
+   
+   
+   </mapper>

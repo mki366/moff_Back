@@ -283,4 +283,41 @@
   </select>
   
   
+   <!--detail -->
+  <select id="ExpertMyDetail" parameterType="String" resultType="bit.com.a.dto.ExpertUsersDto">
+  SELECT 	ENUM,
+  			ID,
+  			PWD,
+  			NAME,
+  			NICKNAME,
+  			
+  			EMAIL,
+  			ADDRESS,
+  			BDATE,
+  			PHONE,
+  			EXPERTYPE,
+  			
+  			IDCARD,
+  			REGISTRATION,
+  			REGISNAME,
+  			REGINUMBER,
+  			CEONAME,
+  			
+  			REGADDRESS,
+  			PART,
+  			EXPERTINFO,
+  			IMAGE,
+  			IMAGEDETAIL1,
+  			IMAGEDETAIL2,
+  			IMAGEDETAIL3,
+  			RECENTCON,
+  			REVIEW
+  			
+  			FROM EXPERT_USERS
+  			WHERE ID=#{id}
+  			
+  
+  </select>
+  
+  
   </mapper>
