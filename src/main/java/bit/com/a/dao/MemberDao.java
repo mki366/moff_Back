@@ -22,10 +22,3 @@ public interface MemberDao {
 	public int pwdUpdate(MemberDto dto);
 	public int addressUpdate(MemberDto dto);
 }
-
-
-
-
-
-
-

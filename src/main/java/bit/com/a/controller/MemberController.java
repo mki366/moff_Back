@@ -9,7 +9,7 @@ import bit.com.a.dto.MemberDto;
 import bit.com.a.service.MemberService;
 
 @RestController
-public class MemberConroller {
+public class MemberController {
 
 	@Autowired
 	MemberService service;
