@@ -316,6 +316,7 @@ public class CommunityController {
 		}
 	}
 	
+	
 	@RequestMapping(value = "/getCommunityDetail", method = RequestMethod.POST)
 	public CommunityDto getCommunityDetail(int cmNum) {
 		System.out.println("getCommunityDetail() Controller");
@@ -326,6 +327,16 @@ public class CommunityController {
 		
 	}
 	
+	 // 커뮤니티 인기순 (메인)
+	   @RequestMapping(value = "/commuList", method = {RequestMethod.GET, RequestMethod.POST})
+	  public List<CommunityDto> commuList(CommunityDto dto) {
+	      System.out.println("commuList() Controller");
+	      
+	      List<CommunityDto> list = service.commuList(dto);
+	      
+	      return list;
+	   }
+
 
 }
 

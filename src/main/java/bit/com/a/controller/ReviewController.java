@@ -99,21 +99,22 @@ public class ReviewController {
 								HttpServletRequest req) throws IOException {
 		
 		System.out.println("writeReview() Controller");
-		System.out.println(rDto);
+		System.out.println("------rDto" + rDto);
+		System.out.println("-------파일로드" + fileload.getOriginalFilename());
 		String uploadPath = req.getServletContext().getRealPath("/review");
 		
 		String image = "";
 		
 		boolean check = false;
 		
-				if(rDto.getImage()==null) {
-					rDto.setImage("");
-					
-					check= service.writeReview(rDto);
-					service.reviewPoint(mem);
-					
-					
-				}else {
+			if(fileload.isEmpty()) {
+				rDto.setImage("");
+				
+				check= service.writeReview(rDto);
+				service.reviewPoint(mem);
+				
+				
+			}else {
 			
 				
 				image = fileload.getOriginalFilename();
@@ -124,7 +125,7 @@ public class ReviewController {
 				System.out.println("------파일업로드 경로--------");
 				System.out.println("Review image: " + filepath);
 				
-				String myPath = "http://localhost:3000//community//";
+				String myPath = "http://localhost:3000//review//";
 				
 				rDto.setImage(myPath+newFilename);
 				
@@ -169,7 +170,15 @@ public class ReviewController {
 	}
 	
 	
-	
+	// 평균평점
+	@RequestMapping(value = "/avgReview", method = {RequestMethod.GET, RequestMethod.POST})
+	public List<ReviewDto> avgReview(int prodNum) {
+		System.out.println("avgReview() Controller");
+		
+		List<ReviewDto> list = service.avgReview(prodNum);
+		
+		return list;
+	}
 	
 	
 	

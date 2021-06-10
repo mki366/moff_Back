@@ -49,6 +49,8 @@ public interface CommunityDao {
 	// 포인트주기
 	void addPoint(MemberDto mem);
 	
+	// 커뮤니티 인기순 (메인)
+	public List<CommunityDto> commuList(CommunityDto dto);
 	
 	
 }

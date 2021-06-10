@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="bit.com.a.dao.CommentDao">
+
+
+	<!-- 디테일 댓글 -->
+	<select id="getAllComment" parameterType="bit.com.a.dto.CommentDto" resultType="bit.com.a.dto.CommentDto">
+		SELECT CTNUM, CMNUM, ID, WDATE, CONTENT, DEL
+		FROM (SELECT ROW_NUMBER()OVER(ORDER BY CTNUM ASC) AS RNUM
+					, CTNUM
+					, CMNUM
+					, ID
+					, WDATE
+					, CONTENT
+					, DEL
+				FROM ALL_COMMENT
+				WHERE DEL=0 AND CMNUM=#{cmNum}
+				ORDER BY RNUM)
+	</select>
+
+	<!-- 댓글 총수 -->
+	<select id="getCommentCount" parameterType="bit.com.a.dto.CommentDto" resultType="java.lang.Integer">
+		SELECT NVL(COUNT(*), 0)
+		FROM ALL_COMMENT
+		WHERE cmNum=#{cmNum} AND DEL=0
+	</select>
+	
+	
+	<!-- 댓글등록 -->
+	<insert id="writeComment" parameterType="bit.com.a.dto.CommentDto">
+		INSERT INTO ALL_COMMENT(CTNUM
+								, CMNUM
+								, ID
+								, WDATE
+								, CONTENT
+								, DEL)
+					VALUES(CTNUMSEQ.NEXTVAL
+								, #{cmNum}
+								, #{id}
+								, SYSDATE
+								, #{content}
+								, 0)
+	
+	</insert>
+
+
+	<!-- 댓글 수정 -->
+	<update id="updateComment" parameterType="bit.com.a.dto.CommentDto">
+		UPDATE ALL_COMMENT
+		SET CONTENT=#{content}
+		WHERE CTNUM=#{ctNum}
+	</update>
+
+
+	<!-- 댓글 삭제 -->
+	<update id="deleteComment" parameterType="java.lang.Integer">
+		UPDATE ALL_COMMENT
+		SET DEL=1
+		WHERE CTNUM=#{ctNum}
+	</update>
+
+
+
+
+
+</mapper>
+
+
+
+
+

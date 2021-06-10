@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="bit.com.a.dao.BoardLikeDao">
+
+	<!-- 좋아요 클릭 -->
+	<insert id="addLikeList" parameterType="bit.com.a.dto.BoardLikeDto">
+		INSERT INTO BOARDLIKE(LIKENUM, CMNUM, ID)
+		VALUES (LNUM.NEXTVAL, #{cmNum}, #{id})
+	</insert>
+
+	<!-- 게시글에 좋아요 적용 -->
+	<update id="updateLike" parameterType="java.lang.Integer">
+		UPDATE COMMU
+		SET CMLIKE = (SELECT COUNT(*)
+					FROM BOARDLIKE
+					WHERE CMNUM=#{cmNum})
+		WHERE CMNUM=#{cmNum}
+	</update>
+	
+	<!-- 좋아요 총 수 -->
+	<select id="likeCount" parameterType="bit.com.a.dto.BoardLikeDto" resultType="java.lang.Integer">
+		SELECT COUNT(LIKENUM)
+		FROM BOARDLIKE 
+		WHERE ID=#{id} AND CMNUM=#{cmNum}
+	</select>
+
+	<!-- 좋아요삭제 -->
+	<delete id="delLike" parameterType="bit.com.a.dto.BoardLikeDto">
+		DELETE FROM BOARDLIKE
+		WHERE CMNUM=#{cmNum} AND ID=#{id}
+	</delete>
+
+
+	<!-- 좋아요 클릭(디테일) -->
+	<insert id="addLikeDetail" parameterType="bit.com.a.dto.BoardLikeDto">
+		INSERT INTO BOARDLIKE(LIKENUM, CMNUM, ID)
+		VALUES (LNUM.NEXTVAL, #{cmNum}, #{id})
+	</insert>
+
+	
+
+
+
+
+</mapper>

@@ -64,18 +64,23 @@
 	
 	<update id="reviewPoint" parameterType="bit.com.a.dto.MemberDto">
 		UPDATE ALL_MEMBER 
-		SET MEMPOINT = MEMPOINT+300
+		SET MEMPOINT = MEMPOINT+500
 		WHERE ID=#{id}
 	</update>
 	
 	<update id="photoPoint" parameterType="bit.com.a.dto.MemberDto">
 		UPDATE ALL_MEMBER 
-		SET MEMPOINT = MEMPOINT+600
+		SET MEMPOINT = MEMPOINT+1000
 		WHERE ID=#{id}
 	</update>
 	
-	
-	
+	<!-- 평균평점 -->
+	<select id="avgReview" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ReviewDto">
+		SELECT STAR, NVL(COUNT(STAR), 0), ROUND(RATIO_TO_REPORT(COUNT(*)) OVER(),2)*100 || '%' AS RATING
+		FROM REVIEW
+		WHERE PRODNUM=#{prodNum}
+		GROUP BY STAR
+	</select>
 	
 	
 	
