@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import bit.com.a.dto.DeliveryCheckDto;
+import bit.com.a.dto.OrderBuyDto;
 import bit.com.a.dto.PurchasesDto;
 
 @Mapper
@@ -34,14 +36,22 @@ public interface AdminSalesDao {
 	
 
 	//배송중
-	public int inDelivery();
+	public int inDelivery(DeliveryCheckDto dto);
 	//배송 완료
-	public int delivered();
+	public int delivered(DeliveryCheckDto dto);
 	//배송 전
-	public int beforeDelivery();
+	public int beforeDelivery(DeliveryCheckDto dto);
 	//배송 수락
-	public int acceptDelivery();
+	public int acceptDelivery(DeliveryCheckDto dto);
 	
+	//구매 건수
+	public int orderBuyDate(OrderBuyDto dto);
+	//구매 총 가격
+	public int orderBuyPriceDate(OrderBuyDto dto);
 	
+	//반품 갯수
+	public int orderDetailTB(OrderBuyDto dto);
+	//교환 갯수
+	public int orderDetailEX(OrderBuyDto dto);
 
 }

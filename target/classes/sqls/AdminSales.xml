@@ -8,19 +8,19 @@
 <select id="dailySales" resultType="java.lang.Integer">
 	SELECT SUM(PRICE)
 	FROM(SELECT PRICE FROM ORDER_BUY
-		 WHERE SUBSTR(OBDATE,1,8)=SUBSTR(SYSDATE,1,10))
+	WHERE SUBSTR(OBDATE,1,8)=SUBSTR(SYSDATE,1,10))
 </select>
 
 <select id="monthlySales" resultType="java.lang.Integer">
 	SELECT SUM(PRICE)
 	FROM(SELECT PRICE FROM ORDER_BUY
-		 WHERE SUBSTR(OBDATE,1,5)=SUBSTR(SYSDATE,1,5))
+	WHERE SUBSTR(OBDATE,1,5)=SUBSTR(SYSDATE,1,5))
 </select>
 
 <select id="annualSales" resultType="java.lang.Integer">
 	SELECT SUM(PRICE)
 	FROM(SELECT PRICE FROM ORDER_BUY
-		 WHERE SUBSTR(OBDATE,1,2)=SUBSTR(SYSDATE,1,2))
+	WHERE SUBSTR(OBDATE,1,2)=SUBSTR(SYSDATE,1,2))
 </select>
 
 <select id="totalSales" resultType="java.lang.Integer">
@@ -54,19 +54,19 @@
 <select id="CountDailySales" resultType="java.lang.Integer">
 	SELECT COUNT(PRICE)
 	FROM(SELECT PRICE FROM ORDER_BUY
-		 WHERE SUBSTR(OBDATE,1,8)=SUBSTR(SYSDATE,1,10))
+	WHERE SUBSTR(OBDATE,1,8)=SUBSTR(SYSDATE,1,10))
 </select>
 
 <select id="CountMonthlySales" resultType="java.lang.Integer">
 	SELECT COUNT(PRICE)
 	FROM(SELECT PRICE FROM ORDER_BUY
-		 WHERE SUBSTR(OBDATE,1,5)=SUBSTR(SYSDATE,1,5))
+	WHERE SUBSTR(OBDATE,1,5)=SUBSTR(SYSDATE,1,5))
 </select>
 
 <select id="CountAnnualSales" resultType="java.lang.Integer">
 	SELECT COUNT(PRICE)
 	FROM(SELECT PRICE FROM ORDER_BUY
-		 WHERE SUBSTR(OBDATE,1,2)=SUBSTR(SYSDATE,1,2))
+	WHERE SUBSTR(OBDATE,1,2)=SUBSTR(SYSDATE,1,2))
 </select>
 
 <select id="CountTotalSales" resultType="java.lang.Integer">
@@ -74,31 +74,67 @@
 	FROM ORDER_BUY
 </select>
 
+<!-- 년/ 월 들어오면  -->
 <!-- 배송중 -->
-<select id="inDelivery" resultType="java.lang.Integer">
+<select id="inDelivery" parameterType="bit.com.a.dto.DeliveryCheckDto" resultType="java.lang.Integer">
 	SELECT COUNT(*)
 	FROM DELIVERY_CHECK
-	WHERE STATUS='배송중'
+	WHERE STATUS='배송중' AND SUBSTR(CHECKDATE,1,5)= SUBSTR(#{checkDate},1,5)
 </select>
 
 <!-- 배송 완료 -->
-<select id="delivered" resultType="java.lang.Integer">
+<select id="delivered" parameterType="bit.com.a.dto.DeliveryCheckDto" resultType="java.lang.Integer">
 	SELECT COUNT(*)
 	FROM DELIVERY_CHECK
-	WHERE STATUS='배송완료'
+	WHERE STATUS='배송완료' AND SUBSTR(CHECKDATE,1,5)= SUBSTR(#{checkDate},1,5)
 </select>
 
 <!-- 배송 전 -->
-<select id="beforeDelivery" resultType="java.lang.Integer">
+<select id="beforeDelivery" parameterType="bit.com.a.dto.DeliveryCheckDto" resultType="java.lang.Integer">
 	SELECT COUNT(*)
 	FROM DELIVERY_CHECK
-	WHERE STATUS='배송전'
+	WHERE STATUS='배송전' AND SUBSTR(CHECKDATE,1,5)= SUBSTR(#{checkDate},1,5)
 </select>
 
 <!-- 배송 수락 -->
-<select id="acceptDelivery" resultType="java.lang.Integer">
+<select id="acceptDelivery" parameterType="bit.com.a.dto.DeliveryCheckDto" resultType="java.lang.Integer">
 	SELECT COUNT(*)
 	FROM DELIVERY_CHECK
-	WHERE STATUS='배송수락'
+	WHERE STATUS='배송수락' AND SUBSTR(CHECKDATE,1,5)= SUBSTR(#{checkDate},1,5)
+</select>
+
+<!-- 구매 건수 -->
+<select id="orderBuyDate" parameterType="bit.com.a.dto.OrderBuyDto" resultType="java.lang.Integer">
+	SELECT COUNT(*)
+	FROM ORDER_BUY 
+	WHERE SUBSTR(OBDATE,1,5)= SUBSTR(#{obDate},1,5)
+</select>
+
+<!-- 구매 총 가격 -->
+<select id="orderBuyPriceDate" parameterType="bit.com.a.dto.OrderBuyDto" resultType="java.lang.Integer">
+	SELECT SUM(PRICE)
+	FROM ORDER_BUY 
+	WHERE SUBSTR(OBDATE,1,5)= SUBSTR(#{obDate},1,5)
+</select>
+
+
+<!-- 반품 갯수  -->
+<select id="orderDetailTB" parameterType="bit.com.a.dto.OrderBuyDto" resultType="java.lang.Integer">	
+	SELECT COUNT(*)
+	FROM ORDER_DETAIL 
+	WHERE OBNUM=( 	SELECT OBNUM
+					FROM ORDER_BUY 
+					WHERE SUBSTR(OBDATE,1,5)= SUBSTR(#{obDate},1,5)
+				) AND OBTAKEBACK=1
+</select>
+
+<!-- 교환 갯수  -->
+<select id="orderDetailEX" parameterType="bit.com.a.dto.OrderBuyDto" resultType="java.lang.Integer">
+	SELECT COUNT(*)
+	FROM ORDER_DETAIL 
+	WHERE OBNUM=( 	SELECT OBNUM
+					FROM ORDER_BUY 
+					WHERE SUBSTR(OBDATE,1,5)= SUBSTR(#{obDate},1,5)
+				) AND OBEXCHANGE=1
 </select>
 </mapper>

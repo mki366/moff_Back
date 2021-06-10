@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import bit.com.a.dto.DeliveryCheckDto;
+import bit.com.a.dto.OrderBuyDto;
+import bit.com.a.dto.OrderDetailDto;
 import bit.com.a.dto.PurchasesDto;
 import bit.com.a.service.AdminSalesService;
 
@@ -98,30 +101,55 @@ public class AdminSalesController {
 
 	//배송중
 		@RequestMapping(value = "/inDelivery", method = RequestMethod.GET)
-		public int inDelivery() {
-			System.out.println("AdminSalesController inDelivery()");
-			return service.inDelivery();
+		public int inDelivery(DeliveryCheckDto dto) {
+			System.out.println("AdminSalesController inDelivery()"+dto.getCheckDate());
+			return service.inDelivery(dto);
 		}
 
 		//배송 완료
 		@RequestMapping(value = "/delivered", method = RequestMethod.GET)
-		public int delivered() {
-			System.out.println("AdminSalesController delivered()");
-			return service.delivered();
+		public int delivered(DeliveryCheckDto dto) {
+			System.out.println("AdminSalesController delivered()"+dto.getCheckDate());
+			return service.delivered(dto);
 		}
 		
 		//배송 전
 		@RequestMapping(value = "/beforeDelivery", method = RequestMethod.GET)
-		public int beforeDelivery() {
-			System.out.println("AdminSalesController beforeDelivery()");
-			return service.beforeDelivery();
+		public int beforeDelivery(DeliveryCheckDto dto) {
+			System.out.println("AdminSalesController beforeDelivery()"+dto.getCheckDate());
+			return service.beforeDelivery(dto);
 		}
 		
 		//배송 수락
 		@RequestMapping(value = "/acceptDelivery", method = RequestMethod.GET)
-		public int acceptDelivery() {
-			System.out.println("AdminSalesController acceptDelivery()");
-			return service.acceptDelivery();
+		public int acceptDelivery(DeliveryCheckDto dto) {
+			System.out.println("AdminSalesController acceptDelivery()"+dto.getCheckDate());
+			return service.acceptDelivery(dto);
+		}
+		//구매 건수
+		@RequestMapping(value = "/orderBuyDate", method = RequestMethod.GET)
+		public int orderBuyDate(OrderBuyDto dto) {
+			System.out.println("AdminSalesController orderBuyDate()"+dto.getObDate());
+			return service.orderBuyDate(dto);
+		}
+		//구매 건수
+		@RequestMapping(value = "/orderBuyPriceDate", method = RequestMethod.GET)
+		public int orderBuyPriceDate(OrderBuyDto dto) {
+			System.out.println("AdminSalesController orderBuyPriceDate()"+dto.getObDate());
+			return service.orderBuyPriceDate(dto);
+		}
+		
+		//반품 갯수
+		@RequestMapping(value = "/orderDetailTB", method = RequestMethod.GET)
+		public int orderDetailTB(OrderBuyDto dto) {
+			System.out.println("AdminSalesController orderDetailTB()");
+			return service.orderDetailTB(dto);
+		}
+		//교환 갯수
+		@RequestMapping(value = "/orderDetailEX", method = RequestMethod.GET)
+		public int orderDetailEX(OrderBuyDto dto) {
+			System.out.println("AdminSalesController orderDetailEX()");
+			return service.orderDetailEX(dto);
 		}
 
 	
