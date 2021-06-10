@@ -1,10 +1,15 @@
 package bit.com.a.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import bit.com.a.dto.PurchasesDto;
 import bit.com.a.service.AdminSalesService;
 
 @RestController
@@ -13,7 +18,6 @@ public class AdminSalesController {
 	@Autowired
 	AdminSalesService service;
 	
-
 	
 	@RequestMapping(value = "/salesByPeriod", method = RequestMethod.POST)
 	public int[] salesByPeriod() {
@@ -26,7 +30,43 @@ public class AdminSalesController {
 		return Array;
 	}
 	
+	@RequestMapping(value = "/selDailySales", method = RequestMethod.POST)
+	public List<PurchasesDto> selDailySales(String yearmonth) {
+		System.out.println("AdminSalesController selDailySales()"); 
 
+		if(yearmonth==null) {
+			Date date = new Date();
+		
+			SimpleDateFormat df = new SimpleDateFormat("yy/MM");
+			yearmonth = df.format(date);
+		}
+		
+		List<PurchasesDto> dlist = service.selDailySales(yearmonth);
+		return dlist;
+	}
+	
+	@RequestMapping(value = "/selMonthlySales", method = RequestMethod.POST)
+	public List<PurchasesDto> selMonthlySales(String year) {
+		System.out.println("AdminSalesController selMonthlySales()"); 
+
+		if(year==null) {
+			Date date = new Date();
+			SimpleDateFormat df = new SimpleDateFormat("yy");
+			year = df.format(date);
+		}
+		
+		List<PurchasesDto> mlist = service.selMonthlySales(year);
+		return mlist;
+	}
+	
+	@RequestMapping(value = "/selAnnualSales", method = RequestMethod.POST)
+	public List<PurchasesDto> selAnnualSales() {
+		System.out.println("AdminSalesController selAnnualSales()"); 
+
+		List<PurchasesDto> alist = service.selAnnualSales();
+		return alist;
+	}
+	
 
 	//주문 건 수 - 오늘 
 	@RequestMapping(value = "/CountDailySales", method = RequestMethod.GET)

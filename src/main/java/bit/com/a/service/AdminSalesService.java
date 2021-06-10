@@ -1,10 +1,13 @@
 package bit.com.a.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import bit.com.a.dao.AdminSalesDao;
+import bit.com.a.dto.PurchasesDto;
 
 @Service
 @Transactional
@@ -26,6 +29,17 @@ public class AdminSalesService {
 	public int totalSales() {
 		return dao.totalSales();
 	}
+	
+	public List<PurchasesDto> selDailySales(String yearmonth) {
+		return dao.selDailySales(yearmonth);
+	}
+	public List<PurchasesDto> selMonthlySales(String year) {
+		return dao.selMonthlySales(year);
+	}
+	public List<PurchasesDto> selAnnualSales() {
+		return dao.selAnnualSales();
+	}
+	
 	//주문 건 수 - 오늘 
 	public int CountDailySales() {
 		return dao.CountDailySales();

@@ -28,6 +28,28 @@
 	FROM ORDER_BUY
 </select>
 
+
+<select id="selDailySales" parameterType="java.lang.String" resultType="bit.com.a.dto.PurchasesDto">
+	SELECT SUM(PRICE) AS PRICE, OBDATE
+	FROM ORDER_BUY
+	GROUP BY OBDATE
+	HAVING SUBSTR(OBDATE,1,5)=#{yearmonth}
+</select>
+
+<select id="selMonthlySales" parameterType="java.lang.String" resultType="bit.com.a.dto.PurchasesDto">
+	SELECT SUM(PRICE) AS PRICE, SUBSTR(OBDATE,1,5) AS OBDATE
+	FROM ORDER_BUY
+	WHERE SUBSTR(OBDATE,1,2)=#{year}
+	GROUP BY SUBSTR(OBDATE,1,5)
+</select>
+
+<select id="selAnnualSales" parameterType="java.lang.String" resultType="bit.com.a.dto.PurchasesDto">
+	SELECT SUM(PRICE) AS PRICE, SUBSTR(OBDATE,1,2) AS OBDATE
+	FROM ORDER_BUY
+	GROUP BY SUBSTR(OBDATE,1,2)
+</select>
+
+
 <!--주문 건수 (오늘/ 이번달/ 이번년도/ 총)  -->
 <select id="CountDailySales" resultType="java.lang.Integer">
 	SELECT COUNT(PRICE)
