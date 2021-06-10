@@ -13,19 +13,16 @@ public class AdminSalesController {
 	@Autowired
 	AdminSalesService service;
 	
-	
-	@RequestMapping(value = "/salesByPeriod", method = RequestMethod.POST)
-	public Array[] salesByPeriod() {
-		System.out.println("AdminSalesController salesByPeriod()");
-		int Array[] = new int[4];
-		Array[1] = service.dailySales();
-		Array[2] = service.monthlySales();
-		Array[3] = service.annualSales();
-		Array[4] = service.totalSales();
-		
-		return Array;
-	}
-	
-
+	/*
+	 @RequestMapping(value = "/salesByPeriod", method = RequestMethod.POST) public
+	 Array[] salesByPeriod() {
+	 System.out.println("AdminSalesController salesByPeriod()");
+	 int Array[] = new int[4]; 
+	 Array[1] = service.dailySales(); Array[2] = service.monthlySales();
+	 Array[3] = service.annualSales(); Array[4] = service.totalSales();
+	 
+	 return Array; }
+	 
+*/
 	
 }

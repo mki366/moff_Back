@@ -4,6 +4,7 @@ public class MonthlyMember {
 	private String month;
 	private int count;
 	
+	
 	public MonthlyMember(String month, int count) {
 		super();
 		this.month = month;

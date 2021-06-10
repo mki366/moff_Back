@@ -6,13 +6,12 @@
   
    <mapper namespace="bit.com.a.dao.AdminMemberDao">
    <!-- 월별가입자수 -->
-   <select id="MonthlyMember" resultType="bit.com.a.dto.MonthlyMember">
-    select TO_CHAR(jdate, 'YYYYMM') as 날짜,
-	 count(*) as 월별가입자 
- 	from all_member 
- 	where jdate >='20210101' and jdate  <![CDATA[ < ]]> to_char(sysdate,'YYYYMMDD')
- 	GROUP BY to_char(jdate, 'YYYYMM')
-   
+   <select id="MonthlyMemberList" resultType="bit.com.a.dto.MonthlyMember">
+  select TO_CHAR(jdate, 'YYYYMM') as 월별,
+ count(*) as 가입자수
+ from all_member 
+ where jdate >='20210101' and jdate  <![CDATA[ < ]]>  to_char(sysdate,'YYYYMMDD')
+ GROUP BY to_char(jdate, 'YYYYMM')
    </select>
    
    

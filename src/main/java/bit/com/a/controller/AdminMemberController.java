@@ -1,5 +1,7 @@
 package bit.com.a.controller;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +20,23 @@ public class AdminMemberController {
 	
 	@RequestMapping(value="/MonthlyMember", method = RequestMethod.POST )
 	public List<MonthlyMember> MonthlyMember(){
-		List<MonthlyMember> MonthlyMember = service.MonthlyMember();
-		for (MonthlyMember monthlyMember2 : MonthlyMember) {
-			System.out.println("월별가입자 확인:" + monthlyMember2.toString());
-		}
+		List<MonthlyMember> MonthlyMember = service.MonthlyMemberList();
+		
+	
+		
+		System.out.println("hashmap확인:" + MonthlyMember.toString());
+		
+		
 		
 		return MonthlyMember;
 	}
+	
+	/*
+	 * @RequestMapping(value="/MonthlyMember", method = RequestMethod.POST ) public
+	 * List<MonthlyMember> MonthlyMember(){ List<MonthlyMember> MonthlyMember =
+	 * service.MonthlyMember(); for (MonthlyMember monthlyMember2 : MonthlyMember) {
+	 * System.out.println("월별가입자 확인:" + monthlyMember2.toString()); }
+	 * 
+	 * return MonthlyMember; }
+	 */
 }
