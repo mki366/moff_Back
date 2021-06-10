@@ -58,4 +58,22 @@ public class AdminSalesService {
 		return dao.CountTotalSales();
 
 	}
+	//배송중
+		public int inDelivery() {
+			return dao.inDelivery();
+		}
+		//배송 완료
+		public int delivered() {
+			return dao.delivered();
+		}
+		//배송 전
+		public int beforeDelivery() {
+			return dao.beforeDelivery();
+		}
+		//배송 수락
+		public int acceptDelivery() {
+			return dao.acceptDelivery();
+
+		}
+
 }

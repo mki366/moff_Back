@@ -74,5 +74,31 @@
 	FROM ORDER_BUY
 </select>
 
+<!-- 배송중 -->
+<select id="inDelivery" resultType="java.lang.Integer">
+	SELECT COUNT(*)
+	FROM DELIVERY_CHECK
+	WHERE STATUS='배송중'
+</select>
 
+<!-- 배송 완료 -->
+<select id="delivered" resultType="java.lang.Integer">
+	SELECT COUNT(*)
+	FROM DELIVERY_CHECK
+	WHERE STATUS='배송완료'
+</select>
+
+<!-- 배송 전 -->
+<select id="beforeDelivery" resultType="java.lang.Integer">
+	SELECT COUNT(*)
+	FROM DELIVERY_CHECK
+	WHERE STATUS='배송전'
+</select>
+
+<!-- 배송 수락 -->
+<select id="acceptDelivery" resultType="java.lang.Integer">
+	SELECT COUNT(*)
+	FROM DELIVERY_CHECK
+	WHERE STATUS='배송수락'
+</select>
 </mapper>

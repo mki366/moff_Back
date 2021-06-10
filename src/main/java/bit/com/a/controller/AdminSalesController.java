@@ -96,5 +96,33 @@ public class AdminSalesController {
 		return service.CountTotalSales();
 	}
 
+	//배송중
+		@RequestMapping(value = "/inDelivery", method = RequestMethod.GET)
+		public int inDelivery() {
+			System.out.println("AdminSalesController inDelivery()");
+			return service.inDelivery();
+		}
+
+		//배송 완료
+		@RequestMapping(value = "/delivered", method = RequestMethod.GET)
+		public int delivered() {
+			System.out.println("AdminSalesController delivered()");
+			return service.delivered();
+		}
+		
+		//배송 전
+		@RequestMapping(value = "/beforeDelivery", method = RequestMethod.GET)
+		public int beforeDelivery() {
+			System.out.println("AdminSalesController beforeDelivery()");
+			return service.beforeDelivery();
+		}
+		
+		//배송 수락
+		@RequestMapping(value = "/acceptDelivery", method = RequestMethod.GET)
+		public int acceptDelivery() {
+			System.out.println("AdminSalesController acceptDelivery()");
+			return service.acceptDelivery();
+		}
+
 	
 }

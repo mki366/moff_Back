@@ -31,5 +31,17 @@ public interface AdminSalesDao {
 	public int CountAnnualSales();
 	//주문 건 수 -총
 	public int CountTotalSales();
+	
+
+	//배송중
+	public int inDelivery();
+	//배송 완료
+	public int delivered();
+	//배송 전
+	public int beforeDelivery();
+	//배송 수락
+	public int acceptDelivery();
+	
+	
 
 }
