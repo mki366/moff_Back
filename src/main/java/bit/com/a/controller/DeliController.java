@@ -142,7 +142,7 @@ public class DeliController {
 	}
 	
 	//전체회원 리스트
-	@RequestMapping(value = "/allmemberList", method = RequestMethod.GET)
+	@RequestMapping(value = "/allmemberList", method = RequestMethod.POST)
 	public List<MemberDto> allmemberList(AdPagingParam param){
 		System.out.println("allmemberList controller");
 		
@@ -150,8 +150,8 @@ public class DeliController {
 		System.out.println(param.toString());
 		
 		int pagen = param.getPage();
-		int start = pagen * 10 + 1;
-		int end = (pagen + 1)*10;
+		int start = pagen * 7 + 1;
+		int end = (pagen + 1)*7;
 		System.out.println("start:"+ start);
 		System.out.println("end:"+ end);
 		
@@ -172,15 +172,23 @@ public class DeliController {
 	}
 	
 	//회원의 총수
-	@RequestMapping(value = "/getallmemberList", method = RequestMethod.GET)
+	@RequestMapping(value = "/getallmemberList", method = RequestMethod.POST)
 
 	public int bbslistCount(AdPagingParam param) {
 		int count = service.getmemberList(param);
-		return count;
+		
+		int pagenum = count/7;
+		  if((count %7)>0) {
+			   pagenum = pagenum + 1;
+			   
+		   }
+		   
+		
+		return pagenum;
 	}
 	
 	//관리자페이지-배달원 승인을위한 배달원 신청 리스트
-		@RequestMapping(value = "/deliverymanList", method = RequestMethod.GET)
+		@RequestMapping(value = "/deliverymanList", method = RequestMethod.POST)
 		public List<MemberDto> deliverymanList(AdPagingParam param){
 			System.out.println("deliverymanList controller");
 			
@@ -188,8 +196,8 @@ public class DeliController {
 			System.out.println(param.toString());
 			
 			int pagen = param.getPage();
-			int start = pagen * 10 + 1;
-			int end = (pagen + 1)*10;
+			int start = pagen * 7 + 1;
+			int end = (pagen + 1)*7;
 			System.out.println("start:"+ start);
 			System.out.println("end:"+ end);
 			
@@ -210,11 +218,17 @@ public class DeliController {
 		}
 		
 		//배달원신청자의 총 인원
-		@RequestMapping(value = "/deliveryman", method = RequestMethod.GET)
+		@RequestMapping(value = "/deliveryman", method = RequestMethod.POST)
 
 		public int deliveryman(AdPagingParam param) {
 			int count = service.deliveryman(param);
-			return count;
+			
+			int pagenum = count/7;
+			  if((count %7)>0) {
+				   pagenum = pagenum + 1;
+				   
+			   }
+			return pagenum;
 		}
 		
 		//배달원 신청 폼 데이터를 받기위함

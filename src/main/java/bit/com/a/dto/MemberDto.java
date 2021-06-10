@@ -79,6 +79,8 @@ public class MemberDto {
 		this.bank = bank;
 		this.carNum = carNum;
 	}
+	
+	
 
 	public int getMemNum() {
 		return memNum;

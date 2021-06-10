@@ -20,7 +20,7 @@ public class AdminSalesController {
 
 	@Autowired
 	AdminSalesService service;
-	
+
 	
 	@RequestMapping(value = "/salesByPeriod", method = RequestMethod.POST)
 	public int[] salesByPeriod() {
@@ -151,6 +151,7 @@ public class AdminSalesController {
 			System.out.println("AdminSalesController orderDetailEX()");
 			return service.orderDetailEX(dto);
 		}
+
 
 	
 }

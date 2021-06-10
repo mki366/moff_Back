@@ -1,5 +1,6 @@
 package bit.com.a.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class AdminMemberService {
 	AdminMemberDao dao;
 	
 	//월별 회원가입 
-	public List<MonthlyMember> MonthlyMember(){
-		return dao.MonthlyMember();
+	public List<MonthlyMember> MonthlyMemberList(){
+		return dao.MonthlyMemberList();
 	}
 }
