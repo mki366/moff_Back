@@ -38,7 +38,7 @@ SELECT B.OBNUM, B.OBDATE, C.STATUS
 <!-- 주문 결제정보 -->
 <select id="getCheckout" parameterType="java.lang.Integer" 
 					resultType="bit.com.a.dto.PurchasesDto">
-	SELECT B.OBNUM, B.OBDATE, B.OBWAY, B.OBCARDN, B.TOTALPRICE, C.STATUS	
+	SELECT B.OBNUM, B.OBDATE, B.OBWAY, B.OBCARDN, B.PRICE, C.STATUS	
 	FROM ORDER_BUY B, DELIVERY_CHECK C
 	WHERE C.OBNUM=B.OBNUM
 		AND B.OBNUM=#{obNum}
@@ -151,4 +151,11 @@ SELECT B.OBNUM, B.OBDATE, C.STATUS
 	WHERE ID=#{id}
 </update>
 
+ <update id="updateQuantity" parameterType="bit.com.a.dto.OrderDetailDto">
+	UPDATE PRODUCT
+	SET QUANTITY=(SELECT QUANTITY-#{quantity}
+				  FROM PRODUCT
+				  WHERE PRODNUM=#{prodNum})
+	WHERE PRODNUM=#{prodNum}
+</update> 
 </mapper>

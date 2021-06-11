@@ -94,4 +94,19 @@ public class AdminSalesService {
 	public int orderDetailEX(OrderBuyDto dto) {
 		return dao.orderDetailEX(dto);
 	}
+	
+	//년도별 주문 건수 
+	public int SearchAnnualSales(OrderBuyDto dto) {
+		return dao.SearchAnnualSales(dto);
+	}
+	//지역별 주문 건수 
+	public String[] SearchLocalSales() {
+		System.out.println();
+		return dao.SearchLocalSales();
+	}
+	//지역별 주문 건수 
+	public String[] SearchLocalCountSales() {
+		System.out.println();
+		return dao.SearchLocalCountSales();
+	}
 }

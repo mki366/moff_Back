@@ -60,6 +60,11 @@ public class OrderBuyDto {
 		this.deliveryCost = deliveryCost;
 	}
 
+	public OrderBuyDto(String obDate) {
+		super();
+		this.obDate = obDate;
+	}
+
 	public int getObNum() {
 		return obNum;
 	}

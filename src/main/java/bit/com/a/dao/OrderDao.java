@@ -38,4 +38,6 @@ public interface OrderDao {
 	public int setExColor(OrderDetailDto dto);
 	public int setTakeback(OrderDetailDto dto);
 	public int updateOrderPoint(MemberDto dto);
+	
+	public int updateQuantity(OrderDetailDto dto);
 }

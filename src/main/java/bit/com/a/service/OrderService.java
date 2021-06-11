@@ -128,10 +128,17 @@ public class OrderService {
 	      return len>0?true:false;
 	   }
 	   
-	   public boolean updateOrderPoint(MemberDto dto){
-	      System.out.println("service-updateOrderPoint: "+dto.getId());
+   public boolean updateOrderPoint(MemberDto dto){
+      System.out.println("service-updateOrderPoint: "+dto.getId());
 
-	      int len = dao.updateOrderPoint(dto);
+      int len = dao.updateOrderPoint(dto);
+      return len>0?true:false;
+   }
+   
+   public boolean updateQuantity(OrderDetailDto dto){
+	      System.out.println("service-updateQuantity: "+dto.getQuantity());
+
+	      int len = dao.updateQuantity(dto);
 	      return len>0?true:false;
 	   }
 }

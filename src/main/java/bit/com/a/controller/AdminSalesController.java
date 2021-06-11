@@ -1,6 +1,7 @@
 package bit.com.a.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -152,6 +153,78 @@ public class AdminSalesController {
 			return service.orderDetailEX(dto);
 		}
 
-
-	
+		//년도별 주문 건수 
+		@RequestMapping(value = "/SearchAnnualSales", method = RequestMethod.GET)
+		public int[] SearchAnnualSales(OrderBuyDto dto) {
+			System.out.println("AdminSalesController SearchAnnualSales()"+dto.getObDate());
+			int result[]=new int[12];
+			for(int i=1; i<13;i++) {
+				String month="";
+				String date="";
+				if(i<10) {
+					month='0'+Integer.toString(i);
+					System.out.println("1월 부터 9월:"+month);
+				}
+				else {
+					month=Integer.toString(i);
+				}
+				date=dto.getObDate()+'/'+month;
+				
+				OrderBuyDto sdto= new OrderBuyDto(date);
+				result[i-1]=service.SearchAnnualSales(sdto);
+				System.out.println("**날짜"+date+"의 결과 :"+result[i-1]+"**");
+			}
+			return result;
+		}
+		
+		
+		//지역별 주문 건수 
+		@RequestMapping(value = "/SearchLocalSales", method = RequestMethod.GET)
+		public String[] SearchLocalSales() {
+			System.out.println("AdminSalesController SearchLocalSales()");
+			String str[] = service.SearchLocalSales();
+			String str2[] = service.SearchLocalCountSales();
+			String re[]= new String[5];
+			for(int i=0; i<str.length;i++) {
+				System.out.println(str2[i]);
+				if(str[i].contains("제주")) {
+					re[i]="제주";
+				}else if(str[i].contains("서울")) {
+					re[i]="서울";
+				}else if(str[i].contains("부산")) {
+					re[i]="부산";
+				}else if(str[i].contains("대구")) {
+					re[i]="대구";
+				}else if(str[i].contains("인천")) {
+					re[i]="인천";
+				}else if(str[i].contains("광주")) {
+					re[i]="광주";
+				} else if(str[i].contains("대전")) {
+					re[i]="대전";
+				}else if(str[i].contains("울산")) {
+					re[i]="울산";
+				}else if(str[i].contains("세종")) {
+					re[i]="세종";
+				}else if(str[i].contains("경기")) {
+					re[i]="경기";
+				}else if(str[i].contains("강원")) {
+					re[i]="강원";
+				}else if(str[i].contains("충청북도")) {
+					re[i]="충청북도";
+				}else if(str[i].contains("충청남도")) {
+					re[i]="충청남도";
+				}else if(str[i].contains("전라북도")) {
+					re[i]="전라북도";
+				}else if(str[i].contains("경상북도")) {
+					re[i]="경상북도";
+				}else if(str[i].contains("경상남도")) {
+					re[i]="경상남도";
+				}
+				re[i] =re[i]+","+str2[i];
+			}
+			for(int i=0; i<re.length;i++) {
+				System.out.println(re[i]);
+			}
+			return re;
+		}
 }

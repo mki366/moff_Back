@@ -54,4 +54,12 @@ public interface AdminSalesDao {
 	//교환 갯수
 	public int orderDetailEX(OrderBuyDto dto);
 
+	//년도별 주문 건수 
+	public int SearchAnnualSales(OrderBuyDto dto);
+	
+	//지역별 주문 건수 
+	public String[] SearchLocalSales();
+	//지역별 주문 건수 
+	public String[] SearchLocalCountSales();
 }
+

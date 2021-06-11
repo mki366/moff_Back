@@ -132,7 +132,12 @@ public class OrderController {
 		System.out.println(dto.toString());
 		//prodNum을 가져옴
 		OrderDetailDto rdto= service.getProdInfo(dto);
-		
+		boolean c=service.updateQuantity(dto);
+		if(c) {
+			System.out.println("수량 줄이기 성공");
+		}else {
+			System.out.println("수량 줄이기 실패");
+		}
 		System.out.println("getProdInfo결과 : "+ rdto.getProdName());
 		
 		//가져온 정보를 다시 세팅

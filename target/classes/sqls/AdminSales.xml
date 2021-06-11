@@ -137,4 +137,25 @@
 					WHERE SUBSTR(OBDATE,1,5)= SUBSTR(#{obDate},1,5)
 				) AND OBEXCHANGE=1
 </select>
+<!-- 년도별 주문 건수  -->
+<select id="SearchAnnualSales" parameterType="bit.com.a.dto.OrderBuyDto" resultType="java.lang.Integer">
+		SELECT COUNT(*)
+		FROM ORDER_BUY
+		WHERE SUBSTR(OBDATE,1,5)= SUBSTR(#{obDate},1,5)
+</select>
+
+<!-- 지역별 주문 건수   -->
+<select id="SearchLocalSales" resultType="String">
+		SELECT SUBSTR(OBADDRESS,1,3)
+		FROM ORDER_BUY
+		GROUP BY SUBSTR(OBADDRESS,1,3)
+		ORDER BY COUNT(*) DESC
+</select>
+
+<select id="SearchLocalCountSales" resultType="String">
+		SELECT COUNT(*)
+		FROM ORDER_BUY
+		GROUP BY SUBSTR(OBADDRESS,1,3)
+		ORDER BY COUNT(*) DESC
+</select>
 </mapper>
