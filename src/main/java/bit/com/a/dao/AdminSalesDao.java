@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import bit.com.a.dto.AdminDto;
 import bit.com.a.dto.PurchasesDto;
 
 @Mapper
@@ -22,6 +23,12 @@ public interface AdminSalesDao {
 	public List<PurchasesDto> selDailySales(String yearmonth);
 	public List<PurchasesDto> selMonthlySales(String year);
 	public List<PurchasesDto> selAnnualSales();
+	public List<AdminDto> salesReport(String yearmonth);
+
+	// 매출 그래프
+	public List<PurchasesDto> annualSalesChart(String year);
+	public List<AdminDto> annualAccumChart(String year);
+	public List<AdminDto> monthlyVarChart();
 	
 	//주문 건 수 - 오늘 
 	public int CountDailySales();
@@ -41,7 +48,6 @@ public interface AdminSalesDao {
 	public int beforeDelivery();
 	//배송 수락
 	public int acceptDelivery();
-	
-	
+
 
 }

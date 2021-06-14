@@ -9,7 +9,7 @@
 <select id="getPurchases" parameterType="java.lang.String" 
 					resultType="bit.com.a.dto.PurchasesDto">
 	SELECT DISTINCT B.OBNUM, B.OBDATE, C.STATUS	
-	FROM ORDER_BUY B, ORDER_DETAIL D, DELIVERY_CHECK C  <!-- D 나중에 쓸 일 있을수도.. -->
+	FROM ORDER_BUY B, ORDER_DETAIL D, DELIVERY_CHECK C 
 	WHERE B.OBNUM=D.OBNUM AND C.OBNUM=B.OBNUM		
 		AND B.ID=#{id}
 	ORDER BY B.OBDATE DESC 
@@ -27,7 +27,7 @@
 <!-- 주문 counter별 list -->
 <select id="getStatusList" parameterType="bit.com.a.dto.PurchasesDto" 
 					resultType="bit.com.a.dto.PurchasesDto">
-SELECT B.OBNUM, B.OBDATE, C.STATUS	
+	SELECT B.OBNUM, B.OBDATE, C.STATUS	
 	FROM ORDER_BUY B, ORDER_DETAIL D, DELIVERY_CHECK C
 	WHERE B.OBNUM=D.OBNUM
 		AND B.ID=#{id} AND C.OBNUM=B.OBNUM AND C.STATUS=#{status}
@@ -38,7 +38,7 @@ SELECT B.OBNUM, B.OBDATE, C.STATUS
 <!-- 주문 결제정보 -->
 <select id="getCheckout" parameterType="java.lang.Integer" 
 					resultType="bit.com.a.dto.PurchasesDto">
-	SELECT B.OBNUM, B.OBDATE, B.OBWAY, B.OBCARDN, B.TOTALPRICE, C.STATUS	
+	SELECT B.OBNUM, B.OBDATE, B.OBWAY, B.OBCARDN, B.PRICE, C.STATUS	
 	FROM ORDER_BUY B, DELIVERY_CHECK C
 	WHERE C.OBNUM=B.OBNUM
 		AND B.OBNUM=#{obNum}
