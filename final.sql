@@ -16,7 +16,7 @@ CREATE TABLE ALL_MEMBER
     NICKNAME     VARCHAR2(20) NOT NULL,      --닉네임
     EMAIL        VARCHAR2(30)  NOT  NULL,     --이메일주소
     ADDRESS      VARCHAR2(500)  NOT  NULL,  --주소
-    PHONE        NUMBER          NULL,        --전화번호
+    PHONE        VARCHAR2(50)          NULL,        --전화번호
     BDATE        VARCHAR2(30)   NOT NULL,     --생년월일(배달원일시 만 19세 미만X)
     JDATE        DATE            NULL,        --회원가입일
     MEMDEL       NUMBER          DEFAULT 0 NULL,        --회원탈퇴유무
@@ -55,7 +55,21 @@ INSERT INTO ALL_MEMBER(
 
 	  
 	  --연령대
-
+	SELECT BDATE
+     , NVL(COUNT(*),0) cnt
+  FROM (SELECT CASE WHEN               age < 20 THEN '20세미만'
+                    WHEN age >= 20 AND age < 30 THEN '20세이상 ~ 30세미만'
+                    WHEN age >= 30 AND age < 40 THEN '30세이상 ~ 40세미만'
+                    WHEN age >= 40 AND age < 50 THEN '40세이상 ~ 50세미만'
+                    WHEN age >= 50 AND age < 60 THEN '50세이상 ~ 60세미만'
+                    WHEN age >= 60              THEN '60세이상'
+                END BDATE
+          FROM (SELECT TRUNC((TO_CHAR(SYSDATE, 'YYYY') - SUBSTR(BDATE,1,4))) age
+                  FROM ALL_MEMBER
+                )
+        )
+ GROUP BY BDATE
+ ORDER BY BDATE
 
 ---------------------------------------------
 --상품테이블
@@ -107,7 +121,7 @@ WHERE PRODNUM=3 AND
 --상품넣기 예시 1
 INSERT INTO PRODUCT(PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME, 
 						COLOR, PRODOPTION, INFO, WEIGHT, ORIPRICE,PRICE, QUANTITY, RDATE, DELIVERYCOST, FILENAME)
-VALUES(PRODSEQ.NEXTVAL, '의자','이쁜의자', '핫한의자','핫핑크', '옵션없음','핫하다', 10, 30000, 30000, 3, SYSDATE,2500, '핫핑크.PNG')
+VALUES(PRODSEQ.NEXTVAL, '편한의자','이쁜의자', '핫한의자','핫핑크', '옵션없음','핫하다', 10, 30000, 30000, 3, SYSDATE,2500, '핫핑크.PNG')
 
 INSERT INTO PRODUCT(PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME, 
 						COLOR, PRODOPTION, INFO, WEIGHT, ORIPRICE,PRICE, QUANTITY, RDATE, DELIVERYCOST, FILENAME)
@@ -131,10 +145,10 @@ DROP SEQUENCE PINUM_SEQ;
 --파일이름 칼럼 변경
 CREATE TABLE PRODUCT_IMG
 (
-    PINUM   		NUMBER   		NOT NULL,    	—이미지번호
-    PRODNUM    		NUMBER   		NOT NULL,    	—상품번호
-    INFO        	VARCHAR2(1000)  NULL,     		—상품이미지정보
-    IMG_FILENAME    VARCHAR2(20)  	NOT NULL,    	—이미지파일명
+    PINUM   		NUMBER   		NOT NULL,    	--이미지번호
+    PRODNUM    		NUMBER   		NOT NULL,    	--상품번호
+    INFO        	VARCHAR2(1000)  NULL,     		--상품이미지정보
+    IMG_FILENAME    VARCHAR2(20)  	NOT NULL,    	--이미지파일명
     
     CONSTRAINT PRODUCT_IMG_FK  FOREIGN KEY (PRODNUM)
     REFERENCES PRODUCT(PRODNUM)
@@ -193,7 +207,7 @@ WHERE OBNAME='곽태민';
 --주문 예시 쿼리
 INSERT INTO ORDER_BUY(OBNUM, ID, NAME, QUANTITY, PRICE, OBNAME, OBPHONE,OBADDRESS,
 						OBMES, OBWAY, OBCARDN, OBDATE, OBTAKEBACK, OBEXCHANGE)
-						VALUES(OBNUM_SEQ.NEXTVAL, 'sbi789','모달년', 3, 90000, '이다솜','010-9507-4414','서울특별시 합정동 12-6 3동 202호',
+						VALUES(OBNUM_SEQ.NEXTVAL, 'test0608','이다솜', 3, 90000, '이다솜','010-9507-4414','서울특별시 합정동 12-6 3동 202호',
 						'배송전 문자좀 부탁드려요', '무통장입금','신한은행',SYSDATE, 0,0)
 
 
@@ -258,12 +272,12 @@ CREATE TABLE ORDER_DETAIL
     WEIGHT       NUMBER            NULL,   --상품무게
     OBTAKEBACK   NUMBER   NULL,          --반품여부 반품 안할시 0-> 1
     OBEXCHANGE   NUMBER   NULL,
-      REASON      VARCHAR2(50)  NULL      --사유
-
+      REASON      VARCHAR2(50)  NULL,      --사유
+    EXCOLORSEQ NUMBER NULL 	--교환 할, COLOR SEQ
 );
 
 INSERT INTO ORDER_DETAIL(ODNUM, OBNUM, PRODNUM, PRODNAME, QUANTITY , PRICE,COLOR, PRODOPTION, FILENAME, WEIGHT)
-VALUES(ODNUM_SEQ.NEXTVAL, 6, 2, '핫한의자', 3, 30000,'red',' ','filename', 10 );
+VALUES(ODNUM_SEQ.NEXTVAL, 22, 2, '편한의자', 3, 30000,'red',' ','filename', 10 );
 
 INSERT INTO ORDER_DETAIL(ODNUM, OBNUM, PRODNUM, PRODNAME, QUANTITY,  PRICE,COLOR, PRODOPTION,FILENAME, WEIGHT)
 VALUES(ODNUM_SEQ.NEXTVAL, 12, 1, '핫한의자', 2, 30000,'red',' ','filename',10);
@@ -296,6 +310,26 @@ INCREMENT BY 1;
 
 
 
+--------------------------------------------------
+
+--관리자 연령별 상품 구매 제일 많은 순
+SELECT  d.BDATE, MAX(NCT), c.PRODNUM, c.prodname
+FROM(SELECT CASE WHEN               age < 20 THEN '20세미만'
+                    WHEN age >= 20 AND age < 30 THEN '20세이상 ~ 30세미만'
+                    WHEN age >= 30 AND age < 40 THEN '30세이상 ~ 40세미만'
+                    WHEN age >= 40 AND age < 50 THEN '40세이상 ~ 50세미만'
+                    WHEN age >= 50 AND age < 60 THEN '50세이상 ~ 60세미만'
+                    WHEN age >= 60              THEN '60세이상'
+                END BDATE
+          FROM (SELECT TRUNC((TO_CHAR(SYSDATE, 'YYYY') - SUBSTR(BDATE,1,4))) age, b.obnum
+                  FROM ALL_MEMBER a, order_buy b
+                  where a.id = b.id
+                )
+         ) d, ( SELECT COUNT(PRODNUM) as NCT , PRODNUM, PRODNAME  FROM ORDER_DETAIL  GROUP BY PRODNUM, PRODNAME) c
+        
+         
+GROUP BY  d.BDATE, c.nct, c.PRODNUM, c.prodname
+ORDER BY  d.BDATE ASC
 
 
 
@@ -442,7 +476,7 @@ CREATE TABLE CART
     PRODNAME  VARCHAR2(50)   NOT   NULL ,   --상품이름 
     QUANTITY NUMBER   NOT  NULL,    --상품개수
     COLOR		VARCHAR2(50)	NOT NULL,	 --상품컬러
-    CARTORWISH NUMBER NOT  DEFAULT 0 NULL --장바구니&위시리스트구분
+    CARTORWISH NUMBER  DEFAULT 0 NULL --장바구니&위시리스트구분
    
 );
 --회원아이디 외래키생성
@@ -723,7 +757,7 @@ ORDER BY REGISNAME ASC
 
 
 
---바이백시퀀스 생성
+--시공업체 생성
 CREATE SEQUENCE EXPERT_SEQ
 START WITH 1
 INCREMENT BY 1;
