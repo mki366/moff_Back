@@ -41,6 +41,15 @@ public class WishCartDto {
 		this.id = id;
 		this.prodNum = prodNum;
 	}
+	
+	
+
+	public WishCartDto(String id, int prodNum, int quantity) {
+		super();
+		this.id = id;
+		this.prodNum = prodNum;
+		this.quantity = quantity;
+	}
 
 	public int getcNum() {
 		return cNum;

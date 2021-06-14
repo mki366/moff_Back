@@ -15,6 +15,8 @@ public interface CustomDao {
 	public int getPrice(int prodNum);
 	public void addChairCart(WishCartDto dto);
 	public void addChairWish(WishCartDto dto);
-	public ProductDto getProduct(int prodNum);
+	public ProductDto getCustomProduct(int prodNum);
 	public List<ProductDto> getBedList(String bedtype);
+	public void addStrgCart(WishCartDto dto);
+	public void addStrgWish(WishCartDto dto);
 }

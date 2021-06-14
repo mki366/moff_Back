@@ -29,11 +29,19 @@ public class CustomService {
 		dao.addChairWish(dto);
 	}
 	
-	public ProductDto getProduct(int prodNum){
-		return dao.getProduct(prodNum);
+	public ProductDto getCustomProduct(int prodNum){
+		return dao.getCustomProduct(prodNum);
 	}
 	
 	public List<ProductDto> getBedList(String bedtype){
 		return dao.getBedList(bedtype);
+	}
+	
+	public void addStrgCart(WishCartDto dto) {
+		dao.addStrgCart(dto);
+	}
+	
+	public void addStrgWish(WishCartDto dto) {
+		dao.addStrgWish(dto);
 	}
 }

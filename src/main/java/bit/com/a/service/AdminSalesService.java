@@ -7,9 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import bit.com.a.dao.AdminSalesDao;
+
 import bit.com.a.dto.DeliveryCheckDto;
 import bit.com.a.dto.OrderBuyDto;
 import bit.com.a.dto.OrderDetailDto;
+
+import bit.com.a.dto.AdminDto;
+
 import bit.com.a.dto.PurchasesDto;
 
 @Service
@@ -41,6 +45,22 @@ public class AdminSalesService {
 	}
 	public List<PurchasesDto> selAnnualSales() {
 		return dao.selAnnualSales();
+	}
+	
+	public List<AdminDto> salesReport(String yearmonth) {
+		return dao.salesReport(yearmonth);
+	}
+	
+	public List<PurchasesDto> annualSalesChart(String year) {
+		return dao.annualSalesChart(year);
+	}
+
+	public List<AdminDto> annualAccumChart(String year) {
+		return dao.annualAccumChart(year);
+	}
+
+	public List<AdminDto> monthlyVarChart() {
+		return dao.monthlyVarChart();
 	}
 	
 	//주문 건 수 - 오늘 

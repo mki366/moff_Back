@@ -22,7 +22,7 @@
 	VALUES(CNUMSEQ.NEXTVAL, #{id}, #{prodNum}, 1, 0)
 </insert>
 
-<select id="getProduct" parameterType="java.lang.Integer" 
+<select id="getCustomProduct" parameterType="java.lang.Integer" 
 					resultType="bit.com.a.dto.ProductDto">
 	SELECT PRODNAME, COLOR, PRICE, FILENAME
 	FROM PRODUCT 
@@ -35,5 +35,15 @@
 	FROM PRODUCT 
 	WHERE SUBCATEGORY=#{type}
 </select>
+
+<insert id="addStrgCart" parameterType="bit.com.a.dto.WishCartDto">
+	INSERT INTO CART(CNUM, ID, PRODNUM, QUANTITY, CARTORWISH)
+	VALUES(CNUMSEQ.NEXTVAL, #{id}, #{prodNum}, #{quantity}, 1)
+</insert>
+
+<insert id="addStrgWish" parameterType="bit.com.a.dto.WishCartDto">
+	INSERT INTO CART(CNUM, ID, PRODNUM, QUANTITY, CARTORWISH)
+	VALUES(CNUMSEQ.NEXTVAL, #{id}, #{prodNum}, #{quantity}, 0)
+</insert>
 
 </mapper>
