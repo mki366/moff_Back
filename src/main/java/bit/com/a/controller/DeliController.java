@@ -257,7 +257,9 @@ public class DeliController {
 		 
 		 @RequestMapping(value = "/sendSms", method = RequestMethod.POST)
 		 public String sendSMS(String from, String text) throws Exception { // 휴대폰 문자보내기
-
+			 	System.out.println("sendSMS");
+			 	System.out.println("발송번호:" + from);
+			 	System.out.println(text);
 				String api_key = "NCSMB43IVVGNNBJP";
 				String api_secret = "JADFQOASE9YHKJO7ZLWGUELS8C8DDBAL";
 				Coolsms coolsms = new Coolsms(api_key, api_secret); // 메시지보내기 객체 생성
@@ -269,7 +271,7 @@ public class DeliController {
 				HashMap<String, String> set = new HashMap<String, String>();
 				set.put("to", from); // 수신번호
 				set.put("from", "010-2888-3498"); // 발신번호
-				set.put("text", "안녕하세요. MOFF입니다. 배달 라이더지원이 승인되었습니다."); // 문자내용
+				set.put("text", text); // 문자내용
 				set.put("type", "sms"); // 문자 타입
 
 				 JSONObject obj = (JSONObject) coolsms.send(set);

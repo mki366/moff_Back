@@ -16,7 +16,7 @@ CREATE TABLE ALL_MEMBER
     NICKNAME     VARCHAR2(20) NOT NULL,      --닉네임
     EMAIL        VARCHAR2(30)  NOT  NULL,     --이메일주소
     ADDRESS      VARCHAR2(500)  NOT  NULL,  --주소
-    PHONE        NUMBER          NULL,        --전화번호
+    PHONE        VARCHAR2(50)          NULL,        --전화번호
     BDATE        VARCHAR2(30)   NOT NULL,     --생년월일(배달원일시 만 19세 미만X)
     JDATE        DATE            NULL,        --회원가입일
     MEMDEL       NUMBER          DEFAULT 0 NULL,        --회원탈퇴유무
@@ -32,9 +32,9 @@ CREATE TABLE ALL_MEMBER
 UPDATE ALL_MEMBER SET MEMDEL = 0
 WHERE MEMDEL IS NULL
 
-	SELECT *
-	FROM ALL_MEMBER
-	WHERE ID='test060801' AND PWD='test060801!' AND MEMDEL=0
+   SELECT *
+   FROM ALL_MEMBER
+   WHERE ID='test060801' AND PWD='test060801!' AND MEMDEL=0
 
 
 
@@ -45,14 +45,31 @@ START WITH 1
 INCREMENT BY 1;
 
 INSERT INTO ALL_MEMBER(
-	MEMNUM, ID, PWD, NAME, NICKNAME,
-	 EMAIL, ADDRESS, PHONE,BDATE, JDATE,
-	  MEMBERTYPE, LICENSE, BANK, CARNUM)
-	  
-	VALUES(MEMNUMSEQ.NEXTVAL, 'dd88ddd55d', 'dsdsdsds', '이필승', '아녕하세요',
-	 'sdkskjdn@naver.com','강원도 원주','01028883498', '1987/5/22', SYSDATE,
-	  0, '운전면허증사진','통장사본사진', '차량신고증사진')
+   MEMNUM, ID, PWD, NAME, NICKNAME,
+    EMAIL, ADDRESS, PHONE,BDATE, JDATE,
+     MEMBERTYPE, LICENSE, BANK, CARNUM)
+     
+   VALUES(MEMNUMSEQ.NEXTVAL, 'dd88ddd55d', 'dsdsdsds', '이필승', '아녕하세요',
+    'sdkskjdn@naver.com','강원도 원주','01028883498', '1987/5/22', SYSDATE,
+     0, '운전면허증사진','통장사본사진', '차량신고증사진')
 
+     
+     --연령대
+   SELECT BDATE
+     , NVL(COUNT(*),0) cnt
+  FROM (SELECT CASE WHEN               age < 20 THEN '20세미만'
+                    WHEN age >= 20 AND age < 30 THEN '20세이상 ~ 30세미만'
+                    WHEN age >= 30 AND age < 40 THEN '30세이상 ~ 40세미만'
+                    WHEN age >= 40 AND age < 50 THEN '40세이상 ~ 50세미만'
+                    WHEN age >= 50 AND age < 60 THEN '50세이상 ~ 60세미만'
+                    WHEN age >= 60              THEN '60세이상'
+                END BDATE
+          FROM (SELECT TRUNC((TO_CHAR(SYSDATE, 'YYYY') - SUBSTR(BDATE,1,4))) age
+                  FROM ALL_MEMBER
+                )
+        )
+ GROUP BY BDATE
+ ORDER BY BDATE
 
 ---------------------------------------------
 --상품테이블
@@ -77,8 +94,8 @@ CREATE TABLE PRODUCT
     QUANTITY      NUMBER          NULL,         --상품재고(수량)
     RDATE         DATE            NULL,         --상품등록일
     DELIVERYCOST      NUMBER          NULL,         --배송비
-   	FILENAME	VARCHAR(50)		NOT NULL, --대표사진
-   	READCOUNT 		NUMBER  		NOT NULL,	 --조회수
+      FILENAME   VARCHAR(50)      NOT NULL, --대표사진
+      READCOUNT       NUMBER        NOT NULL,    --조회수
 
     CONSTRAINT PRODUCT_PK PRIMARY KEY (PRODNUM)
 );
@@ -103,11 +120,11 @@ UPDATE PRODUCT SET DELIVERYCOST=50000
 WHERE PRODNUM=3 AND 
 --상품넣기 예시 1
 INSERT INTO PRODUCT(PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME, 
-						COLOR, PRODOPTION, INFO, WEIGHT, ORIPRICE,PRICE, QUANTITY, RDATE, DELIVERYCOST, FILENAME)
-VALUES(PRODSEQ.NEXTVAL, '의자','이쁜의자', '핫한의자','핫핑크', '옵션없음','핫하다', 10, 30000, 30000, 3, SYSDATE,2500, '핫핑크.PNG')
+                  COLOR, PRODOPTION, INFO, WEIGHT, ORIPRICE,PRICE, QUANTITY, RDATE, DELIVERYCOST, FILENAME)
+VALUES(PRODSEQ.NEXTVAL, '편한의자','이쁜의자', '핫한의자','핫핑크', '옵션없음','핫하다', 10, 30000, 30000, 3, SYSDATE,2500, '핫핑크.PNG')
 
 INSERT INTO PRODUCT(PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME, 
-						COLOR, PRODOPTION, INFO, WEIGHT, ORIPRICE,PRICE, QUANTITY, RDATE, DELIVERYCOST, FILENAME)
+                  COLOR, PRODOPTION, INFO, WEIGHT, ORIPRICE,PRICE, QUANTITY, RDATE, DELIVERYCOST, FILENAME)
 VALUES(PRODSEQ.NEXTVAL, '의자','이쁜의자', '기깔란책상','핫핑크', '옵션없음','핫하다', 10, 30000, 30000, 3, SYSDATE,2500, '핫핑크.PNG')
 
 
@@ -128,10 +145,10 @@ DROP SEQUENCE PINUM_SEQ;
 --파일이름 칼럼 변경
 CREATE TABLE PRODUCT_IMG
 (
-    PINUM   		NUMBER   		NOT NULL,    	—이미지번호
-    PRODNUM    		NUMBER   		NOT NULL,    	—상품번호
-    INFO        	VARCHAR2(1000)  NULL,     		—상품이미지정보
-    IMG_FILENAME    VARCHAR2(20)  	NOT NULL,    	—이미지파일명
+    PINUM         NUMBER         NOT NULL,       --이미지번호
+    PRODNUM          NUMBER         NOT NULL,       --상품번호
+    INFO           VARCHAR2(1000)  NULL,           --상품이미지정보
+    IMG_FILENAME    VARCHAR2(20)     NOT NULL,       --이미지파일명
     
     CONSTRAINT PRODUCT_IMG_FK  FOREIGN KEY (PRODNUM)
     REFERENCES PRODUCT(PRODNUM)
@@ -189,9 +206,9 @@ WHERE OBNAME='곽태민';
 
 --주문 예시 쿼리
 INSERT INTO ORDER_BUY(OBNUM, ID, NAME, QUANTITY, PRICE, OBNAME, OBPHONE,OBADDRESS,
-						OBMES, OBWAY, OBCARDN, OBDATE, OBTAKEBACK, OBEXCHANGE)
-						VALUES(OBNUM_SEQ.NEXTVAL, 'sbi789','모달년', 3, 90000, '이다솜','010-9507-4414','서울특별시 합정동 12-6 3동 202호',
-						'배송전 문자좀 부탁드려요', '무통장입금','신한은행',SYSDATE, 0,0)
+                  OBMES, OBWAY, OBCARDN, OBDATE, OBTAKEBACK, OBEXCHANGE)
+                  VALUES(OBNUM_SEQ.NEXTVAL, 'test0608','이다솜', 3, 90000, '이다솜','010-9507-4414','서울특별시 합정동 12-6 3동 202호',
+                  '배송전 문자좀 부탁드려요', '무통장입금','신한은행',SYSDATE, 0,0)
 
 
 --전체주문테이블, 배송상태체크 테이블 조인
@@ -207,18 +224,18 @@ SELECT OBNUM,
         DID,
         DNAME
 FROM(SELECT ROW_NUMBER()OVER(ORDER BY a.OBNUM ASC) AS RNUM,a.OBNUM, a.NAME, a.QUANTITY, a.PRICE, a.OBNAME, a.OBPHONE, a.OBADDRESS,
-	a.OBDATE, b.STATUS AS STA, b.ID AS DID, b.NAME AS DNAME
+   a.OBDATE, b.STATUS AS STA, b.ID AS DID, b.NAME AS DNAME
 FROM ORDER_BUY a , DELIVERY_CHECK b
-WHERE a.OBNUM = b.OBNUM	
+WHERE a.OBNUM = b.OBNUM   
 ORDER BY a.OBNUM ASC)
 WHERE RNUM BETWEEN 1 AND 13
-------------------------------------			
-						
+------------------------------------         
+                  
 --
  SELECT a.OBNUM, a.NAME, a.QUANTITY, a.PRICE, a.OBNAME, a.OBPHONE, a.OBADDRESS,
-	a.OBDATE, b.STATUS, b.ID, b.NAME
-	FROM ORDER_BUY a , DELIVERY_CHECK b
-	WHERE a.OBNUM = b.OBNUM
+   a.OBDATE, b.STATUS, b.ID, b.NAME
+   FROM ORDER_BUY a , DELIVERY_CHECK b
+   WHERE a.OBNUM = b.OBNUM
 
 
 --구매자아이디 외래키생성
@@ -247,19 +264,20 @@ CREATE TABLE ORDER_DETAIL
     PRODNUM  NUMBER          NOT NULL,     --상품번호 
     PRODNAME   VARCHAR2(50)    NOT NULL,     --상품이름
     QUANTITY   NUMBER          NULL,   --구매수량
-  	PRICE        NUMBER          NULL,         --상품판매가격
-  	COLOR         VARCHAR2(50)   NOT NULL,
+     PRICE        NUMBER          NULL,         --상품판매가격
+     COLOR         VARCHAR2(50)   NOT NULL,
     PRODOPTION      VARCHAR2(50)    NULL,
     FILENAME      VARCHAR2(50)   NOT NULL,
 
     WEIGHT       NUMBER            NULL,   --상품무게
     OBTAKEBACK   NUMBER   NULL,          --반품여부 반품 안할시 0-> 1
     OBEXCHANGE   NUMBER   NULL,
-    REASON      VARCHAR2(50)  NULL      --사유
+      REASON      VARCHAR2(50)  NULL,      --사유
+    EXCOLORSEQ NUMBER NULL    --교환 할, COLOR SEQ
 );
 
 INSERT INTO ORDER_DETAIL(ODNUM, OBNUM, PRODNUM, PRODNAME, QUANTITY , PRICE,COLOR, PRODOPTION, FILENAME, WEIGHT)
-VALUES(ODNUM_SEQ.NEXTVAL, 6, 2, '핫한의자', 3, 30000,'red',' ','filename', 10 );
+VALUES(ODNUM_SEQ.NEXTVAL, 22, 2, '편한의자', 3, 30000,'red',' ','filename', 10 );
 
 INSERT INTO ORDER_DETAIL(ODNUM, OBNUM, PRODNUM, PRODNAME, QUANTITY,  PRICE,COLOR, PRODOPTION,FILENAME, WEIGHT)
 VALUES(ODNUM_SEQ.NEXTVAL, 12, 1, '핫한의자', 2, 30000,'red',' ','filename',10);
@@ -292,6 +310,26 @@ INCREMENT BY 1;
 
 
 
+--------------------------------------------------
+
+--관리자 연령별 상품 구매 제일 많은 순
+SELECT  d.BDATE, MAX(NCT), c.PRODNUM, c.prodname
+FROM(SELECT CASE WHEN               age < 20 THEN '20세미만'
+                    WHEN age >= 20 AND age < 30 THEN '20세이상 ~ 30세미만'
+                    WHEN age >= 30 AND age < 40 THEN '30세이상 ~ 40세미만'
+                    WHEN age >= 40 AND age < 50 THEN '40세이상 ~ 50세미만'
+                    WHEN age >= 50 AND age < 60 THEN '50세이상 ~ 60세미만'
+                    WHEN age >= 60              THEN '60세이상'
+                END BDATE
+          FROM (SELECT TRUNC((TO_CHAR(SYSDATE, 'YYYY') - SUBSTR(BDATE,1,4))) age, b.obnum
+                  FROM ALL_MEMBER a, order_buy b
+                  where a.id = b.id
+                )
+         ) d, ( SELECT COUNT(PRODNUM) as NCT , PRODNUM, PRODNAME  FROM ORDER_DETAIL  GROUP BY PRODNUM, PRODNAME) c
+        
+         
+GROUP BY  d.BDATE, c.nct, c.PRODNUM, c.prodname
+ORDER BY  d.BDATE ASC
 
 
 
@@ -311,7 +349,7 @@ CREATE TABLE DELIVERY_CHECK
 (
     DCNUM   NUMBER   NOT NULL,    --배송번호
     OBNUM    NUMBER   NOT NULL,    --주문번호F
-    MEMID 	VARCHAR2(20)  NOT NULL,  --회원아이디
+    MEMID    VARCHAR2(20)  NOT NULL,  --회원아이디
     STATUS    VARCHAR2(400)    NULL,    --배송상태
     ID       VARCHAR2(20)      NULL,    --배송라이더 아이디
     NAME     VARCHAR2(20)    NULL,    --배송라이더 이름
@@ -395,14 +433,14 @@ CASCADE CONSTRAINTS;
 DROP SEQUENCE COLORSEQ;
 
 CREATE TABLE COLOR(
-	COLORSEQ 	NUMBER			NOT NULL,
-	PRODNUM		NUMBER			NOT NULL,
-	COLOR		VARCHAR2(50)	NOT NULL,
-	COLORFILENAME VARCHAR2(50)	NOT NULL,
-	
-	
-	CONSTRAINT COLORSEQ PRIMARY KEY (COLORSEQ)
-	
+   COLORSEQ    NUMBER         NOT NULL,
+   PRODNUM      NUMBER         NOT NULL,
+   COLOR      VARCHAR2(50)   NOT NULL,
+   COLORFILENAME VARCHAR2(50)   NOT NULL,
+   
+   
+   CONSTRAINT COLORSEQ PRIMARY KEY (COLORSEQ)
+   
 );
 
 — 상품번호 외래키 생성
@@ -433,12 +471,12 @@ DROP SEQUENCE CNUMSEQ;
 CREATE TABLE CART
 (
     CNUM   NUMBER         NOT NULL,    --장바구니&위시리스트번호
-    ID   	 VARCHAR2(50)   NOT NULL,    --회원아이디 
+    ID       VARCHAR2(50)   NOT NULL,    --회원아이디 
     PRODNUM   NUMBER         NOT NULL,    --상품번호
     PRODNAME  VARCHAR2(50)   NOT   NULL ,   --상품이름 
     QUANTITY NUMBER   NOT  NULL,    --상품개수
-    COLOR		VARCHAR2(50)	NOT NULL,	 --상품컬러
-    CARTORWISH NUMBER NOT  DEFAULT 0 NULL --장바구니&위시리스트구분
+    COLOR      VARCHAR2(50)   NOT NULL,    --상품컬러
+    CARTORWISH NUMBER  DEFAULT 0 NULL --장바구니&위시리스트구분
    
 );
 --회원아이디 외래키생성
@@ -470,16 +508,16 @@ DROP SEQUENCE CMMUSEQ;
 
 CREATE TABLE COMMU
 (
-    CMNUM   	NUMBER        	PRIMARY KEY,    --커뮤니티번호
-    ID   		VARCHAR2(50)   	NOT NULL,    --회원아이디 
-    IMAGE1   	VARCHAR2(2000)   	NULL,    --이미지등록1
-    IMAGE2   	VARCHAR2(2000)   	NULL ,   --이미지등록2
-    TITLE 		VARCHAR2(100) 	NOT NULL,    --제목
-    CONTENT 	VARCHAR2(4000) 	NOT NULL,  --내용
-    WDATE 		DATE 			NOT NULL, --작성날짜
-    READCOUNT 	NUMBER  		NOT NULL, --조회수
-    CMLIKE 		NUMBER 			NULL, --좋아요
-  	COMMUDEL    NUMBER          NULL 
+    CMNUM      NUMBER           PRIMARY KEY,    --커뮤니티번호
+    ID         VARCHAR2(50)      NOT NULL,    --회원아이디 
+    IMAGE1      VARCHAR2(2000)      NULL,    --이미지등록1
+    IMAGE2      VARCHAR2(2000)      NULL ,   --이미지등록2
+    TITLE       VARCHAR2(100)    NOT NULL,    --제목
+    CONTENT    VARCHAR2(4000)    NOT NULL,  --내용
+    WDATE       DATE          NOT NULL, --작성날짜
+    READCOUNT    NUMBER        NOT NULL, --조회수
+    CMLIKE       NUMBER          NULL, --좋아요
+     COMMUDEL    NUMBER          NULL 
     
 );
 --회원아이디 외래키생성
@@ -508,12 +546,12 @@ DROP SEQUENCE CTNUMSEQ;
 CREATE TABLE ALL_COMMENT
 (
 
-	CTNUM NUMBER(8) PRIMARY KEY, --댓글번호
-	CMNUM NUMBER(8) NOT NULL,  --커뮤니티 글번호
-	ID VARCHAR2(50) NOT NULL, --회원 아이디
-	WDATE DATE NOT NULL,  --댓글 작성일자
-	CONTENT VARCHAR2(4000) NOT NULL , --댓글내용
-	DEL		NUMBER			NULL
+   CTNUM NUMBER(8) PRIMARY KEY, --댓글번호
+   CMNUM NUMBER(8) NOT NULL,  --커뮤니티 글번호
+   ID VARCHAR2(50) NOT NULL, --회원 아이디
+   WDATE DATE NOT NULL,  --댓글 작성일자
+   CONTENT VARCHAR2(4000) NOT NULL , --댓글내용
+   DEL      NUMBER         NULL
 
 
 );
@@ -608,26 +646,26 @@ CREATE TABLE BUY_BACK
 );
 
 INSERT INTO BUY_BACK(BNUM,
-  		 ID,
-  		 CATEGORY,
-  		 SUBCATEGORY,
-  		 PRODNUM, 
-  		 PRICE,
-  		 CONDITION,
-  		 BDATE,
-  		 BADDRESS,
-  		 BRESULT,
-  		 BID,
-  		 BNAME,
-  		 BPHONE)
-  		 VALUES(BNUMSEQ.NEXTVAL, 'sbi789','의자','이쁜의자', 1, 30000, 30, '2021-06-26','일산 식사동 5동 1205호',' ', ' ', ' ',''  )
+         ID,
+         CATEGORY,
+         SUBCATEGORY,
+         PRODNUM, 
+         PRICE,
+         CONDITION,
+         BDATE,
+         BADDRESS,
+         BRESULT,
+         BID,
+         BNAME,
+         BPHONE)
+         VALUES(BNUMSEQ.NEXTVAL, 'sbi789','의자','이쁜의자', 1, 30000, 30, '2021-06-26','일산 식사동 5동 1205호',' ', ' ', ' ',''  )
 
 
   SELECT NVL(COUNT(*),0)
   FROM BUY_BACK a, ALL_MEMBER b
   WHERE a.ID = b.ID  AND 1=1
-  AND a.BDATE LIKE '%'||2021-06||'%'		 
-  		 
+  AND a.BDATE LIKE '%'||2021-06||'%'       
+         
 
 --보이 전화번호 데이터 타입 바꾸기
 ALTER TABLE BUY_BACK MODIFY BPHONE VARCHAR2(50); 
@@ -671,30 +709,30 @@ SELECT * FROM EXPERT_USERS;
 CREATE TABLE EXPERT_USERS
 (
     ENUM            NUMBER         NOT NULL,    --업체 신청 번호
-    ID           VARCHAR2(50)   	NOT NULL,    --아이디 
-    PWD          VARCHAR2(50)  	 NOT NULL,       --비밀번호
+    ID           VARCHAR2(50)      NOT NULL,    --아이디 
+    PWD          VARCHAR2(50)      NOT NULL,       --비밀번호
     NAME     VARCHAR2(50)   NOT   NULL ,        --이름
     NICKNAME     VARCHAR2(50)   NOT   NULL ,        --닉네임
     EMAIL        VARCHAR2(50)   NOT    NULL,    --이메일
     ADDRESS      VARCHAR2(100)  NOT    NULL, --주소
     BDATE        VARCHAR2(100)   NOT NULL,  --생년월일  
-    PHONE    	VARCHAR2(50)   NOT  NULL,  -- 핸드폰번호
+    PHONE       VARCHAR2(50)   NOT  NULL,  -- 핸드폰번호
     
     EXPERTYPE  NUMBER NULL, --프리랜서 1 개인사업자 2 법인사업자 3
-    IDCARD 			VARCHAR2(400)    NULL,  --신분증사진(프리랜서일경우)
-    REGISTRATION  	VARCHAR2(400)     NULL,  --사업자등록증사진(개인사업자, 법인사업자)
+    IDCARD          VARCHAR2(400)    NULL,  --신분증사진(프리랜서일경우)
+    REGISTRATION     VARCHAR2(400)     NULL,  --사업자등록증사진(개인사업자, 법인사업자)
     REGISNAME       VARCHAR2(50)    NULL,    --등록상호
     REGINUMBER       VARCHAR2(50)    NULL,    --사업자번호
-    CEONAME 		VARCHAR2(50) NULL, --대표자명
-    REGADDRESS		VARCHAR2(200) NULL, --사업장주소
+    CEONAME       VARCHAR2(50) NULL, --대표자명
+    REGADDRESS      VARCHAR2(200) NULL, --사업장주소
     
     
-    PART 	NUMBER NULL,			--시공분야 종합인테리어 1 , 도배 타일만 2
+    PART    NUMBER NULL,         --시공분야 종합인테리어 1 , 도배 타일만 2
     EXPERTINFO      VARCHAR2(100) NULL, --업체소개
-    IMAGE			 VARCHAR2(400) NULL,
-    IMAGEDETAIL1	  VARCHAR2(400) NULL,
-    IMAGEDETAIL2	  VARCHAR2(400) NULL,
-    IMAGEDETAIL3	  VARCHAR2(400) NULL,
+    IMAGE          VARCHAR2(400) NULL,
+    IMAGEDETAIL1     VARCHAR2(400) NULL,
+    IMAGEDETAIL2     VARCHAR2(400) NULL,
+    IMAGEDETAIL3     VARCHAR2(400) NULL,
     RECENTCON NUMBER NULL,
     REVIEW  NUMBER NULL
     
@@ -719,7 +757,7 @@ ORDER BY REGISNAME ASC
 
 
 
---바이백시퀀스 생성
+--시공업체 생성
 CREATE SEQUENCE EXPERT_SEQ
 START WITH 1
 INCREMENT BY 1;
@@ -740,7 +778,7 @@ CREATE TABLE CHAT
     ROOMNUM   NUMBER         NOT NULL,    --채팅방번호
     SENDER    VARCHAR2(50)   NOT NULL,    --보낸이 
     CONTENT   NUMBER  NOT NULL,    --  보낸내용
-    WDATE   NUMBER NOT  NULL, 	-- 보낸날짜
+    WDATE   NUMBER NOT  NULL,    -- 보낸날짜
     SENDTYPE NUMBER NULL
   
     
@@ -769,10 +807,10 @@ CASCADE CONSTRAINTS;
 DROP SEQUENCE LNUM;
 
 CREATE TABLE BOARDLIKE(
-	LIKENUM	NUMBER			NOT NULL,		-- 좋아요seq
-	CMNUM	NUMBER			NOT NULL,		-- 커뮤eq
-	ID		VARCHAR2(50)	NOT NULL,		-- 멤버ID
-	CONSTRAINT BOARDLIKE_PK PRIMARY KEY(LIKENUM)
+   LIKENUM   NUMBER         NOT NULL,      -- 좋아요seq
+   CMNUM   NUMBER         NOT NULL,      -- 커뮤eq
+   ID      VARCHAR2(50)   NOT NULL,      -- 멤버ID
+   CONSTRAINT BOARDLIKE_PK PRIMARY KEY(LIKENUM)
 );
 
 
@@ -799,11 +837,11 @@ CASCADE CONSTRAINTS;
 SELECT * FROM CHATROOM;
 
 CREATE TABLE CHATROOM(
-	EXPERTNUM	NUMBER			NOT NULL,		-- 업체 번호
-	ROOMNUM		NUMBER			NOT NULL,		-- 방번호
-	ID		VARCHAR2(50)	NULL,		--보낸이
-	MES		 VARCHAR2(50) NULL,	--메세지
-	MESTYPE NUMBER NULL
-	
+   EXPERTNUM   NUMBER         NOT NULL,      -- 업체 번호
+   ROOMNUM      NUMBER         NOT NULL,      -- 방번호
+   ID      VARCHAR2(50)   NULL,      --보낸이
+   MES       VARCHAR2(50) NULL,   --메세지
+   MESTYPE NUMBER NULL
+   
 );
 ---------------------------------------------

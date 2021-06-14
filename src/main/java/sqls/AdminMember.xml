@@ -13,6 +13,30 @@
  where jdate >='20210101' and jdate  <![CDATA[ < ]]>  to_char(sysdate,'YYYYMMDD')
  GROUP BY to_char(jdate, 'YYYYMM')
    </select>
+<!-- 회원탈퇴 -->
+   <update id="MemDel" parameterType="bit.com.a.dto.MemberDto">
+   UPDATE ALL_MEMBER SET MEMDEL=1
+   WHERE MEMNUM=#{memNum}
+   
+   </update>
+ <!-- 연령대별 회원 -->  
+   <select id="TotalAge" resultType="bit.com.a.dto.MemberAge">
+   SELECT BDATE 
+     , NVL(COUNT(*), 0) cnt
+  FROM (SELECT CASE WHEN               age <![CDATA[ < ]]> 20 THEN 'map1'
+                    WHEN age >= 20 AND age <![CDATA[ < ]]> 30 THEN 'map2'
+                    WHEN age >= 30 AND age <![CDATA[ < ]]> 40 THEN 'map3'
+                    WHEN age >= 40 AND age <![CDATA[ < ]]> 50 THEN 'map4'
+                    WHEN age >= 50 AND age <![CDATA[ < ]]> 60 THEN 'map5'
+                    WHEN age >= 60              THEN 'map6'
+                END BDATE
+          FROM (SELECT TRUNC((TO_CHAR(SYSDATE, 'YYYY') - SUBSTR(BDATE,1,4))) age
+                  FROM ALL_MEMBER
+                )
+        )
+ GROUP BY BDATE
+ ORDER BY BDATE
    
    
+   </select>
    </mapper>
