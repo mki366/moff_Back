@@ -21,6 +21,13 @@ public class ColorDto {
       this.colorFilename = colorFilename;
    }
 
+   public ColorDto(int prodNum, String color, String colorFilename) {
+		super();
+		this.prodNum = prodNum;
+		this.color = color;
+		this.colorFilename = colorFilename;
+	}
+   
 
    public int getColorSeq() {
       return colorSeq;

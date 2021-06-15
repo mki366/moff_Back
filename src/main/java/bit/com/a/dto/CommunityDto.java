@@ -3,16 +3,6 @@ package bit.com.a.dto;
 import java.util.Date;
 
 public class CommunityDto {
-//
-//	CMNUM   NUMBER        PRIMARY KEY,    --커뮤니티번호
-//    ID    VARCHAR2(50)   NOT NULL,    --회원아이디 
-//    IMAGE1   VARCHAR2(50)   NULL,    --이미지등록1
-//    IMAGE2   VARCHAR2(50)   NULL ,   --이미지등록2
-//    TITLE VARCHAR2(100) NOT    NULL,    --제목
-//    CONTENT VARCHAR2(4000) NOT    NULL,  --내용
-//    WDATE DATE NOT NULL, --작성날짜
-//    READCOUNT NUMBER  NOT    NULL, --조회수
-//    CMLIKE NUMBER NULL --좋아요 
 	
 	private int cmNum;
 	private String id;

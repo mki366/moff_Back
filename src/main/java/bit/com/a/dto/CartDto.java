@@ -1,15 +1,6 @@
 package bit.com.a.dto;
 
 public class CartDto {
-	/*
-	cNum   NUMBER         	NOT NULL,    --장바구니&위시리스트번호
-    ID   	 VARCHAR2(50)   NOT NULL,    --회원아이디 
-    PRODNUM   NUMBER        NOT NULL,    --상품번호
-    PRODNAME  VARCHAR2(20)  NOT   NULL ,   --상품이름 
-    QUANTITY NUMBER   		DEFAULT 1 NOT NULL,    --상품개수
-    CARTORWISH NUMBER 		NOT  NULL --장바구니&위시리스트구분
-    */
-	
 	
 	private int cNum;
 	private String id;

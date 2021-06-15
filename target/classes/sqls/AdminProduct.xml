@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="bit.com.a.dao.AdminProductDao">
+ 
+ 	<!-- 상품등록 -->
+ 	<insert id="productRegi" parameterType="bit.com.a.dto.ProductDto">
+ 		 <selectKey keyProperty="prodNum" resultType="int" order="BEFORE">
+      	SELECT PRODSEQ.NEXTVAL
+      	FROM DUAL
+      </selectKey>
+ 	
+      INSERT INTO PRODUCT (PRODNUM
+      					, CATEGORY
+      					, SUBCATEGORY
+      					, PRODNAME
+      					, COLOR
+      					, INFO
+      					, WEIGHT
+      					, ORIPRICE
+      					, PRICE
+      					, QUANTITY
+      					, RDATE
+      					, DELIVERYCOST
+      					, FILENAME
+      					, READCOUNT)
+      VALUES(#{prodNum}
+      				, #{category}
+      				, #{subCategory}
+      				, #{prodName}
+      				, #{color}
+      				, #{info}
+      				, #{weight}
+      				, #{oriPrice}
+      				, #{price}
+      				, #{quantity}
+      				, SYSDATE
+      				, #{deliveryCost}
+      				, #{filename}
+      				, 0)
+      
+     
+ 	</insert>
+ 
+ 	<!-- 컬러테이블 상품등록 -->
+ 	<insert id="colorRegi" parameterType="bit.com.a.dto.ColorDto">
+      INSERT INTO COLOR(COLORSEQ
+      				, PRODNUM
+      				, COLOR
+      				, COLORFILENAME)
+      VALUES(COLORSEQ.NEXTVAL
+      				, #{prodNum}
+      				, #{color}
+      				, #{colorFilename})
+	</insert>
+ 
+ 	<!-- 상세이미지 상품등록 -->
+ 	<insert id="imgRegi" parameterType="bit.com.a.dto.ProductImgDto">
+      INSERT INTO PRODUCT_IMG(PINUM
+      						, PRODNUM
+      						, INFO
+      						, IMG_FILENAME)
+      VALUES(PINUM_SEQ.NEXTVAL
+      						, #{prodNum}
+      						, #{info},
+      						 #{imgFilename})
+	</insert>
+ 
+ 
+ 	   <!-- 리스트 -->
+   <select id="adminProductList" parameterType="bit.com.a.dto.ProductDto" resultType="bit.com.a.dto.ProductDto">
+	SELECT
+	  PRODNUM
+	  , CATEGORY
+	  , SUBCATEGORY
+	  , PRODNAME
+	  , COLOR
+	  , INFO
+	  , WEIGHT
+	  , ORIPRICE
+	  , PRICE
+	  , QUANTITY
+	  , RDATE
+	  , DELIVERYCOST
+	  , FILENAME
+	FROM (
+	  SELECT
+	  		ROW_NUMBER()OVER(ORDER BY PRODNUM DESC) AS SEQ
+	      , PRODNUM
+	      , CATEGORY
+	      , SUBCATEGORY
+	      , PRODNAME
+	      , COLOR
+	      , INFO
+	      , WEIGHT
+	      , ORIPRICE
+	      , PRICE
+	      , QUANTITY
+	      , RDATE
+	      , DELIVERYCOST
+	      , FILENAME
+	  FROM PRODUCT
+	     WHERE 1=1 AND CATEGORY NOT IN('주문제작') AND SUBCATEGORY NOT IN('chair','bed','desk','storage')
+	      <if test="choice != null and choice != ''
+	      		and search != null and search != ''">
+	      		<if test="choice == 'prodName'">
+			      AND PRODNAME LIKE '%'|| #{search}||'%' 
+			    </if>
+			    <if test="choice == 'category'">
+			      AND CATEGORY LIKE '%'|| #{search}||'%' 
+			    </if>
+			    <if test="choice == 'subCategory'">
+			      AND SUBCATEGORY LIKE '%'|| #{search}||'%' 
+			    </if>
+			    
+		</if>
+	  		ORDER BY PRODNUM DESC)
+		WHERE SEQ BETWEEN #{start} AND #{end}
+   </select>
+   
+   
+   <!-- 총수 -->
+ 	<select id="adminProductCount" parameterType="bit.com.a.dto.ProductDto" resultType="java.lang.Integer">
+		SELECT NVL(COUNT(*),0)
+		FROM PRODUCT
+		WHERE 1=1 AND CATEGORY NOT IN('주문제작') AND SUBCATEGORY NOT IN('chair','bed','desk','storage')
+		<if test="choice != null and choice != ''
+	      		and search != null and search != ''">
+	      		<if test="choice == 'prodName'">
+			      AND PRODNAME LIKE '%'|| #{search}||'%' 
+			    </if>
+			    <if test="choice == 'category'">
+			      AND CATEGORY LIKE '%'|| #{search}||'%' 
+			    </if>
+			    <if test="choice == 'subCategory'">
+			      AND SUBCATEGORY LIKE '%'|| #{search}||'%' 
+			    </if>
+		</if>
+	</select>
+	
+	<!-- 디테일 -->
+	<select id="adminProductDetail" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ProductDto">
+		SELECT ROW_NUMBER()OVER(ORDER BY PRODNUM DESC) AS RNUM, PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME,
+				COLOR, PRODOPTION, INFO, WEIGHT, ORIPRICE, PRICE, QUANTITY, RDATE, FILENAME, DELIVERYCOST
+		FROM PRODUCT 
+		WHERE PRODNUM=#{prodNum}
+	</select>
+	
+	<!-- 디테일에서 이미지 불러오기 -->
+	<select id="adminImgDetail" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ProductImgDto">
+		SELECT *
+		FROM PRODUCT_IMG
+		WHERE PRODNUM=#{prodNum}
+	</select>
+ 
+ 	<!-- 디테일에서 컬러 불러오기 -->
+	<select id="adminColorDetail" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ColorDto">
+		SELECT *
+		FROM COLOR
+		WHERE PRODNUM=#{prodNum}
+	</select>
+ 
+ 	<!-- 상품수정 -->
+ 	<update id="adminProductUpdate" parameterType="bit.com.a.dto.ProductDto">
+      	UPDATE PRODUCT 
+		SET	CATEGORY=#{category}
+			, SUBCATEGORY=#{subCategory}
+			, PRODNAME=#{prodName}
+			, COLOR=#{color}
+			, INFO=#{info}
+			, WEIGHT=#{weight}
+			, ORIPRICE=#{oriPrice}
+			, PRICE=#{price}
+			, QUANTITY=#{quantity}
+			, RDATE = SYSDATE
+			, DELIVERYCOST=#{deliveryCost}
+			, FILENAME =#{filename}
+		WHERE PRODNUM =#{prodNum}
+ 	</update>
+ 
+     <!-- 컬러수정 --> 	
+	<update id="adminColorUpdate" parameterType="bit.com.a.dto.ColorDto">
+		
+		UPDATE COLOR
+		SET COLOR=#{color},
+			COLORFILENAME=#{colorFilename}
+		WHERE PRODNUM=#{prodNum}
+	</update>
+	
+	<!-- 이미지수정 -->
+	<update id="adminImgUpdate" parameterType="bit.com.a.dto.ProductImgDto">
+      	UPDATE PRODUCT_IMG
+      	SET INFO=#{info}, IMG_FILENAME=#{imgFilename}
+    </update>
+ 
+ 
+ 	<!-- 컬러추가 -->
+ 	<insert id="addColor" parameterType="bit.com.a.dto.ColorDto">
+      INSERT INTO COLOR(COLORSEQ
+      				, PRODNUM
+      				, COLOR
+      				, COLORFILENAME)
+      VALUES(COLORSEQ.NEXTVAL
+      				, #{prodNum}
+      				, #{color}
+      				, #{colorFilename})
+	</insert>
+ 
+ 
+ 	<!-- 이미지추가 -->
+ 	<insert id="addImage" parameterType="bit.com.a.dto.ProductImgDto">
+      INSERT INTO PRODUCT_IMG(PINUM
+      						, PRODNUM
+      						, INFO
+      						, IMG_FILENAME)
+      VALUES(PINUM_SEQ.NEXTVAL
+      						, #{prodNum}
+      						, #{info},
+      						 #{imgFilename})
+	</insert>
+ 
+ 	<!-- 수정에서 디테일불러오기 -->
+	<select id="getAdminProduct" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ProductDto">
+		SELECT ROW_NUMBER()OVER(ORDER BY PRODNUM DESC) AS RNUM, PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME,
+				COLOR, PRODOPTION, INFO, WEIGHT, ORIPRICE, PRICE, QUANTITY, RDATE, FILENAME
+		FROM PRODUCT 
+		WHERE PRODNUM=#{prodNum}
+	</select>
+ 
+ 	<!-- 수정에서 이미지 불러오기 -->
+	<select id="getAdminImgae" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ProductImgDto">
+		SELECT *
+		FROM PRODUCT_IMG
+		WHERE PRODNUM=#{prodNum}
+	</select>
+ 
+ 	<!-- 수정에서 컬러 불러오기 -->
+	<select id="getAdminColor" parameterType="bit.com.a.dto.ColorDto" resultType="bit.com.a.dto.ColorDto">
+		SELECT *
+		FROM COLOR
+		WHERE PRODNUM=#{prodNum}
+	</select>
+ 
+ 	<!-- 삭제 -->
+ 	<delete id="delProduct" parameterType="java.lang.Integer">
+ 		DELETE FROM PRODUCT
+		WHERE PRODNUM=#{prodNum}
+ 	</delete>
+ 	
+ 	<!-- 재고리스트 -->
+ 	<select id="stockList" parameterType="bit.com.a.dto.ProductDto" resultType="bit.com.a.dto.ProductDto">
+	 	SELECT
+		  PRODNUM
+		  , PRODNAME
+		  , QUANTITY
+		FROM (
+		  SELECT
+		  		ROW_NUMBER()OVER(ORDER BY PRODNUM DESC) AS SEQ
+		     	, PRODNUM
+		      	, PRODNAME
+		  		, QUANTITY
+		  FROM PRODUCT
+		  WHERE 1=1 AND CATEGORY NOT IN('주문제작') AND SUBCATEGORY NOT IN('chair','bed','desk','storage')
+			 <if test="search != null and search != ''">
+			      AND PRODNAME LIKE '%'|| #{search}||'%' 
+			</if>
+	  		ORDER BY PRODNUM DESC)
+		WHERE SEQ BETWEEN #{start} AND #{end}
+ 	</select>
+ 	
+ 	<select id="stockListCount" parameterType="bit.com.a.dto.ProductDto" resultType="java.lang.Integer">
+		SELECT NVL(COUNT(*),0)
+		FROM PRODUCT
+		WHERE 1=1 AND CATEGORY NOT IN('주문제작') AND SUBCATEGORY NOT IN('chair','bed','desk','storage')
+		<if test="search != null and search != ''">
+			AND PRODNAME LIKE '%'|| #{search}||'%' 
+		</if>
+	</select>
+	
+	<!-- 재고 수량변경 -->
+	<update id="stockUpdate" parameterType="bit.com.a.dto.ProductDto">
+		UPDATE PRODUCT 
+		SET	QUANTITY=#{quantity}
+		WHERE PRODNUM=#{prodNum}
+	</update>
+	
+	
+	
+	
+	<!-- 다솜 /////////////////////////////////////-->
+	
+	<!--조회수순 싱픔리스트 -->
+	<select id="mainRcList" parameterType="bit.com.a.dto.ProductDto" resultType="bit.com.a.dto.ProductDto">
+
+		SELECT PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME, COLOR, PRODOPTION,
+				INFO, WEIGHT, ORIPRICE, PRICE, QUANTITY, RDATE, DELIVERYCOST, FILENAME, READCOUNT
+		FROM( SELECT ROW_NUMBER() OVER(ORDER BY READCOUNT DESC) AS RK , PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME, COLOR, PRODOPTION,
+				INFO, WEIGHT, ORIPRICE, PRICE, QUANTITY, RDATE, DELIVERYCOST, FILENAME, READCOUNT
+				FROM PRODUCT)
+				      <![CDATA[
+					      WHERE RK <=50
+					  ]]> 
+	</select>
+	
+	
+	<!-- 평균을 내기위한 총조회수 -->
+	<select id="rCount" resultType="java.lang.Integer">
+		SELECT SUM(READCOUNT)
+		FROM PRODUCT
+	
+	</select>
+
+	<!-- 카테고리별 주문건수  -->
+	<select id="catelist" resultType="bit.com.a.dto.ProductDto">	
+		SELECT  CATEGORY , ODCOUNT
+		FROM ( SELECT P.CATEGORY , 
+		  NVL( COUNT(O.PRODNUM),0 )AS ODCOUNT
+		  FROM PRODUCT P 
+		      LEFT OUTER JOIN ORDER_DETAIL O ON P.PRODNUM = O.PRODNUM
+		GROUP BY P.CATEGORY 
+		 )
+		 ORDER BY ODCOUNT DESC
+	</select>
+
+	<!-- 	 상품별 주문건수 -->
+	<select id="prodlist" resultType="bit.com.a.dto.ProductDto">	
+		SELECT 	PRODNUM, PRODNAME, ODCOUNT
+		FROM(	  SELECT P.PRODNUM, P.PRODNAME, NVL( COUNT(O.PRODNUM),0 )AS ODCOUNT
+			  FROM ORDER_DETAIL o 
+			  LEFT OUTER JOIN PRODUCT P ON P.PRODNUM = O.PRODNUM
+			  GROUP BY P.PRODNUM, P.PRODNAME
+			  ORDER BY ODCOUNT DESC)
+			   <![CDATA[
+				WHERE ROWNUM <=10
+			  ]]> 
+	</select>
+ 
+ </mapper>

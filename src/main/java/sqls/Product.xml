@@ -58,7 +58,7 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
 	<select id="getProductCount" parameterType="bit.com.a.dto.ProductDto" resultType="java.lang.Integer">
 		SELECT NVL(COUNT(*),0)
 		FROM PRODUCT P
-		WHERE 1=1
+		WHERE 1=1 AND P.CATEGORY NOT IN('주문제작') AND P.SUBCATEGORY NOT IN('chair','bed','desk','storage')
 		 <if test="search != null and search != ''">
 		  	  <!-- AND DEL=0 -->		
 			  		AND PRODNAME LIKE '%'||#{search}||'%'		  
@@ -69,16 +69,16 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
 	<!-- 디테일 -->
 	<select id="getProduct" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ProductDto">
 		SELECT ROW_NUMBER()OVER(ORDER BY PRODNUM DESC) AS RNUM, PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME,
-				COLOR, PRODOPTION, INFO, WEIGHT, ORIPRICE, PRICE, QUANTITY, RDATE, FILENAME, READCOUNT
+				COLOR, DELIVERYCOST, INFO, WEIGHT, ORIPRICE, PRICE, QUANTITY, RDATE, FILENAME, READCOUNT
 		FROM PRODUCT 
-		WHERE PRODNUM=#{prodnum}
+		WHERE PRODNUM=#{prodNum}
 	</select>	
 	
 	<!-- 디테일 이미지 -->
 	<select id="getProductImg" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ProductImgDto">
 		SELECT IMG_FILENAME , INFO
 		FROM PRODUCT_IMG
-		WHERE PRODNUM=#{prodnum}
+		WHERE PRODNUM=#{prodNum}
 	</select>
 	
 	<!-- 조회수증가 -->
@@ -112,7 +112,7 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
       , ROUND(AVG(NVL(R.STAR, 0)), 1) AS STAR
   FROM PRODUCT P 
       LEFT OUTER JOIN REVIEW R ON P.PRODNUM = R.PRODNUM
-  WHERE 1=1
+  WHERE 1=1 AND P.CATEGORY NOT IN('주문제작') AND P.SUBCATEGORY NOT IN('chair','bed','desk','storage')
 		<if test="color != null and color != ''">
 			AND COLOR=#{color}
 		</if>
@@ -275,8 +275,8 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
 	</insert>
 	
 	<!-- 디테일에서 컬러 불러오기 -->
-	<select id="detailColor" parameterType="bit.com.a.dto.ColorDto" resultType="bit.com.a.dto.ColorDto">
-		SELECT COLOR
+	<select id="detailColor" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ColorDto">
+		SELECT *
 		FROM COLOR
 		WHERE PRODNUM=#{prodNum}
 	</select>
@@ -284,7 +284,7 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
 	
 	<!-- 컬러 클릭 시 사진 띄우기 -->
 	<select id="getColorFilename" parameterType="bit.com.a.dto.ColorDto" resultType="bit.com.a.dto.ColorDto">
-		SELECT COLORFILENAME
+		SELECT *
 		FROM COLOR
 		WHERE PRODNUM=#{prodNum} AND COLOR=#{color}
 	</select>
@@ -311,11 +311,10 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
 	
    <!-- 쇼룸 말풍선   -->
    <select id="srList" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ProductDto">
-   
       SELECT PRODNUM, PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME,
             COLOR, PRODOPTION, INFO, WEIGHT, ORIPRICE, PRICE, QUANTITY, RDATE, FILENAME, READCOUNT
       FROM PRODUCT
-      WHERE PRODNUM=#{prodNum}
+      WHERE 1=1 AND PRODNUM=#{prodNum}
    </select>   
    
    <!-- 메인 리스트(새로운순)  -->
@@ -323,22 +322,23 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
       SELECT PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME, COLOR, PRODOPTION,
             INFO, WEIGHT, ORIPRICE, PRICE, QUANTITY, RDATE, DELIVERYCOST, FILENAME, READCOUNT
       FROM PRODUCT
+      WHERE 1=1
       <![CDATA[
-          WHERE ROWNUM <= 8
+          AND ROWNUM <= 8
        ]]> 
       ORDER BY PRODNUM DESC
    </select>
    
    <!-- 메인 리스트(리뷰순)  -->
    <select id="mainReadcountList" parameterType="bit.com.a.dto.ProductDto" resultType="bit.com.a.dto.ProductDto">
-
       SELECT PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME, COLOR, PRODOPTION,
             INFO, WEIGHT, ORIPRICE, PRICE, QUANTITY, RDATE, DELIVERYCOST, FILENAME, READCOUNT
       FROM( SELECT ROW_NUMBER() OVER(ORDER BY READCOUNT DESC) AS RK , PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME, COLOR, PRODOPTION,
             INFO, WEIGHT, ORIPRICE, PRICE, QUANTITY, RDATE, DELIVERYCOST, FILENAME, READCOUNT
             FROM PRODUCT)
+      WHERE 1=1
       <![CDATA[
-      WHERE RK <=8
+      AND RK <=8
        ]]> 
        
    </select>
@@ -351,9 +351,9 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
                FROM ORDER_DETAIL
                GROUP BY PRODNUM
                ORDER BY CNT DESC) a, PRODUCT p
-         
+         		WHERE 1=1
             <![CDATA[
-            WHERE a.PRODNUM = p.PRODNUM 
+            AND a.PRODNUM = p.PRODNUM 
             AND CNT <=8
              ]]> 
          ORDER BY CNT DESC

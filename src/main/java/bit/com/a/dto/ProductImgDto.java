@@ -21,6 +21,13 @@ public class ProductImgDto implements Serializable{
 		this.imgFilename = imgFilename;
 	}
 
+	public ProductImgDto(int prodNum, String info, String imgFilename) {
+		super();
+		this.prodNum = prodNum;
+		this.info = info;
+		this.imgFilename = imgFilename;
+	}
+	
 	public int getPiNum() {
 		return piNum;
 	}

@@ -4,17 +4,6 @@ import java.util.Date;
 
 public class CommentDto {
 
-//	
-//	CTNUM	NUMBER 			PRIMARY KEY, --댓글번호
-//	CMNUM	NUMBER 			NOT NULL,  --커뮤니티 글번호
-//	ID 		VARCHAR2(50) 	NOT NULL, --회원 아이디
-//	WDATE 	DATE 			NOT NULL,  --댓글 작성일자
-//	CONTENT VARCHAR2(4000) 	NOT NULL,  --댓글내용
-//	REF 	NUMBER 			NOT NULL,
-//	STEP 	NUMBER 			NULL,
-//	DEPTH 	NUMBER 			NULL
-	
-	
 	private int ctNum;
 	private int cmNum;
 	private String id;

@@ -4,12 +4,6 @@ import java.util.Date;
 
 public class ReviewDto {
 
-//	rnum   	NUMBER   		NOT NULL,    --리뷰번호
-//    ID    	VARCHAR2(50)   	NOT NULL,    --회원아이디 
-//    PRODNUM NUMBER   		NOT NULL,    --상품번호 
-//    STAR   	NUMBER  		NOT NULL ,   --별점 
-//    TITLE 	VARCHAR2(400) 	NOT NULL,    --제목
-//    CONTENT VARCHAR2(1000) 	NOT NULL 
 	
 	private int rnum;
 	private String id;
@@ -23,12 +17,16 @@ public class ReviewDto {
 	private int start;
 	private int end;
 	
+	private String rating;		// 별점 차트
+	
 	public ReviewDto() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ReviewDto(int rnum, String id, int prodNum, int star, String content, String image,
-			String newfilename, Date rdate, int page, int start, int end) {
+	
+
+	public ReviewDto(int rnum, String id, int prodNum, int star, String content, String image, Date rdate, int page,
+			int start, int end, String rating) {
 		super();
 		this.rnum = rnum;
 		this.id = id;
@@ -40,7 +38,10 @@ public class ReviewDto {
 		this.page = page;
 		this.start = start;
 		this.end = end;
+		this.rating = rating;
 	}
+
+
 
 	public ReviewDto(int prodNum, String id, int star, String content, String image) {
 		this.prodNum = prodNum;
@@ -129,6 +130,19 @@ public class ReviewDto {
 	public void setEnd(int end) {
 		this.end = end;
 	}
+
+	
+	public String getRating() {
+		return rating;
+	}
+
+
+
+	public void setRating(String rating) {
+		this.rating = rating;
+	}
+
+
 
 	@Override
 	public String toString() {

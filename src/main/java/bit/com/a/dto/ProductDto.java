@@ -33,6 +33,8 @@ public class ProductDto {
 	   private int end;   
 	  
 	   private double star;
+	   
+	   private int odCount;	
 	
 	public ProductDto() {
 	}
@@ -50,25 +52,21 @@ public class ProductDto {
 	   }
 	
 	
-	public ProductDto(int prodNum, String category, String subCategory, String prodName, String color,
-			String prodOption, String info, int weight, int oriPrice, int price, int quantity, String rdate,
-			int deliveryCost, String filename) {
-		super();
-		this.prodNum = prodNum;
-		this.category = category;
-		this.subCategory = subCategory;
-		this.prodName = prodName;
-		this.color = color;
-		this.prodOption = prodOption;
-		this.info = info;
-		this.weight = weight;
-		this.oriPrice = oriPrice;
-		this.price = price;
-		this.quantity = quantity;
-		this.rdate = rdate;
-		this.deliveryCost = deliveryCost;
-		this.filename = filename;
-	}
+	   public ProductDto(String category, String subCategory, String prodName, String color, String info, int weight,
+				int oriPrice, int price, int quantity, int deliveryCost, String filename) {
+			super();
+			this.category = category;
+			this.subCategory = subCategory;
+			this.prodName = prodName;
+			this.color = color;
+			this.info = info;
+			this.weight = weight;
+			this.oriPrice = oriPrice;
+			this.price = price;
+			this.quantity = quantity;
+			this.deliveryCost = deliveryCost;
+			this.filename = filename;
+		}
 	
 	
 
@@ -98,6 +96,37 @@ public class ProductDto {
 		this.start = start;
 		this.end = end;
 		this.star = star;
+	}
+	
+	
+
+	public ProductDto(int prodNum, String category, String subCategory, String prodName, String color,
+			String prodOption, String info, int weight, int oriPrice, int price, int quantity, String rdate,
+			int deliveryCost, String filename, int readCount, String choice, String search, int page, int start,
+			int end, double star, int odCount) {
+		super();
+		this.prodNum = prodNum;
+		this.category = category;
+		this.subCategory = subCategory;
+		this.prodName = prodName;
+		this.color = color;
+		this.prodOption = prodOption;
+		this.info = info;
+		this.weight = weight;
+		this.oriPrice = oriPrice;
+		this.price = price;
+		this.quantity = quantity;
+		this.rdate = rdate;
+		this.deliveryCost = deliveryCost;
+		this.filename = filename;
+		this.readCount = readCount;
+		this.choice = choice;
+		this.search = search;
+		this.page = page;
+		this.start = start;
+		this.end = end;
+		this.star = star;
+		this.odCount = odCount;
 	}
 
 	public int getProdNum() {
@@ -269,14 +298,27 @@ public class ProductDto {
 		this.star = star;
 	}
 
+	
+	
+	public int getOdCount() {
+		return odCount;
+	}
+
+	public void setOdCount(int odCount) {
+		this.odCount = odCount;
+	}
+
 	@Override
 	public String toString() {
 		return "ProductDto [prodNum=" + prodNum + ", category=" + category + ", subCategory=" + subCategory
 				+ ", prodName=" + prodName + ", color=" + color + ", prodOption=" + prodOption + ", info=" + info
 				+ ", weight=" + weight + ", oriPrice=" + oriPrice + ", price=" + price + ", quantity=" + quantity
-				+ ", rdate=" + rdate + ", deliveryCost=" + deliveryCost + ", filename=" + filename + "]";
+				+ ", rdate=" + rdate + ", deliveryCost=" + deliveryCost + ", filename=" + filename + ", readCount="
+				+ readCount + ", choice=" + choice + ", search=" + search + ", page=" + page + ", start=" + start
+				+ ", end=" + end + ", star=" + star + ", odCount=" + odCount + "]";
 	}
-	
+
+
 	
 }
 

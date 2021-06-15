@@ -23,7 +23,6 @@ public class ProductService {
 	public List<ProductDto> getAllProductList(ProductDto prdDto) {
 		 
 				List<ProductDto> l=	prdDao.getAllProductList(prdDto);
-		//		System.out.println("getAllProductList service: " + l.get(0).getCategory());
 				System.out.println("service: " + l.toString());
 	return l;
 	}
@@ -101,9 +100,9 @@ public class ProductService {
 	}
 	
 	// 디테일에서 컬러 불러오깅
-	public List<ColorDto> detailColor(ColorDto colorDto) {
+	public List<ColorDto> detailColor(int prodNum) {
 		
-		return prdDao.detailColor(colorDto);
+		return prdDao.detailColor(prodNum);
 	}
 	
 	// 디테일에서 컬러 클릭 시 사진 띄우기

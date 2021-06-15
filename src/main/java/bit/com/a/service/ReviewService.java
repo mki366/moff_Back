@@ -21,8 +21,6 @@ public class ReviewService {
 	
 	// 리뷰 리스트
 	public List<ReviewDto> getAllReviewList(ReviewDto rDto) {
-		List<ReviewDto> rList = rDao.getAllReviewList(rDto);
-		
 		return rDao.getAllReviewList(rDto);
 	}
 	
@@ -61,6 +59,13 @@ public class ReviewService {
 	// 평균평점
 	public List<ReviewDto> avgReview(int prodNum) {
 		return rDao.avgReview(prodNum);
+	}
+	
+	// 리뷰삭제
+	public boolean deleteReview(int rnum) {
+		int count = rDao.deleteReview(rnum);
+		
+		return count>0?true:false;
 	}
 	
 }

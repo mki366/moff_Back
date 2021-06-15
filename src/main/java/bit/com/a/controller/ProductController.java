@@ -1,5 +1,7 @@
 package bit.com.a.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,20 +32,20 @@ public class ProductController {
 		System.out.println("ProductController getAllProductList() " + new Date());
 		
 		int sn = prdDto.getPage();
-		System.out.println("페이지 확인"+sn);
 		
 		int start = sn * 9 + 1;
 		int end = (sn + 1) * 9;
 		
 		
 		prdDto.setStart(start);
-		System.out.println("페이지 확인"+start);
 		
 		prdDto.setEnd(end);
-		System.out.println("페이지 확인"+end);
 	//	Map<String, Object> map = new HashMap<String, Object>();
 		
-	
+	/*	 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		   Calendar cal = Calendar.getInstance();
+		   cal.add(Calendar.DAY_OF_MONTH, -7);
+		   String nowday = format.format(cal.getTime());*/
 		
 		List<ProductDto> list = service.getAllProductList(prdDto);
 	//	System.out.println("확인하려는 list" + list);
@@ -65,8 +67,8 @@ public class ProductController {
 	}
 	
 	// 글 총수 + 페이지
-	@RequestMapping(value = "/Pagination", method = {RequestMethod.GET, RequestMethod.POST})
-	public int Pagination(ProductDto prdDto) {
+	@RequestMapping(value = "/prdListCount", method = {RequestMethod.GET, RequestMethod.POST})
+	public int prdListCount(ProductDto prdDto) {
 		int count = service.getProductCount(prdDto);
 		System.out.println("count 갯수: " + count);
 		
@@ -75,7 +77,7 @@ public class ProductController {
 			pagenum = pagenum + 1;
 		}
 		
-		System.out.println(" 리스트 페이지 갯수 확인: " + pagenum);
+		System.out.println(" prdListCount 리스트 페이지 갯수 확인: " + pagenum);
 		return pagenum;
 	}
 	
@@ -273,10 +275,10 @@ public class ProductController {
 	
 	// 디테일에서 컬러
 	@RequestMapping(value = "/detailColor", method = {RequestMethod.GET, RequestMethod.POST})
-	public List<ColorDto> detailColor(ColorDto colorDto){
+	public List<ColorDto> detailColor(int prodNum){
 		System.out.println("detailColor Controller");
 		
-		List<ColorDto> colorList = service.detailColor(colorDto);
+		List<ColorDto> colorList = service.detailColor(prodNum);
 		
 		System.out.println("colorList: " + colorList.toString());
 		
@@ -309,20 +311,6 @@ public class ProductController {
 	}
 	
 	 
-	 
-	/*
-	// 리스트에서 위시리스트 두번 클릭 시 데이터 삭제
-	@RequestMapping(value = "/deleteWish", method = {RequestMethod.GET, RequestMethod.POST})
-	public String deleteWish(CartDto cartDto) {
-		if(service.deleteWish(cartDto)==true) {
-			return "success";
-		}else {
-			return "fail";
-		}
-		
-	}
-	
-	*/
 	
 	///////// 다솜 //////////////////
 
@@ -374,10 +362,7 @@ public class ProductController {
       
    }
    
-	
-	
-	
-	
+
 }
 
 
