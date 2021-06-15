@@ -252,24 +252,25 @@ public class ProductController {
 		
 		if(cartCount < 1) {
 			service.detailCart(cartDto);
-			return "detialCart Success";
+			return "YES";
 			
 		}else {
-			return "detialCart error";
+			
+			return "NO";
 		}
 	}
 	
 	// 상품디테일에서 하트(위시리스트)
 	@RequestMapping(value = "/detailWishList", method = {RequestMethod.GET, RequestMethod.POST})
 	public String detailWishList(CartDto cartDto) {
-		
+		System.out.println("상품디테일 위시 확인: " + cartDto.toString());
 		int wishCount = service.wishCount(cartDto);
-		if(wishCount > 1) {
+		if(wishCount < 1) {
 			service.detailWishList(cartDto);
-			return "detialWishList Success";
+			return "YES";
 			
 		}else {
-			return "detialWishList error";
+			return "NO";
 		}
 	}
 	

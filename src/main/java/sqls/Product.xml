@@ -300,7 +300,7 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
 		WHERE SEQ BETWEEN 1 AND 4
 	</select>
 	
-	
+	<!-- 디테일에서 위시 삭제 -->
 	<delete id="deleteWish" parameterType="bit.com.a.dto.CartDto">
 		DELETE FROM CART 
 		WHERE PRODNUM=#{prodNum} AND ID=#{id} AND CARTORWISH=0

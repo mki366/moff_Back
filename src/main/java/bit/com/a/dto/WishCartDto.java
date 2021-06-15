@@ -11,6 +11,7 @@ public class WishCartDto {
 	private String prodName;
 	private String color;
 	private String prodOption;
+	private String oriPrice;
 	private String price;
 	private String filename;
 	private int weight;
@@ -19,7 +20,7 @@ public class WishCartDto {
 	}
 
 	public WishCartDto(int cNum, String id, int prodNum, int quantity, int cartORwish, String prodName, String color,
-			String prodOption, String price, String filename, int weight) {
+			String prodOption, String price, String filename, int weight, String oriPrice) {
 		super();
 		this.cNum = cNum;
 		this.id = id;
@@ -32,6 +33,7 @@ public class WishCartDto {
 		this.price = price;
 		this.filename = filename;
 		this.weight = weight;
+		this.oriPrice = oriPrice;
 	}
 	
 	
@@ -139,12 +141,23 @@ public class WishCartDto {
 		this.weight = weight;
 	}
 
+	public String getOriPrice() {
+		return oriPrice;
+	}
+
+	public void setOriPrice(String oriPrice) {
+		this.oriPrice = oriPrice;
+	}
+
 	@Override
 	public String toString() {
 		return "WishCartDto [cNum=" + cNum + ", id=" + id + ", prodNum=" + prodNum + ", quantity=" + quantity
 				+ ", cartORwish=" + cartORwish + ", prodName=" + prodName + ", color=" + color + ", prodOption="
-				+ prodOption + ", price=" + price + ", filename=" + filename + "]";
+				+ prodOption + ", oriPrice=" + oriPrice + ", price=" + price + ", filename=" + filename + ", weight="
+				+ weight + "]";
 	}
+
+	
 
 	
 }
