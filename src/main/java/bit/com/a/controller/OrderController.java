@@ -167,6 +167,10 @@ public class OrderController {
 		System.out.println(dto.toString());
 		//prodNum을 가져옴
 		OrderDetailDto rdto= service.getProdInfo(dto);
+		/*
+		 * if(rdto.getPrice()==0) { System.out.println("세일 안하는 상품"); OrderDetailDto
+		 * Odto=service.getProdOriPrice(dto); rdto.setPrice(Odto.geto) }
+		 */
 		boolean c=service.updateQuantity(dto);
 		if(c) {
 			System.out.println("수량 줄이기 성공");
@@ -177,7 +181,7 @@ public class OrderController {
 		
 		//가져온 정보를 다시 세팅
 		dto.setProdName(rdto.getProdName());
-		dto.setQuantity(rdto.getQuantity());
+		
 		dto.setPrice(rdto.getPrice());
 		dto.setColor(rdto.getColor());
 		dto.setFilename(rdto.getFilename());

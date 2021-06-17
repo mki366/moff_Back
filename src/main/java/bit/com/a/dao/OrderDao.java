@@ -31,6 +31,8 @@ public interface OrderDao {
 	public int setOrder(OrderBuyDto dto);
 	public void OrderDelCart(String id);
 	public OrderDetailDto getProdInfo(OrderDetailDto dto);
+	/* public OrderDetailDto getProdOriPrice(OrderDetailDto dto); */
+	
 	public int setOrderDetail(OrderDetailDto dto);
 	public int setDeliveryCheck(DeliveryCheckDto dto);
 	public List<OrderBuyDto> getOrderBuyInfo(OrderBuyDto dto);

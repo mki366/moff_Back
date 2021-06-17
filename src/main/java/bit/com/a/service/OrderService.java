@@ -80,11 +80,18 @@ public class OrderService {
 	}
 	
 	public OrderDetailDto getProdInfo(OrderDetailDto dto) {
-		System.out.println("service-OrderDelCart: "+dto.getProdNum());
+		System.out.println("service-getProdInfo: "+dto.getProdNum());
 		OrderDetailDto rdto = dao.getProdInfo(dto);
+		System.out.println("해당 product의 정보 가져오기 "+rdto.toString());
 		return rdto;
 	}
-	
+
+	/*
+	 * public OrderDetailDto getProdOriPrice(OrderDetailDto dto) {
+	 * System.out.println("service-getProdOriPrice: "+dto.getProdNum());
+	 * OrderDetailDto rdto = dao.getProdInfo(dto);
+	 * System.out.println("OriPrice의  가져오기 "+rdto.toString()); return rdto; }
+	 */
 	public int setOrderDetail(OrderDetailDto dto){
 		System.out.println("service-setOrderDetail: "+dto.getFilename());
 

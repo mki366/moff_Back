@@ -4,8 +4,8 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="bit.com.a.dao.ProductDao">
-	
-	<select id="getAllProductList" parameterType="bit.com.a.dto.ProductDto" resultType="bit.com.a.dto.ProductDto">
+   
+   <select id="getAllProductList" parameterType="bit.com.a.dto.ProductDto" resultType="bit.com.a.dto.ProductDto">
 SELECT
   PRODNUM
   , CATEGORY
@@ -25,7 +25,7 @@ SELECT
   , STAR 
 FROM (
   SELECT
-  		ROW_NUMBER()OVER(ORDER BY P.PRODNUM DESC) AS SEQ
+        ROW_NUMBER()OVER(ORDER BY P.PRODNUM DESC) AS SEQ
       , P.PRODNUM
       , P.CATEGORY
       , P.SUBCATEGORY
@@ -45,55 +45,55 @@ FROM (
   FROM PRODUCT P 
       LEFT OUTER JOIN REVIEW R ON P.PRODNUM = R.PRODNUM
       WHERE 1=1 AND P.CATEGORY NOT IN('주문제작') AND P.SUBCATEGORY NOT IN('chair','bed','desk','storage')
-			 	<if test="search != null and search != ''">
-					 <!-- AND DEL=0 -->		
-						  AND P.PRODNAME LIKE '%'||#{search}||'%' 
-				</if>
+             <if test="search != null and search != ''">
+                <!-- AND DEL=0 -->      
+                    AND P.PRODNAME LIKE '%'||#{search}||'%' 
+            </if>
 GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION, P.INFO, P.WEIGHT, P.ORIPRICE, P.PRICE, P.QUANTITY, P.RDATE, P.DELIVERYCOST, P.FILENAME, P.READCOUNT ORDER BY PRODNUM DESC
   )
-	WHERE 1=1 AND SEQ BETWEEN #{start} AND #{end}
-	</select>
-	
-	
-	<select id="getProductCount" parameterType="bit.com.a.dto.ProductDto" resultType="java.lang.Integer">
-		SELECT NVL(COUNT(*),0)
-		FROM PRODUCT P
-		WHERE 1=1 AND P.CATEGORY NOT IN('주문제작') AND P.SUBCATEGORY NOT IN('chair','bed','desk','storage')
-		 <if test="search != null and search != ''">
-		  	  <!-- AND DEL=0 -->		
-			  		AND PRODNAME LIKE '%'||#{search}||'%'		  
-		 </if>
-	</select>
-	
-	
-	<!-- 디테일 -->
-	<select id="getProduct" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ProductDto">
-		SELECT ROW_NUMBER()OVER(ORDER BY PRODNUM DESC) AS RNUM, PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME,
-				COLOR, DELIVERYCOST, INFO, WEIGHT, ORIPRICE, PRICE, QUANTITY, RDATE, FILENAME, READCOUNT
-		FROM PRODUCT 
-		WHERE PRODNUM=#{prodNum}
-	</select>	
-	
-	<!-- 디테일 이미지 -->
-	<select id="getProductImg" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ProductImgDto">
-		SELECT IMG_FILENAME , INFO
-		FROM PRODUCT_IMG
-		WHERE PRODNUM=#{prodNum}
-	</select>
-	
-	<!-- 조회수증가 -->
-	<update id="readCountProduct" parameterType="java.lang.Integer">
-		UPDATE PRODUCT
-		SET READCOUNT=READCOUNT+1
-		WHERE PRODNUM=#{prodNum}
-	</update>
-	
-	<!-- 필터검색 -->
-	<select id="productFilter" parameterType="map" resultType="bit.com.a.dto.ProductDto">
-		SELECT *
-		FROM (
-  		SELECT
-  		ROW_NUMBER()OVER(ORDER BY P.PRODNUM DESC) AS SEQ
+   WHERE 1=1 AND SEQ BETWEEN #{start} AND #{end}
+   </select>
+   
+   
+   <select id="getProductCount" parameterType="bit.com.a.dto.ProductDto" resultType="java.lang.Integer">
+      SELECT NVL(COUNT(*),0)
+      FROM PRODUCT P
+      WHERE 1=1 AND P.CATEGORY NOT IN('주문제작') AND P.SUBCATEGORY NOT IN('chair','bed','desk','storage')
+       <if test="search != null and search != ''">
+             <!-- AND DEL=0 -->      
+                 AND PRODNAME LIKE '%'||#{search}||'%'        
+       </if>
+   </select>
+   
+   
+   <!-- 디테일 -->
+   <select id="getProduct" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ProductDto">
+      SELECT ROW_NUMBER()OVER(ORDER BY PRODNUM DESC) AS RNUM, PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME,
+            COLOR, DELIVERYCOST, INFO, WEIGHT, ORIPRICE, PRICE, QUANTITY, RDATE, FILENAME, READCOUNT
+      FROM PRODUCT 
+      WHERE PRODNUM=#{prodNum}
+   </select>   
+   
+   <!-- 디테일 이미지 -->
+   <select id="getProductImg" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ProductImgDto">
+      SELECT IMG_FILENAME , INFO
+      FROM PRODUCT_IMG
+      WHERE PRODNUM=#{prodNum}
+   </select>
+   
+   <!-- 조회수증가 -->
+   <update id="readCountProduct" parameterType="java.lang.Integer">
+      UPDATE PRODUCT
+      SET READCOUNT=READCOUNT+1
+      WHERE PRODNUM=#{prodNum}
+   </update>
+   
+   <!-- 필터검색 -->
+   <select id="productFilter" parameterType="map" resultType="bit.com.a.dto.ProductDto">
+      SELECT *
+      FROM (
+        SELECT
+        ROW_NUMBER()OVER(ORDER BY P.PRODNUM DESC) AS SEQ
       , P.PRODNUM
       , P.CATEGORY
       , P.SUBCATEGORY
@@ -113,202 +113,202 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
   FROM PRODUCT P 
       LEFT OUTER JOIN REVIEW R ON P.PRODNUM = R.PRODNUM
   WHERE 1=1 AND P.CATEGORY NOT IN('주문제작') AND P.SUBCATEGORY NOT IN('chair','bed','desk','storage')
-		<if test="color != null and color != ''">
-			AND COLOR=#{color}
-		</if>
-		
-		<if test="category != null and category != ''">
-			AND CATEGORY = #{category}
-		</if>
-		
-		<if test="subCategory != null and subCategory != ''">
-			AND SUBCATEGORY = #{subCategory}
-		</if>
-		
-		<if test="min != null and min != '' and max != nill and max != '' " >
-		<![CDATA[
-			AND ORIPRICE >= #{min} AND ORIPRICE <= #{max}
-				 ]]>
-		</if>
-	GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION, P.INFO, P.WEIGHT, P.ORIPRICE, P.PRICE, P.QUANTITY, P.RDATE, P.DELIVERYCOST, P.FILENAME, P.READCOUNT
-	ORDER BY PRODNUM DESC)
-	WHERE SEQ BETWEEN #{start} AND #{end}
-	</select>
-	
-	<!-- 필터검색 후 글의 총 수 불러오기 -->
-	<select id="filterCount" parameterType="map" resultType="java.lang.Integer">
-		SELECT NVL(COUNT(*),0)
-		FROM PRODUCT
-		WHERE 1=1
-		
-		<if test="color != null and color != ''">
-			AND COLOR=#{color}
-		</if>
-		
-		<if test="category != null and category != ''">
-			AND CATEGORY = #{category}
-		</if>
-		
-		<if test="subCategory != null and subCategory != ''">
-			AND SUBCATEGORY = #{subCategory}
-		</if>
-		
-		<if test="min != null and min != '' and max != nill and max != '' " >
-		<![CDATA[
-			AND ORIPRICE >= #{min} AND ORIPRICE <= #{max}
-				 ]]>
-		</if>
-	</select>
-	
-	
-	<!-- 상품리스트에서 카트 -->
-	<insert id="setCart" parameterType="bit.com.a.dto.CartDto">
-		INSERT INTO CART(CNUM
-		, PRODNUM
-		, ID
-		, PRODNAME
-		, CARTORWISH
-		, COLOR
-		<if test="quantity != null and quantity != ''">
-		, QUANTITY
-		</if>
-		)
-		VALUES(CNUMSEQ.NEXTVAL
-		, #{prodNum}
-		, #{id}
-		, #{prodName}
-		, 1
-		, #{color}
-		<if test="quantity != null and quantity != ''">
-		, #{quantity}
-		</if>
-		)
-	</insert>
-	
-	
-	<!-- 상품리스트에서 하트(위시리스트) -->
-	<insert id="setWishList" parameterType="bit.com.a.dto.CartDto">
-		INSERT INTO CART(CNUM
-		, PRODNUM
-		, ID
-		, PRODNAME
-		, CARTORWISH
-		, COLOR
-		<if test="quantity != null and quantity != ''">
-		, QUANTITY
-		</if>
-		)
-		VALUES(CNUMSEQ.NEXTVAL
-		, #{prodNum}
-		, #{id}
-		, #{prodName}
-		, 0
-		, #{color}
-		<if test="quantity != null and quantity != ''">
-		, #{quantity}
-		</if>
-		)
-	</insert>
+      <if test="color != null and color != ''">
+         AND COLOR=#{color}
+      </if>
+      
+      <if test="category != null and category != ''">
+         AND CATEGORY = #{category}
+      </if>
+      
+      <if test="subCategory != null and subCategory != ''">
+         AND SUBCATEGORY = #{subCategory}
+      </if>
+      
+      <if test="min != null and min != '' and max != nill and max != '' " >
+      <![CDATA[
+         AND ORIPRICE >= #{min} AND ORIPRICE <= #{max}
+             ]]>
+      </if>
+   GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION, P.INFO, P.WEIGHT, P.ORIPRICE, P.PRICE, P.QUANTITY, P.RDATE, P.DELIVERYCOST, P.FILENAME, P.READCOUNT
+   ORDER BY PRODNUM DESC)
+   WHERE SEQ BETWEEN #{start} AND #{end}
+   </select>
+   
+   <!-- 필터검색 후 글의 총 수 불러오기 -->
+   <select id="filterCount" parameterType="map" resultType="java.lang.Integer">
+      SELECT NVL(COUNT(*),0)
+      FROM PRODUCT
+      WHERE 1=1
+      
+      <if test="color != null and color != ''">
+         AND COLOR=#{color}
+      </if>
+      
+      <if test="category != null and category != ''">
+         AND CATEGORY = #{category}
+      </if>
+      
+      <if test="subCategory != null and subCategory != ''">
+         AND SUBCATEGORY = #{subCategory}
+      </if>
+      
+      <if test="min != null and min != '' and max != nill and max != '' " >
+      <![CDATA[
+         AND ORIPRICE >= #{min} AND ORIPRICE <= #{max}
+             ]]>
+      </if>
+   </select>
+   
+   
+   <!-- 상품리스트에서 카트 -->
+   <insert id="setCart" parameterType="bit.com.a.dto.CartDto">
+      INSERT INTO CART(CNUM
+      , PRODNUM
+      , ID
+      , PRODNAME
+      , CARTORWISH
+      , COLOR
+      <if test="quantity != null and quantity != ''">
+      , QUANTITY
+      </if>
+      )
+      VALUES(CNUMSEQ.NEXTVAL
+      , #{prodNum}
+      , #{id}
+      , #{prodName}
+      , 1
+      , #{color}
+      <if test="quantity != null and quantity != ''">
+      , #{quantity}
+      </if>
+      )
+   </insert>
+   
+   
+   <!-- 상품리스트에서 하트(위시리스트) -->
+   <insert id="setWishList" parameterType="bit.com.a.dto.CartDto">
+      INSERT INTO CART(CNUM
+      , PRODNUM
+      , ID
+      , PRODNAME
+      , CARTORWISH
+      , COLOR
+      <if test="quantity != null and quantity != ''">
+      , QUANTITY
+      </if>
+      )
+      VALUES(CNUMSEQ.NEXTVAL
+      , #{prodNum}
+      , #{id}
+      , #{prodName}
+      , 0
+      , #{color}
+      <if test="quantity != null and quantity != ''">
+      , #{quantity}
+      </if>
+      )
+   </insert>
 
-	<!-- 위시리스트 총 수 -->
-	<select id="wishCount" parameterType="bit.com.a.dto.CartDto" resultType="java.lang.Integer" >
-		SELECT NVL(COUNT(*),0)
-		FROM CART
-		WHERE PRODNUM=#{prodNum} AND CARTORWISH=0 AND ID=#{id}
-	</select>
+   <!-- 위시리스트 총 수 -->
+   <select id="wishCount" parameterType="bit.com.a.dto.CartDto" resultType="java.lang.Integer" >
+      SELECT NVL(COUNT(*),0)
+      FROM CART
+      WHERE PRODNUM=#{prodNum} AND CARTORWISH=0 AND ID=#{id}
+   </select>
 
-	<!-- 카트리스트 총 수 -->
-	<select id="cartCount" parameterType="bit.com.a.dto.CartDto" resultType="java.lang.Integer">
-		SELECT NVL(COUNT(*),0)
-		FROM CART
-		WHERE PRODNUM=#{prodNum} AND CARTORWISH=1 AND ID=#{id}
-	</select>
-	
+   <!-- 카트리스트 총 수 -->
+   <select id="cartCount" parameterType="bit.com.a.dto.CartDto" resultType="java.lang.Integer">
+      SELECT NVL(COUNT(*),0)
+      FROM CART
+      WHERE PRODNUM=#{prodNum} AND CARTORWISH=1 AND ID=#{id}
+   </select>
+   
 
-	<!-- 상품디테일에서 카트 -->
-	<insert id="detailCart" parameterType="bit.com.a.dto.CartDto">
-		INSERT INTO CART(CNUM
-		, PRODNUM
-		, ID
-		, PRODNAME
-		, CARTORWISH
-		, COLOR
-		<if test="quantity != null and quantity != ''">
-		, QUANTITY
-		</if>
-		)
-		VALUES(CNUMSEQ.NEXTVAL
-		, #{prodNum}
-		, #{id}
-		, #{prodName}
-		, 1
-		, #{color}
-		<if test="quantity != null and quantity != ''">
-		, #{quantity}
-		</if>
-		)
-	</insert>
+   <!-- 상품디테일에서 카트 -->
+   <insert id="detailCart" parameterType="bit.com.a.dto.CartDto">
+      INSERT INTO CART(CNUM
+      , PRODNUM
+      , ID
+      , PRODNAME
+      , CARTORWISH
+      , COLOR
+      <if test="quantity != null and quantity != ''">
+      , QUANTITY
+      </if>
+      )
+      VALUES(CNUMSEQ.NEXTVAL
+      , #{prodNum}
+      , #{id}
+      , #{prodName}
+      , 1
+      , #{color}
+      <if test="quantity != null and quantity != ''">
+      , #{quantity}
+      </if>
+      )
+   </insert>
 
 
-	<!-- 상품디테일에서 하트(위시리스트) -->
-	<insert id="detailWishList" parameterType="bit.com.a.dto.CartDto">
-		INSERT INTO CART(CNUM
-		, PRODNUM
-		, ID
-		, PRODNAME
-		, CARTORWISH
-		, COLOR
-		<if test="quantity != null and quantity != ''">
-		, QUANTITY
-		</if>
-		)
-		VALUES(CNUMSEQ.NEXTVAL
-		, #{prodNum}
-		, #{id}
-		, #{prodName}
-		, 0
-		, #{color}
-		<if test="quantity != null and quantity != ''">
-		, #{quantity}
-		</if>
-		)
-	</insert>
-	
-	<!-- 디테일에서 컬러 불러오기 -->
-	<select id="detailColor" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ColorDto">
-		SELECT *
-		FROM COLOR
-		WHERE PRODNUM=#{prodNum}
-	</select>
-	
-	
-	<!-- 컬러 클릭 시 사진 띄우기 -->
-	<select id="getColorFilename" parameterType="bit.com.a.dto.ColorDto" resultType="bit.com.a.dto.ColorDto">
-		SELECT *
-		FROM COLOR
-		WHERE PRODNUM=#{prodNum} AND COLOR=#{color}
-	</select>
-	
-	
-	<!-- 디테일에서 관련상품 불러오기 -->
-	<select id="relatedProduct" parameterType="java.lang.String" resultType="bit.com.a.dto.ProductDto">
-		SELECT  PRODNUM, PRODNAME, ORIPRICE, PRICE, FILENAME
-		FROM 	(SELECT ROW_NUMBER()OVER(ORDER BY RDATE DESC)AS SEQ, PRODNUM, PRODNAME, ORIPRICE, PRICE, FILENAME
-				FROM PRODUCT
-				WHERE SUBCATEGORY=#{subCategory}
-				ORDER BY RDATE DESC)
-		WHERE SEQ BETWEEN 1 AND 4
-	</select>
-	
-	<!-- 디테일에서 위시 삭제 -->
-	<delete id="deleteWish" parameterType="bit.com.a.dto.CartDto">
-		DELETE FROM CART 
-		WHERE PRODNUM=#{prodNum} AND ID=#{id} AND CARTORWISH=0
-	</delete>
-	
-	
-	<!--/////////////////////////// 다솜 쇼룸 //////////////////////////////////  -->
-	
+   <!-- 상품디테일에서 하트(위시리스트) -->
+   <insert id="detailWishList" parameterType="bit.com.a.dto.CartDto">
+      INSERT INTO CART(CNUM
+      , PRODNUM
+      , ID
+      , PRODNAME
+      , CARTORWISH
+      , COLOR
+      <if test="quantity != null and quantity != ''">
+      , QUANTITY
+      </if>
+      )
+      VALUES(CNUMSEQ.NEXTVAL
+      , #{prodNum}
+      , #{id}
+      , #{prodName}
+      , 0
+      , #{color}
+      <if test="quantity != null and quantity != ''">
+      , #{quantity}
+      </if>
+      )
+   </insert>
+   
+   <!-- 디테일에서 컬러 불러오기 -->
+   <select id="detailColor" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ColorDto">
+      SELECT *
+      FROM COLOR
+      WHERE PRODNUM=#{prodNum}
+   </select>
+   
+   
+   <!-- 컬러 클릭 시 사진 띄우기 -->
+   <select id="getColorFilename" parameterType="bit.com.a.dto.ColorDto" resultType="bit.com.a.dto.ColorDto">
+      SELECT *
+      FROM COLOR
+      WHERE PRODNUM=#{prodNum} AND COLOR=#{color}
+   </select>
+   
+   
+   <!-- 디테일에서 관련상품 불러오기 -->
+   <select id="relatedProduct" parameterType="java.lang.String" resultType="bit.com.a.dto.ProductDto">
+      SELECT  PRODNUM, PRODNAME, ORIPRICE, PRICE, FILENAME
+      FROM    (SELECT ROW_NUMBER()OVER(ORDER BY RDATE DESC)AS SEQ, PRODNUM, PRODNAME, ORIPRICE, PRICE, FILENAME
+            FROM PRODUCT
+            WHERE SUBCATEGORY=#{subCategory}
+            ORDER BY RDATE DESC)
+      WHERE SEQ BETWEEN 1 AND 4
+   </select>
+   
+   <!-- 디테일에서 위시 삭제 -->
+   <delete id="deleteWish" parameterType="bit.com.a.dto.CartDto">
+      DELETE FROM CART 
+      WHERE PRODNUM=#{prodNum} AND ID=#{id} AND CARTORWISH=0
+   </delete>
+   
+   
+   <!--/////////////////////////// 다솜 쇼룸 //////////////////////////////////  -->
+   
    <!-- 쇼룸 말풍선   -->
    <select id="srList" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ProductDto">
       SELECT PRODNUM, PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME,
@@ -351,7 +351,7 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
                FROM ORDER_DETAIL
                GROUP BY PRODNUM
                ORDER BY CNT DESC) a, PRODUCT p
-         		WHERE 1=1
+               WHERE 1=1
             <![CDATA[
             AND a.PRODNUM = p.PRODNUM 
             AND CNT <=8
@@ -360,12 +360,11 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
    </select>
    
    
-	
-	
-	
-	
+   
+   
+   
+   
 </mapper>
-
 
 
 
