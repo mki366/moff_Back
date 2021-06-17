@@ -1,7 +1,6 @@
 package bit.com.a.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -37,6 +36,8 @@ public interface ReviewDao {
 	
 	// 평균리뷰
 	public List<ReviewDto> avgReview(int prodNum);
-		
+	
+	// 리뷰 삭제
+	int deleteReview(int rnum);
 	
 }

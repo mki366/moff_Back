@@ -52,7 +52,7 @@
 	<update id="deleteReview" parameterType="java.lang.Integer">
 		UPDATE REVIEW
 		SET DEL=1
-		WHERE RNUM=#{rNum}
+		WHERE RNUM=#{rnum}
 	</update>
 	
 	<!-- 상품정보 불러오기 -->

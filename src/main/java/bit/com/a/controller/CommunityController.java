@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,20 @@ public class CommunityController {
 		
 		List<CommunityDto> list = service.getAllCommunity(param);
 		
+		
 		return list;
+		
+		
+	/*	
+		Date nowDate = new Date(); System.out.println("포맷 지정 전 : " + nowDate); 
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일"); 
+		//원하는 데이터 포맷 지정 
+		String strNowDate = simpleDateFormat.format(nowDate); 
+		//지정한 포맷으로 변환 
+		System.out.println("포맷 지정 후 : " + strNowDate);
+		
+	*/
+		
 		
 	}
 	

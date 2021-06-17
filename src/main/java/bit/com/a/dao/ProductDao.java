@@ -56,7 +56,7 @@ public interface ProductDao {
 	int detailWishList(CartDto cartDto);
 	
 	// 상품디테일에서 컬러불러오기
-	public List<ColorDto> detailColor(ColorDto colorDto);
+	public List<ColorDto> detailColor(int prodNum);
 	
 	// 디테일에서 관련상품 불러오기
 	public List<ProductDto> relatedProduct(String subCategory);

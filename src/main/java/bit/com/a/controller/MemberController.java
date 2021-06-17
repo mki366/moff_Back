@@ -135,7 +135,11 @@ public class MemberController {
 		return mem;
 	}
 	
-	
+	@RequestMapping(value = "/byebye", method = RequestMethod.POST)
+	public void byebye(MemberDto dto) {
+		System.out.println("MemberController byebye()");		
+		service.byebye(dto);
+	}
 }
 
 

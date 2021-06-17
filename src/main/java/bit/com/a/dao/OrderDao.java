@@ -22,6 +22,10 @@ public interface OrderDao {
 	public PurchasesDto trackDelivery(int obNum);
 	public List<PurchasesDto> purchasesCNT(String id);
 	public List<PurchasesDto> getStatusList(PurchasesDto dto);
+	public List<PurchasesDto> obExchange(String id);
+	public List<PurchasesDto> obRefund(String id);
+	public int exCNT(String id);
+	public int refundCNT(String id);
 	
 	public int updatePoint(MemberDto dto);
 	public int setOrder(OrderBuyDto dto);
@@ -38,4 +42,6 @@ public interface OrderDao {
 	public int setExColor(OrderDetailDto dto);
 	public int setTakeback(OrderDetailDto dto);
 	public int updateOrderPoint(MemberDto dto);
+	
+	public int updateQuantity(OrderDetailDto dto);
 }

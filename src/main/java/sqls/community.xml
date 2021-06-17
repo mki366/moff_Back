@@ -110,7 +110,7 @@
  
  	<!--오늘 인기사진 리스트 -->
  	<select id="todayList" parameterType="bit.com.a.dto.CommunityDto" resultType="bit.com.a.dto.CommunityDto">
-	 	SELECT CMNUM
+		SELECT CMNUM
 	 		, ID
 	 		, IMAGE1
 	 		, IMAGE2
@@ -120,7 +120,7 @@
 	 		, READCOUNT
 	 		, CMLIKE
 		 	
-		FROM 	(SELECT ROW_NUMBER()OVER(ORDER BY CMNUM DESC) AS SEQ
+		FROM 	(SELECT ROW_NUMBER()OVER(ORDER BY CMLIKE DESC) AS SEQ
 						, CMNUM
 						, ID
 						, IMAGE1
@@ -231,6 +231,36 @@
  		WHERE CMNUM=#{cmNum}
  	</select>
  	
+ 	<!-- 메인 -->
+ 	<select id="commuList" parameterType="bit.com.a.dto.CommunityDto" resultType="bit.com.a.dto.CommunityDto">
+       SELECT CMNUM
+          , ID
+          , IMAGE1
+          , IMAGE2
+          , TITLE
+          , CONTENT
+          , WDATE
+          , READCOUNT
+          , CMLIKE
+    
+          
+      FROM    (SELECT ROW_NUMBER()OVER(ORDER BY CMNUM DESC) AS SEQ
+                  , CMNUM
+                  , ID
+                  , IMAGE1
+                  , IMAGE2
+                  , TITLE
+                  , CONTENT
+                  , WDATE
+                  , READCOUNT
+                  , CMLIKE
+               
+            FROM COMMU
+            WHERE COMMUDEL=0)
+      WHERE CMLIKE BETWEEN 1 AND 2
+   </select>
+   
+
  	
  	
  </mapper>

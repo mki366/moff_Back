@@ -1,18 +1,6 @@
 package bit.com.a.dto;
 
-import java.util.Date;
-
 public class CommunityDto {
-//
-//	CMNUM   NUMBER        PRIMARY KEY,    --커뮤니티번호
-//    ID    VARCHAR2(50)   NOT NULL,    --회원아이디 
-//    IMAGE1   VARCHAR2(50)   NULL,    --이미지등록1
-//    IMAGE2   VARCHAR2(50)   NULL ,   --이미지등록2
-//    TITLE VARCHAR2(100) NOT    NULL,    --제목
-//    CONTENT VARCHAR2(4000) NOT    NULL,  --내용
-//    WDATE DATE NOT NULL, --작성날짜
-//    READCOUNT NUMBER  NOT    NULL, --조회수
-//    CMLIKE NUMBER NULL --좋아요 
 	
 	private int cmNum;
 	private String id;
@@ -21,7 +9,7 @@ public class CommunityDto {
 	private String newfilename;
 	private String title;
 	private String content;
-	private Date wdate;
+	private String wdate;
 	private int readCount;
 	private int cmLike;
 	private int commuDel;
@@ -34,7 +22,7 @@ public class CommunityDto {
 
 	
 	public CommunityDto(int cmNum, String id, String image1, String image2, String newfilename, String title,
-			String content, Date wdate, int readCount, int cmLike, int commuDel) {
+			String content, String wdate, int readCount, int cmLike, int commuDel) {
 		super();
 		this.cmNum = cmNum;
 		this.id = id;
@@ -156,13 +144,13 @@ public class CommunityDto {
 
 
 
-	public Date getWdate() {
+	public String getWdate() {
 		return wdate;
 	}
 
 
 
-	public void setWdate(Date wdate) {
+	public void setWdate(String wdate) {
 		this.wdate = wdate;
 	}
 

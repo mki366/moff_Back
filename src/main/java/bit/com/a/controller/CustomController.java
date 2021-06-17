@@ -18,14 +18,13 @@ public class CustomController {
 	CustomService service;
 	
 	
-	@RequestMapping(value = "/getProduct", method = RequestMethod.POST)
-	public ProductDto getProduct(int prodNum){
-		System.out.println("CustomController getProduct()");
-		ProductDto dto = service.getProduct(prodNum);
+	@RequestMapping(value = "/getCustomProduct", method = RequestMethod.POST)
+	public ProductDto getCustomProduct(int prodNum){
+		System.out.println("CustomController getCustomProduct()");
+		ProductDto dto = service.getCustomProduct(prodNum);
 		return dto;
 	}
-	
-	
+		
 	
 	/* Chair */
 	
@@ -138,4 +137,59 @@ public class CustomController {
 		}
 	}
 	
+	
+/* storage */
+	
+	@RequestMapping(value = "/addStrgCart", method = RequestMethod.POST)
+	public void addStrgCart(String id, int frame, int top1, int base1, int box1, int top2, int base2, int box2){
+		System.out.println("CustomController addStrgCart()");
+		if(frame!=0) {
+			service.addStrgCart(new WishCartDto(id, 42, frame));
+		}
+		if(top1!=0) {
+			service.addStrgCart(new WishCartDto(id, 44, top1));
+		}
+		if(base1!=0) {
+			service.addStrgCart(new WishCartDto(id, 43, base1));
+		}
+		if(box1!=0) {
+			service.addStrgCart(new WishCartDto(id, 45, box1));
+		}
+		if(top2!=0) {
+			service.addStrgCart(new WishCartDto(id, 47, top2));
+		}
+		if(base2!=0) {
+			service.addStrgCart(new WishCartDto(id, 46, base2));
+		}
+		if(box2!=0) {
+			service.addStrgCart(new WishCartDto(id, 48, box2));
+		}
+		
+	}
+	
+	@RequestMapping(value = "/addStrgWish", method = RequestMethod.POST)
+	public void addStrgWish(String id, int frame, int top1, int base1, int box1, int top2, int base2, int box2){
+		System.out.println("CustomController addStrgWish()");
+		if(frame!=0) {
+			service.addStrgWish(new WishCartDto(id, 42, frame));
+		}
+		if(top1!=0) {
+			service.addStrgWish(new WishCartDto(id, 44, top1));
+		}
+		if(base1!=0) {
+			service.addStrgWish(new WishCartDto(id, 43, base1));
+		}
+		if(box1!=0) {
+			service.addStrgWish(new WishCartDto(id, 45, box1));
+		}
+		if(top2!=0) {
+			service.addStrgWish(new WishCartDto(id, 47, top2));
+		}
+		if(base2!=0) {
+			service.addStrgWish(new WishCartDto(id, 46, base2));
+		}
+		if(box2!=0) {
+			service.addStrgWish(new WishCartDto(id, 48, box2));
+		}
+	}
 }

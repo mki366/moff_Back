@@ -181,7 +181,17 @@ public class ReviewController {
 	}
 	
 	
-	
+	// 리뷰삭제
+	@RequestMapping(value = "/deleteReview", method = {RequestMethod.GET, RequestMethod.POST})
+	public String deleteReview(int rnum) {
+		System.out.println("deleteReview() Controller");
+		
+		if(service.deleteReview(rnum)==true) {
+			return "YES";
+		}else {
+			return "NO";
+		}
+	}
 	
 	
 	

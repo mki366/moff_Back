@@ -29,6 +29,21 @@ public class OrderService {
 		return dao.purchasesCNT(id);
 	}
 	
+	public List<PurchasesDto> obExchange(String id){
+		return dao.obExchange(id);
+	}
+
+	public List<PurchasesDto> obRefund(String id){
+		return dao.obRefund(id);
+	}
+	
+	public int exCNT(String id){
+		return dao.exCNT(id);
+	}
+	
+	public int refundCNT(String id){
+		return dao.refundCNT(id);
+	}
 	public PurchasesDto getCheckout(int obNum) {
 		return dao.getCheckout(obNum);
 	}
@@ -128,10 +143,17 @@ public class OrderService {
 	      return len>0?true:false;
 	   }
 	   
-	   public boolean updateOrderPoint(MemberDto dto){
-	      System.out.println("service-updateOrderPoint: "+dto.getId());
+   public boolean updateOrderPoint(MemberDto dto){
+      System.out.println("service-updateOrderPoint: "+dto.getId());
 
-	      int len = dao.updateOrderPoint(dto);
+      int len = dao.updateOrderPoint(dto);
+      return len>0?true:false;
+   }
+   
+   public boolean updateQuantity(OrderDetailDto dto){
+	      System.out.println("service-updateQuantity: "+dto.getQuantity());
+
+	      int len = dao.updateQuantity(dto);
 	      return len>0?true:false;
 	   }
 }

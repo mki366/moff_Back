@@ -58,6 +58,11 @@ public class MemberService {
 		int n = dao.addressUpdate(dto);
 		return n>0?true:false;
 	}
+	
+	public boolean byebye(MemberDto dto) {
+		int len = dao.byebye(dto);
+		return len>0?true:false;
+	}
 }
 
 

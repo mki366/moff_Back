@@ -66,5 +66,11 @@
 	WHERE MEMNUM=#{memNum}
 </update>
 
+<update id="byebye" parameterType="bit.com.a.dto.MemberDto">
+	UPDATE ALL_MEMBER
+	SET MEMDEL=1
+	WHERE MEMNUM=#{memNum}
+</update>
+
 
 </mapper>

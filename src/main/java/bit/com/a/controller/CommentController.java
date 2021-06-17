@@ -40,7 +40,7 @@ public class CommentController {
 	@RequestMapping(value = "/writeComment", method = RequestMethod.POST)
 	public String writeComment(CommentDto dto) {
 		System.out.println("writeComment() Controller");
-		
+	//	System.out.println(dto.getContent());
 		if(service.writeComment(dto) == true) {
 			return "YES";
 		}else {

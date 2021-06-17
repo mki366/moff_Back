@@ -21,4 +21,6 @@ public interface MemberDao {
 	public int contactUpdate(MemberDto dto);
 	public int pwdUpdate(MemberDto dto);
 	public int addressUpdate(MemberDto dto);
+	
+	public int byebye(MemberDto dto);
 }

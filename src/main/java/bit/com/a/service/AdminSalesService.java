@@ -7,6 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import bit.com.a.dao.AdminSalesDao;
+
+import bit.com.a.dto.DeliveryCheckDto;
+import bit.com.a.dto.OrderBuyDto;
+import bit.com.a.dto.OrderDetailDto;
+
+import bit.com.a.dto.AdminDto;
+
 import bit.com.a.dto.PurchasesDto;
 
 @Service
@@ -40,6 +47,22 @@ public class AdminSalesService {
 		return dao.selAnnualSales();
 	}
 	
+	public List<AdminDto> salesReport(String yearmonth) {
+		return dao.salesReport(yearmonth);
+	}
+	
+	public List<PurchasesDto> annualSalesChart(String year) {
+		return dao.annualSalesChart(year);
+	}
+
+	public List<AdminDto> annualAccumChart(String year) {
+		return dao.annualAccumChart(year);
+	}
+
+	public List<AdminDto> monthlyVarChart() {
+		return dao.monthlyVarChart();
+	}
+	
 	//주문 건 수 - 오늘 
 	public int CountDailySales() {
 		return dao.CountDailySales();
@@ -59,21 +82,51 @@ public class AdminSalesService {
 
 	}
 	//배송중
-		public int inDelivery() {
-			return dao.inDelivery();
-		}
-		//배송 완료
-		public int delivered() {
-			return dao.delivered();
-		}
-		//배송 전
-		public int beforeDelivery() {
-			return dao.beforeDelivery();
-		}
-		//배송 수락
-		public int acceptDelivery() {
-			return dao.acceptDelivery();
-
-		}
-
+	public int inDelivery(DeliveryCheckDto dto) {
+		return dao.inDelivery(dto);
+	}
+	//배송 완료
+	public int delivered(DeliveryCheckDto dto) {
+		return dao.delivered(dto);
+	}
+	//배송 전
+	public int beforeDelivery(DeliveryCheckDto dto) {
+		return dao.beforeDelivery(dto);
+	}
+	//배송 수락
+	public int acceptDelivery(DeliveryCheckDto dto) {
+		return dao.acceptDelivery(dto);
+	}
+	//구매 건수
+	public int orderBuyDate(OrderBuyDto dto) {
+		return dao.orderBuyDate(dto);
+	}
+	//구매 총 가격
+	public int orderBuyPriceDate(OrderBuyDto dto) {
+		return dao.orderBuyPriceDate(dto);
+	}
+	
+	//반품 갯수
+	public int orderDetailTB(OrderBuyDto dto) {
+		return dao.orderDetailTB(dto);
+	}
+	//교환 갯수
+	public int orderDetailEX(OrderBuyDto dto) {
+		return dao.orderDetailEX(dto);
+	}
+	
+	//년도별 주문 건수 
+	public int SearchAnnualSales(OrderBuyDto dto) {
+		return dao.SearchAnnualSales(dto);
+	}
+	//지역별 주문 건수 
+	public String[] SearchLocalSales() {
+		System.out.println();
+		return dao.SearchLocalSales();
+	}
+	//지역별 주문 건수 
+	public String[] SearchLocalCountSales() {
+		System.out.println();
+		return dao.SearchLocalCountSales();
+	}
 }
