@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import bit.com.a.dto.AgeBuyRank;
 import bit.com.a.dto.MemberAge;
 import bit.com.a.dto.MemberDto;
 import bit.com.a.dto.MonthlyMember;
@@ -66,5 +67,14 @@ public class AdminMemberController {
 		return TotalAge;
 	}
 	
-
+	@RequestMapping(value="/AgeBuyRank", method = RequestMethod.POST )
+	public List<AgeBuyRank> AgeBuyRank(){
+		List<AgeBuyRank> listA = service.AgeBuyRank();
+		
+		for (AgeBuyRank ageBuyRank : listA) {
+			System.out.println("AgeBuyRank 데이터확인:" + ageBuyRank.toString() );
+			System.out.println(" ");
+		}
+		return listA;
+	}
 }

@@ -7,11 +7,11 @@
    <mapper namespace="bit.com.a.dao.AdminMemberDao">
    <!-- 월별가입자수 -->
    <select id="MonthlyMemberList" resultType="bit.com.a.dto.MonthlyMember">
-  select TO_CHAR(jdate, 'YYYYMM') as 월별,
- count(*) as 가입자수
- from all_member 
- where jdate >='20210101' and jdate  <![CDATA[ < ]]>  to_char(sysdate,'YYYYMMDD')
- GROUP BY to_char(jdate, 'YYYYMM')
+																				 select TO_CHAR(jdate, 'YYYYMM') as 월별,
+																				count(*) as 가입자수
+																				from all_member 
+																				where jdate >='20210101' and jdate  <![CDATA[ < ]]>  to_char(sysdate,'YYYYMMDD')
+																				GROUP BY to_char(jdate, 'YYYYMM')
    </select>
 <!-- 회원탈퇴 -->
    <update id="MemDel" parameterType="bit.com.a.dto.MemberDto">
@@ -36,6 +36,38 @@
         )
  GROUP BY BDATE
  ORDER BY BDATE
+   
+   
+   </select>
+   <!-- 연령별 구매순위 -->
+   <select id="AgeBuyRank" resultType="bit.com.a.dto.AgeBuyRank">
+   
+
+SELECT DISTINCT  MAX(NCT) as countp ,BDATE, DENSE_RANK() OVER ( PARTITION BY BDATE ORDER BY NCT DESC ) AS RANKING, prodname
+FROM(SELECT CASE WHEN               age  <![CDATA[ < ]]> 20 THEN '20세미만'
+                    WHEN age >= 20 AND age  <![CDATA[ < ]]> 30 THEN '20세이상 ~ 30세미만'
+                    WHEN age >= 30 AND age  <![CDATA[ < ]]> 40 THEN '30세이상 ~ 40세미만'
+                    WHEN age >= 40 AND age  <![CDATA[ < ]]> 50 THEN '40세이상 ~ 50세미만'
+                    WHEN age >= 50 AND age  <![CDATA[ < ]]> 60 THEN '50세이상 ~ 60세미만'
+                    WHEN age >= 60              THEN '60세이상'
+                END BDATE, MEMNUM, NCT, prodname
+          FROM (SELECT TRUNC((TO_CHAR(SYSDATE, 'YYYY') - SUBSTR(BDATE,1,4))) as age, MEMNUM, COUNT(c.PRODNUM) as NCT, c.prodname      
+                  FROM ALL_MEMBER a
+                  INNER
+                  JOIN order_buy b
+                  on a.id = b.id
+                  INNER
+                  JOIN ORDER_DETAIL c
+                  on b.OBNUM = c.OBNUM
+                  GROUP BY BDATE, MEMNUM, c.PRODNUM, c.PRODNAME
+                  
+                ))
+                
+         
+        
+
+GROUP BY  BDATE, nct, prodname, MEMNUM
+ORDER BY  BDATE ASC
    
    
    </select>
