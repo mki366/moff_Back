@@ -48,10 +48,44 @@
 <!-- 주문내역상세 -->
 <select id="purchasesDetail" parameterType="java.lang.Integer" 
 					resultType="bit.com.a.dto.PurchasesDto">
-	SELECT D.PRODNUM, D.PRODNAME, D.QUANTITY, D.PRICE, D.COLOR, D.PRODOPTION, D.FILENAME, C.STATUS	
+	SELECT D.ODNUM, D.PRODNUM, D.PRODNAME, D.QUANTITY, D.PRICE, D.COLOR, D.PRODOPTION, D.FILENAME, C.STATUS	
 	FROM  ORDER_DETAIL D, DELIVERY_CHECK C
 	WHERE D.OBNUM=C.OBNUM 
 		AND D.OBNUM=#{obNum}
+</select>
+
+
+<!--  교환 -->
+<select id="obExchange" parameterType="java.lang.String" resultType="bit.com.a.dto.PurchasesDto">
+	SELECT B.OBNUM, B.OBDATE, D.PRODNUM, D.PRODNAME, D.QUANTITY, D.PRICE, D.COLOR, D.PRODOPTION, D.FILENAME, D.REASON	
+	FROM  ORDER_DETAIL D, ORDER_BUY B
+	WHERE B.OBNUM = D.OBNUM AND B.ID =#{id} AND D.OBEXCHANGE=1
+</select>
+
+<!--  환불 -->
+<select id="obRefund" parameterType="java.lang.String" resultType="bit.com.a.dto.PurchasesDto">
+	SELECT B.OBNUM, B.OBDATE, D.PRODNUM, D.PRODNAME, D.QUANTITY, D.PRICE, D.COLOR, D.PRODOPTION, D.FILENAME	
+	FROM  ORDER_DETAIL D, ORDER_BUY B
+	WHERE B.OBNUM = D.OBNUM AND B.ID =#{id} AND D.OBTAKEBACK=1
+</select>
+
+<!-- 교환수 -->
+<select id="exCNT" parameterType="java.lang.String" 
+					resultType="java.lang.Integer">
+	SELECT COUNT(ODNUM) CNT
+	FROM ORDER_DETAIL D, ORDER_BUY B
+	WHERE B.OBNUM=D.OBNUM
+		AND B.ID=#{id} AND D.OBEXCHANGE=1
+</select>
+
+
+<!-- 환불수 -->
+<select id="refundCNT" parameterType="java.lang.String" 
+					resultType="java.lang.Integer">
+	SELECT COUNT(ODNUM) CNT
+	FROM ORDER_DETAIL D, ORDER_BUY B
+	WHERE B.OBNUM=D.OBNUM
+		AND B.ID=#{id} AND D.OBTAKEBACK=1
 </select>
 
 

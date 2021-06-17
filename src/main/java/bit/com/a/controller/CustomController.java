@@ -144,25 +144,25 @@ public class CustomController {
 	public void addStrgCart(String id, int frame, int top1, int base1, int box1, int top2, int base2, int box2){
 		System.out.println("CustomController addStrgCart()");
 		if(frame!=0) {
-			service.addStrgCart(new WishCartDto(id, 57, frame));
+			service.addStrgCart(new WishCartDto(id, 42, frame));
 		}
 		if(top1!=0) {
-			service.addStrgCart(new WishCartDto(id, 58, top1));
+			service.addStrgCart(new WishCartDto(id, 44, top1));
 		}
 		if(base1!=0) {
-			service.addStrgCart(new WishCartDto(id, 60, base1));
+			service.addStrgCart(new WishCartDto(id, 43, base1));
 		}
 		if(box1!=0) {
-			service.addStrgCart(new WishCartDto(id, 59, box1));
+			service.addStrgCart(new WishCartDto(id, 45, box1));
 		}
 		if(top2!=0) {
-			service.addStrgCart(new WishCartDto(id, 61, top2));
+			service.addStrgCart(new WishCartDto(id, 47, top2));
 		}
 		if(base2!=0) {
-			service.addStrgCart(new WishCartDto(id, 63, base2));
+			service.addStrgCart(new WishCartDto(id, 46, base2));
 		}
 		if(box2!=0) {
-			service.addStrgCart(new WishCartDto(id, 62, box2));
+			service.addStrgCart(new WishCartDto(id, 48, box2));
 		}
 		
 	}
@@ -171,25 +171,25 @@ public class CustomController {
 	public void addStrgWish(String id, int frame, int top1, int base1, int box1, int top2, int base2, int box2){
 		System.out.println("CustomController addStrgWish()");
 		if(frame!=0) {
-			service.addStrgWish(new WishCartDto(id, 57, frame));
+			service.addStrgWish(new WishCartDto(id, 42, frame));
 		}
 		if(top1!=0) {
-			service.addStrgWish(new WishCartDto(id, 58, top1));
+			service.addStrgWish(new WishCartDto(id, 44, top1));
 		}
 		if(base1!=0) {
-			service.addStrgWish(new WishCartDto(id, 60, base1));
+			service.addStrgWish(new WishCartDto(id, 43, base1));
 		}
 		if(box1!=0) {
-			service.addStrgWish(new WishCartDto(id, 59, box1));
+			service.addStrgWish(new WishCartDto(id, 45, box1));
 		}
 		if(top2!=0) {
-			service.addStrgWish(new WishCartDto(id, 61, top2));
+			service.addStrgWish(new WishCartDto(id, 47, top2));
 		}
 		if(base2!=0) {
-			service.addStrgWish(new WishCartDto(id, 63, base2));
+			service.addStrgWish(new WishCartDto(id, 46, base2));
 		}
 		if(box2!=0) {
-			service.addStrgWish(new WishCartDto(id, 62, box2));
+			service.addStrgWish(new WishCartDto(id, 48, box2));
 		}
 	}
 }

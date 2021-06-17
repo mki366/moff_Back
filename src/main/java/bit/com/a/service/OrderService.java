@@ -29,6 +29,21 @@ public class OrderService {
 		return dao.purchasesCNT(id);
 	}
 	
+	public List<PurchasesDto> obExchange(String id){
+		return dao.obExchange(id);
+	}
+
+	public List<PurchasesDto> obRefund(String id){
+		return dao.obRefund(id);
+	}
+	
+	public int exCNT(String id){
+		return dao.exCNT(id);
+	}
+	
+	public int refundCNT(String id){
+		return dao.refundCNT(id);
+	}
 	public PurchasesDto getCheckout(int obNum) {
 		return dao.getCheckout(obNum);
 	}

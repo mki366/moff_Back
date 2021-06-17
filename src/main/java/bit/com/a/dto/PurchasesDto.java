@@ -25,14 +25,17 @@ public class PurchasesDto {
 	private String name;
 	private String phone;
 	private int cnt;
+	private String reason;
+	private int odNum;
 	
 	public PurchasesDto() {
 	}
 
+	
 	public PurchasesDto(String id, int obNum, String obName, String obDate, String obWay, String obPhone,
 			String obAddress, String obMes, String obCardN, int totalPrice, int prodNum, String prodName, int quantity,
 			int price, String color, String prodOption, String filename, String status, String name, String phone,
-			int cnt) {
+			int cnt, String reason, int odNum) {
 		super();
 		this.id = id;
 		this.obNum = obNum;
@@ -55,6 +58,25 @@ public class PurchasesDto {
 		this.name = name;
 		this.phone = phone;
 		this.cnt = cnt;
+		this.reason = reason;
+		this.odNum = odNum;
+	}
+
+	public int getOdNum() {
+		return odNum;
+	}
+
+	public void setOdNum(int odNum) {
+		this.odNum = odNum;
+	}
+
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 
 	public String getId() {

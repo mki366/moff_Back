@@ -50,6 +50,41 @@ public class OrderController {
 		return list;
 	}
 
+	
+	@RequestMapping(value = "/obExchange", method = RequestMethod.POST)
+	public List<PurchasesDto> obExchange(String id) {
+		System.out.println("OrderController obExchange()");
+
+		List<PurchasesDto> list = service.obExchange(id);
+		
+		// 확인용
+		for (PurchasesDto purchasesDto : list) {
+			System.out.println(purchasesDto.toString());
+		}
+				
+		return list;
+	}
+	
+	@RequestMapping(value = "/obRefund", method = RequestMethod.POST)
+	public List<PurchasesDto> obRefund(String id) {
+		System.out.println("OrderController obRefund()");
+
+		List<PurchasesDto> list = service.obRefund(id);
+		
+		// 확인용
+		for (PurchasesDto purchasesDto : list) {
+			System.out.println(purchasesDto.toString());
+		}
+				
+		return list;
+	}
+	
+	@RequestMapping(value = "/exCNT", method = RequestMethod.POST)
+	public int exCNT(String id) {
+		System.out.println("OrderController exCNT()");
+		return service.exCNT(id) + service.refundCNT(id);
+	}
+	
 	@RequestMapping(value = "/getStatusList", method = RequestMethod.POST)
 	public List<PurchasesDto> getStatusList(PurchasesDto dto) {
 		System.out.println("OrderController getStatusList()");

@@ -7,43 +7,43 @@
   
 <select id="getPrice" parameterType="java.lang.Integer" 
 					resultType="java.lang.Integer">
-	SELECT PRICE
+	SELECT ORIPRICE
 	FROM PRODUCT
 	WHERE PRODNUM=#{prodNum}
 </select>
   
 <insert id="addChairCart" parameterType="bit.com.a.dto.WishCartDto">
-	INSERT INTO CART(CNUM, ID, PRODNUM, QUANTITY, CARTORWISH)
-	VALUES(CNUMSEQ.NEXTVAL, #{id}, #{prodNum}, 1, 1)
+	INSERT INTO CART(CNUM, ID, PRODNUM, PRODNAME, QUANTITY, COLOR, CARTORWISH)
+	VALUES(CNUMSEQ.NEXTVAL, #{id}, '없음', #{prodNum}, 1, '없음', 1)
 </insert>
 
 <insert id="addChairWish" parameterType="bit.com.a.dto.WishCartDto">
-	INSERT INTO CART(CNUM, ID, PRODNUM, QUANTITY, CARTORWISH)
-	VALUES(CNUMSEQ.NEXTVAL, #{id}, #{prodNum}, 1, 0)
+	INSERT INTO CART(CNUM, ID, PRODNUM, PRODNAME, QUANTITY,COLOR, CARTORWISH)
+	VALUES(CNUMSEQ.NEXTVAL, #{id}, '없음', #{prodNum}, 1, '없음', 0)
 </insert>
 
 <select id="getCustomProduct" parameterType="java.lang.Integer" 
 					resultType="bit.com.a.dto.ProductDto">
-	SELECT PRODNAME, COLOR, PRICE, FILENAME
+	SELECT PRODNAME, COLOR, ORIPRICE, FILENAME
 	FROM PRODUCT 
 	WHERE PRODNUM=#{prodNum}
 </select>
 
 <select id="getBedList" parameterType="java.lang.String" 
 					resultType="bit.com.a.dto.ProductDto">
-	SELECT PRODNUM, PRODNAME, COLOR, PRICE, INFO, FILENAME
+	SELECT PRODNUM, PRODNAME, COLOR, ORIPRICE, INFO, FILENAME
 	FROM PRODUCT 
 	WHERE SUBCATEGORY=#{type}
 </select>
 
 <insert id="addStrgCart" parameterType="bit.com.a.dto.WishCartDto">
-	INSERT INTO CART(CNUM, ID, PRODNUM, QUANTITY, CARTORWISH)
-	VALUES(CNUMSEQ.NEXTVAL, #{id}, #{prodNum}, #{quantity}, 1)
+	INSERT INTO CART(CNUM, ID, PRODNUM, PRODNAME, QUANTITY, COLOR, CARTORWISH)
+	VALUES(CNUMSEQ.NEXTVAL, #{id}, #{prodNum}, '없음', #{quantity}, '없음', 1)
 </insert>
 
 <insert id="addStrgWish" parameterType="bit.com.a.dto.WishCartDto">
-	INSERT INTO CART(CNUM, ID, PRODNUM, QUANTITY, CARTORWISH)
-	VALUES(CNUMSEQ.NEXTVAL, #{id}, #{prodNum}, #{quantity}, 0)
+	INSERT INTO CART(CNUM, ID, PRODNUM, PRODNAME, QUANTITY, COLOR, CARTORWISH)
+	VALUES(CNUMSEQ.NEXTVAL, #{id}, #{prodNum}, '없음', #{quantity}, '없음', 0)
 </insert>
 
 </mapper>
