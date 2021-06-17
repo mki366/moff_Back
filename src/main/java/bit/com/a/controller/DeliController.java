@@ -342,7 +342,7 @@ public class DeliController {
 			   return count;
 		   }
 		   
-		   @RequestMapping(value = "/Pagination", method = RequestMethod.GET)
+		   @RequestMapping(value = "/PaginationDeli", method = RequestMethod.GET)
 		   public int Pagination(AdPagingParam param) {
 			   int count = service.TotalOrderCount(param);
 			   System.out.println("count 주문내역 수량" + count);

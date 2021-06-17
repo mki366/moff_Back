@@ -7,11 +7,11 @@
    <mapper namespace="bit.com.a.dao.AdminMemberDao">
    <!-- 월별가입자수 -->
    <select id="MonthlyMemberList" resultType="bit.com.a.dto.MonthlyMember">
-  select TO_CHAR(jdate, 'YYYYMM') as 월별,
- count(*) as 가입자수
- from all_member 
- where jdate >='20210101' and jdate  <![CDATA[ < ]]>  to_char(sysdate,'YYYYMMDD')
- GROUP BY to_char(jdate, 'YYYYMM')
+ SELECT TO_CHAR(JDATE, 'YYYYMM') as 월별,
+ NVL(COUNT(*),0) as count
+ FROM ALL_MEMBER 
+ WHERE JDATE >='20210101' and JDATE  <![CDATA[ <= ]]>  to_char(SYSDATE+1,'YYYYMMDD')
+ GROUP BY to_char(JDATE, 'YYYYMM')
    </select>
 <!-- 회원탈퇴 -->
    <update id="MemDel" parameterType="bit.com.a.dto.MemberDto">
@@ -22,7 +22,7 @@
  <!-- 연령대별 회원 -->  
    <select id="TotalAge" resultType="bit.com.a.dto.MemberAge">
    SELECT BDATE 
-     , NVL(COUNT(*), 0) cnt
+     , NVL(COUNT(*), 0) as cnt
   FROM (SELECT CASE WHEN               age <![CDATA[ < ]]> 20 THEN 'map1'
                     WHEN age >= 20 AND age <![CDATA[ < ]]> 30 THEN 'map2'
                     WHEN age >= 30 AND age <![CDATA[ < ]]> 40 THEN 'map3'

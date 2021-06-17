@@ -762,7 +762,62 @@ CREATE SEQUENCE EXPERT_SEQ
 START WITH 1
 INCREMENT BY 1;
 
+UPDATE EXPERT_USERS
+SET REGISNAME='더큐디자인'
+WHERE REGISNAME='더큐디자인스튜디오'
+
+
+
+----
+  select TO_CHAR(jdate, 'YYYYMM') as month,
+ count(*) as count ,id
+ from all_member 
+ where jdate >='20210101' and jdate <=  to_char(sysdate + 1,'YYYYMMDD')
+ GROUP BY to_char(jdate, 'YYYYMM'), id
 ----------------------------------------------
+
+  SELECT BDATE 
+     , NVL(COUNT(*), 0) as cnt
+  FROM (SELECT CASE WHEN               age  < 20 THEN 'map1'
+                    WHEN age >= 20 AND age  < 30 THEN 'map2'
+                    WHEN age >= 30 AND age < 40 THEN 'map3'
+                    WHEN age >= 40 AND age  <  50 THEN 'map4'
+                    WHEN age >= 50 AND age  <  60 THEN 'map5'
+                    WHEN age >= 60              THEN 'map6'
+                END BDATE
+          FROM (SELECT TRUNC((TO_CHAR(SYSDATE, 'YYYY') - SUBSTR(BDATE,1,4))) age
+                  FROM ALL_MEMBER
+                )
+        )
+ GROUP BY BDATE
+ ORDER BY BDATE
+ 
+ 
+    
+SELECT BDATE
+     , COUNT(*) cnt
+  FROM (SELECT CASE WHEN               age < 20 THEN '20세미만'
+                    WHEN age >= 20 AND age < 30 THEN '20세이상 ~ 30세미만'
+                    WHEN age >= 30 AND age < 40 THEN '30세이상 ~ 40세미만'
+                    WHEN age >= 40 AND age < 50 THEN '40세이상 ~ 50세미만'
+                    WHEN age >= 50 AND age < 60 THEN '50세이상 ~ 60세미만'
+                    WHEN age >= 60              THEN '60세이상'
+                END BDATE
+          FROM (SELECT TRUNC((TO_CHAR(SYSDATE, 'YYYY') - SUBSTR(BDATE,1,4))) age
+                  FROM ALL_MEMBER
+                )
+        ) 
+ GROUP BY BDATE
+ ORDER BY BDATE
+ 
+ 
+ DELETE FROM ALL_MEMBER
+ WHERE ID='eyJhbGciOi'
+ 
+ UPDATE ALL_MEMBER
+ SET BDATE='0'
+ WHERE ID='tGDTlX_Dg-';
+ --------------------------------------------
 --채팅 테이블
 
 --채팅테이블 드랍

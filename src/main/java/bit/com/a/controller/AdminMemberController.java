@@ -1,7 +1,6 @@
 package bit.com.a.controller;
 
-import java.util.HashMap;
-import java.util.Iterator;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +55,7 @@ public class AdminMemberController {
 	
 	@RequestMapping(value="/TotalAgeChart", method = RequestMethod.POST )
 	public List<MemberAge> TotalAgeChart(){
-		
+		System.out.println("TotalAgeChart");
 		List<MemberAge> TotalAge = service.TotalAge();
 		
 		for (MemberAge memberAge : TotalAge) {
