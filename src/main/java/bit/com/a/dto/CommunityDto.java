@@ -1,7 +1,5 @@
 package bit.com.a.dto;
 
-import java.util.Date;
-
 public class CommunityDto {
 	
 	private int cmNum;
@@ -11,7 +9,7 @@ public class CommunityDto {
 	private String newfilename;
 	private String title;
 	private String content;
-	private Date wdate;
+	private String wdate;
 	private int readCount;
 	private int cmLike;
 	private int commuDel;
@@ -24,7 +22,7 @@ public class CommunityDto {
 
 	
 	public CommunityDto(int cmNum, String id, String image1, String image2, String newfilename, String title,
-			String content, Date wdate, int readCount, int cmLike, int commuDel) {
+			String content, String wdate, int readCount, int cmLike, int commuDel) {
 		super();
 		this.cmNum = cmNum;
 		this.id = id;
@@ -146,13 +144,13 @@ public class CommunityDto {
 
 
 
-	public Date getWdate() {
+	public String getWdate() {
 		return wdate;
 	}
 
 
 
-	public void setWdate(Date wdate) {
+	public void setWdate(String wdate) {
 		this.wdate = wdate;
 	}
 
