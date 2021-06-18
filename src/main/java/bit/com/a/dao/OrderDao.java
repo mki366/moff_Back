@@ -26,6 +26,9 @@ public interface OrderDao {
 	public List<PurchasesDto> obRefund(String id);
 	public int exCNT(String id);
 	public int refundCNT(String id);
+	public int exCheck(int odNum);
+	public int refundCheck(int odNum);
+	
 	
 	public int updatePoint(MemberDto dto);
 	public int setOrder(OrderBuyDto dto);

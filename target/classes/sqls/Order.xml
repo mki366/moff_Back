@@ -89,6 +89,22 @@
 </select>
 
 
+<!-- 교환여부 -->
+<select id="exCheck" parameterType="java.lang.Integer" 
+					resultType="java.lang.Integer">
+	SELECT NVL(OBEXCHANGE,0)
+	FROM ORDER_DETAIL
+	WHERE ODNUM=#{odNum}
+</select>
+
+<!-- 환불여부 -->
+<select id="refundCheck" parameterType="java.lang.Integer" 
+					resultType="java.lang.Integer">
+	SELECT NVL(OBTAKEBACK,0)
+	FROM ORDER_DETAIL
+	WHERE ODNUM=#{odNum}
+</select>
+
 <!-- 배송조회 -->
 <select id="trackDelivery" parameterType="java.lang.Integer" 
 					resultType="bit.com.a.dto.PurchasesDto">

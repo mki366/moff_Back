@@ -7,32 +7,32 @@
   
 <select id="getPrice" parameterType="java.lang.Integer" 
 					resultType="java.lang.Integer">
-	SELECT ORIPRICE
+	SELECT NVL(PRICE,ORIPRICE) AS PRICE
 	FROM PRODUCT
 	WHERE PRODNUM=#{prodNum}
 </select>
   
 <insert id="addChairCart" parameterType="bit.com.a.dto.WishCartDto">
 	INSERT INTO CART(CNUM, ID, PRODNUM, PRODNAME, QUANTITY, COLOR, CARTORWISH)
-	VALUES(CNUMSEQ.NEXTVAL, #{id}, '없음', #{prodNum}, 1, '없음', 1)
+	VALUES(CNUMSEQ.NEXTVAL, #{id}, #{prodNum}, '없음', 1, '없음', 1)
 </insert>
 
 <insert id="addChairWish" parameterType="bit.com.a.dto.WishCartDto">
 	INSERT INTO CART(CNUM, ID, PRODNUM, PRODNAME, QUANTITY,COLOR, CARTORWISH)
-	VALUES(CNUMSEQ.NEXTVAL, #{id}, '없음', #{prodNum}, 1, '없음', 0)
+	VALUES(CNUMSEQ.NEXTVAL, #{id}, #{prodNum}, '없음', 1, '없음', 0)
 </insert>
 
 <select id="getCustomProduct" parameterType="java.lang.Integer" 
 					resultType="bit.com.a.dto.ProductDto">
-	SELECT PRODNAME, COLOR, ORIPRICE, FILENAME
+	SELECT PRODNAME, COLOR, NVL(PRICE,ORIPRICE) AS PRICE, FILENAME
 	FROM PRODUCT 
 	WHERE PRODNUM=#{prodNum}
 </select>
 
 <select id="getBedList" parameterType="java.lang.String" 
 					resultType="bit.com.a.dto.ProductDto">
-	SELECT PRODNUM, PRODNAME, COLOR, ORIPRICE, INFO, FILENAME
-	FROM PRODUCT 
+	SELECT PRODNUM, PRODNAME, COLOR, NVL(PRICE,ORIPRICE) AS PRICE, INFO, FILENAME
+	FROM PRODUCT
 	WHERE SUBCATEGORY=#{type}
 </select>
 

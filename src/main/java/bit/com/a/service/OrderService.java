@@ -44,6 +44,15 @@ public class OrderService {
 	public int refundCNT(String id){
 		return dao.refundCNT(id);
 	}
+	
+	public int exCheck(int odNum){
+		return dao.exCheck(odNum);
+	}
+	
+	public int refundCheck(int odNum){
+		return dao.refundCheck(odNum);
+	}
+	
 	public PurchasesDto getCheckout(int obNum) {
 		return dao.getCheckout(obNum);
 	}

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import bit.com.a.dto.ProductDto;
+import bit.com.a.dto.PurchasesDto;
 import bit.com.a.dto.WishCartDto;
 import bit.com.a.service.CustomService;
 
@@ -67,8 +68,11 @@ public class CustomController {
 	@RequestMapping(value = "/getBedList", method = RequestMethod.POST)
 	public List<ProductDto> getBedList(String type){
 		System.out.println("CustomController getBedList()");
-
+		System.out.println(type);
 		List<ProductDto> list = service.getBedList(type);
+		for (ProductDto purchasesDto : list) {
+			System.out.println(purchasesDto.toString());
+		}
 		return list;
 	}
 	

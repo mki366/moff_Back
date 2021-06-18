@@ -85,6 +85,18 @@ public class OrderController {
 		return service.exCNT(id) + service.refundCNT(id);
 	}
 	
+	@RequestMapping(value = "/exCheck", method = RequestMethod.POST)
+	public int exCheck(int odNum) {
+		System.out.println("OrderController exCheck()");
+		return service.exCheck(odNum);
+	}
+	
+	@RequestMapping(value = "/refundCheck", method = RequestMethod.POST)
+	public int refundCheck(int odNum) {
+		System.out.println("OrderController refundCheck()");
+		return service.refundCheck(odNum);
+	}
+	
 	@RequestMapping(value = "/getStatusList", method = RequestMethod.POST)
 	public List<PurchasesDto> getStatusList(PurchasesDto dto) {
 		System.out.println("OrderController getStatusList()");
