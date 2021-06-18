@@ -1,6 +1,5 @@
 package bit.com.a.dto;
 
-import java.util.Date;
 
 public class ProductDto {
 

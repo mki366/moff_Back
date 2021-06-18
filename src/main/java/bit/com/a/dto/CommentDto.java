@@ -1,13 +1,12 @@
 package bit.com.a.dto;
 
-import java.util.Date;
 
 public class CommentDto {
 
 	private int ctNum;
 	private int cmNum;
 	private String id;
-	private Date wdate;
+	private String wdate;
 	private String content;
 	private int ref;
 	private int step;
@@ -17,7 +16,7 @@ public class CommentDto {
 		// TODO Auto-generated constructor stub
 	}
 
-	public CommentDto(int ctNum, int cmNum, String id, Date wdate, String content, int ref, int step, int depth) {
+	public CommentDto(int ctNum, int cmNum, String id, String wdate, String content, int ref, int step, int depth) {
 		super();
 		this.ctNum = ctNum;
 		this.cmNum = cmNum;
@@ -60,11 +59,11 @@ public class CommentDto {
 		this.id = id;
 	}
 
-	public Date getWdate() {
+	public String getWdate() {
 		return wdate;
 	}
 
-	public void setWdate(Date wdate) {
+	public void setWdate(String wdate) {
 		this.wdate = wdate;
 	}
 

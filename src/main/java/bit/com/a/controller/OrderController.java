@@ -181,7 +181,7 @@ public class OrderController {
 		
 		//가져온 정보를 다시 세팅
 		dto.setProdName(rdto.getProdName());
-		
+		System.out.println("망할"+rdto.getPrice());
 		dto.setPrice(rdto.getPrice());
 		dto.setColor(rdto.getColor());
 		dto.setFilename(rdto.getFilename());
