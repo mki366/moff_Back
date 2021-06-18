@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import bit.com.a.dao.ExpertUsersDao;
+import bit.com.a.dto.ConsultingExpert;
 import bit.com.a.dto.ExpertPagingParam;
 import bit.com.a.dto.ExpertUsersDto;
 import bit.com.a.dto.MemberDto;
@@ -52,4 +53,10 @@ public class ExperUsersService {
 			return dao.ExpertMyDetail(id);
 		}
 		
+		
+
+		//업체 간편상담신청
+		public boolean consulting(ConsultingExpert dto) {
+			return dao.consulting(dto)>0?true:false;
+		}
 }

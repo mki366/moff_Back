@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import bit.com.a.dto.ConsultingExpert;
 import bit.com.a.dto.ExpertPagingParam;
 import bit.com.a.dto.ExpertUsersDto;
 import bit.com.a.dto.MemberDto;
@@ -32,4 +33,6 @@ public interface ExpertUsersDao {
 	//업체 디테일 나의 업체
 	public ExpertUsersDto ExpertMyDetail(String id);
 	
+	//업체 간편상담신청
+	public int consulting(ConsultingExpert dto);
 }

@@ -320,4 +320,10 @@
   </select>
   
   
+  <insert id="consulting" parameterType="bit.com.a.dto.ConsultingExpert">
+  INSERT INTO CONSULTINGT(CONNUM, ID, PHONE, MESS, CONDATE)
+  VALUES(CONSEQ.NEXTVAL, #{id}, #{phone},#{mess},SYSDATE)
+  
+  </insert>
+  
   </mapper>

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import bit.com.a.dto.BuybackDto;
+import bit.com.a.dto.ConsultingExpert;
 import bit.com.a.dto.ExpertPagingParam;
 import bit.com.a.dto.ExpertUsersDto;
 import bit.com.a.dto.ExpertUsersParam;
@@ -267,4 +268,15 @@ public class ExpertUsersController {
 		
 		return Detail;
 	}
+	
+	
+	@RequestMapping(value = "/consultingExpert", method = RequestMethod.POST)
+	public boolean consulting(ConsultingExpert dto) {
+		System.out.println("consulting start");
+		
+		boolean result = ExperService.consulting(dto);
+		
+		return result;
+	}
+	
 }
