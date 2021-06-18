@@ -304,11 +304,13 @@ public class AdminProductController {
 	}
 	
 	// 상품삭제
-	@RequestMapping(value = "/delProduct", method = {RequestMethod.GET, RequestMethod.POST})
-	public String delProduct(int prodNum) {
+	@RequestMapping(value = "/delAdminColor", method = {RequestMethod.GET, RequestMethod.POST})
+	public String delAdminColor(int prodNum) {
 		System.out.println("delProduct() Controller");
 		
-		if(service.delProduct(prodNum)== true) {
+		if(service.delAdminColor(prodNum)== true) {
+			service.delAdminImg(prodNum);
+			service.delAdminProduct(prodNum);
 			return "YES";
 		}else {
 			return "NO";
