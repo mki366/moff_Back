@@ -30,7 +30,7 @@
 	 		 #{phone},
 	 		  #{bdate},
 	 		   SYSDATE,
-	 		   2)
+	 		   3)
 </insert>
   
   <insert id="addExperUsers" parameterType="bit.com.a.dto.ExpertUsersDto">

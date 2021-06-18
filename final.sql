@@ -21,7 +21,7 @@ CREATE TABLE ALL_MEMBER
     JDATE        DATE            NULL,        --회원가입일
     MEMDEL       NUMBER          DEFAULT 0 NULL,        --회원탈퇴유무
     MEMPOINT     NUMBER          DEFAULT 0 NULL,        --포인트 칼럼생성
-    MEMBERTYPE   NUMBER          NULL,        -- 0 번은 회원, 1번은 배달원, 2번은 관리자
+    MEMBERTYPE   NUMBER          NULL,        -- 0 번은 회원, 1번은 배달원, 2번은 관리자, 3번은 시공업체
     DELIVERYADMI     NUMBER          NULL,   --배달원일시승인여부 칼럼생성
     LICENSE      VARCHAR2(400)        NULL,        --운전면허증사진
     BANK         VARCHAR2(400)        NULL,        --통장사본사진
@@ -29,8 +29,8 @@ CREATE TABLE ALL_MEMBER
     CONSTRAINT MEMBER_PK PRIMARY KEY (ID)
 );
 
-UPDATE ALL_MEMBER SET MEMDEL = 0
-WHERE MEMDEL IS NULL
+UPDATE ALL_MEMBER SET MEMBERTYPE = 3
+WHERE MEMBERTYPE = 2
 
    SELECT *
    FROM ALL_MEMBER
@@ -45,6 +45,7 @@ START WITH 1
 INCREMENT BY 1;
 
 INSERT INTO ALL_MEMBER(
+<<<<<<< HEAD
    MEMNUM, ID, PWD, NAME, NICKNAME,
     EMAIL, ADDRESS, PHONE,BDATE, JDATE,
      MEMBERTYPE, LICENSE, BANK, CARNUM)
@@ -56,6 +57,19 @@ INSERT INTO ALL_MEMBER(
      
      --연령대
    SELECT BDATE
+=======
+	MEMNUM, ID, PWD, NAME, NICKNAME,
+	 EMAIL, ADDRESS, PHONE,BDATE, JDATE,
+	  MEMBERTYPE, LICENSE, BANK, CARNUM)
+	  
+	VALUES(MEMNUMSEQ.NEXTVAL, 'admin', 'admin', '관리자', '아녕하세요',
+	 'sdkskjdn@naver.com','강원도 원주','01028883498', '1987/5/22', SYSDATE,
+	  2, '운전면허증사진','통장사본사진', '차량신고증사진')
+
+	  
+	  --연령대
+	SELECT BDATE
+>>>>>>> 8b783b32efc04d326f6f6d2c42ae45f107e46b4b
      , NVL(COUNT(*),0) cnt
   FROM (SELECT CASE WHEN               age < 20 THEN '20세미만'
                     WHEN age >= 20 AND age < 30 THEN '20세이상 ~ 30세미만'
