@@ -73,7 +73,14 @@ public interface AdminProductDao {
 	// 재고 수량 추가
 	int stockUpdate(ProductDto product);
 	
+	// 상품삭제
+	int delAdminProduct(int prodNum);
 	
+	// 컬러삭제
+	int delAdminColor(int prodNum);
+	
+	// 이미지삭제
+	int delAdminImg(int prodNum);
 	
 	////////// 다솜 ////////////////
 	// 조회수순 상품리스트

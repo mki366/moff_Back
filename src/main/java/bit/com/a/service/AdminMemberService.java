@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import bit.com.a.dao.AdminMemberDao;
+import bit.com.a.dto.AgeBuyRank;
 import bit.com.a.dto.MemberAge;
 import bit.com.a.dto.MemberDto;
 import bit.com.a.dto.MonthlyMember;
@@ -33,4 +34,11 @@ public class AdminMemberService {
 		public List<MemberAge> TotalAge(){
 			return dao.TotalAge();
 		}
+		
+		
+		//연령별 상품 구매수
+		public List<AgeBuyRank> AgeBuyRank(){
+			return dao.AgeBuyRank();
+		}
+
 }
