@@ -153,6 +153,24 @@ public class AdminProductService {
 		
 	}
 	
+	public boolean delAdminProduct(int prodNum) {
+		int count =  dao.delAdminProduct(prodNum);
+		
+		return count>0?true:false;
+	}
+	
+	public boolean delAdminColor(int prodNum) {
+		int count =  dao.delAdminColor(prodNum);
+		
+		return count>0?true:false;
+	}
+	
+	public boolean delAdminImg(int prodNum) {
+		int count =  dao.delAdminImg(prodNum);
+		
+		return count>0?true:false;
+	}
+	
 }
 
 

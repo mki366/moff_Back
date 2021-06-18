@@ -102,7 +102,7 @@
 	      , DELIVERYCOST
 	      , FILENAME
 	  FROM PRODUCT
-	     WHERE 1=1 AND CATEGORY NOT IN('주문제작') AND SUBCATEGORY NOT IN('chair','bed','desk','storage')
+	     WHERE 1=1 AND CATEGORY NOT IN('주문제작') AND SUBCATEGORY NOT IN('chair','bed','desk','storage', '책상', '의자')
 	      <if test="choice != null and choice != ''
 	      		and search != null and search != ''">
 	      		<if test="choice == 'prodName'">
@@ -125,7 +125,7 @@
  	<select id="adminProductCount" parameterType="bit.com.a.dto.ProductDto" resultType="java.lang.Integer">
 		SELECT NVL(COUNT(*),0)
 		FROM PRODUCT
-		WHERE 1=1 AND CATEGORY NOT IN('주문제작') AND SUBCATEGORY NOT IN('chair','bed','desk','storage')
+		WHERE 1=1 AND CATEGORY NOT IN('주문제작') AND SUBCATEGORY NOT IN('chair','bed','desk','storage', '책상', '의자')
 		<if test="choice != null and choice != ''
 	      		and search != null and search != ''">
 	      		<if test="choice == 'prodName'">
@@ -220,6 +220,24 @@
       						, #{info},
       						 #{imgFilename})
 	</insert>
+ 
+ 	<!-- 삭제 -->
+ 	<delete id="delAdminProduct" parameterType="java.lang.Integer">
+ 		DELETE FROM PRODUCT
+ 		WHERE PRODNUM=#{prodNum}
+ 	</delete>
+ 	
+ 		<delete id="delAdminImg" parameterType="java.lang.Integer">
+ 		DELETE FROM PRODUCT_IMG
+ 		WHERE PRODNUM=#{prodNum}
+ 	</delete>
+ 	
+ 		<delete id="delAdminColor" parameterType="java.lang.Integer">
+ 		DELETE FROM COLOR
+ 		WHERE PRODNUM=#{prodNum}
+ 	</delete>
+ 
+ 
  
  	<!-- 수정에서 디테일불러오기 -->
 	<select id="getAdminProduct" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ProductDto">

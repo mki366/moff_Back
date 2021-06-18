@@ -244,7 +244,7 @@
           , CMLIKE
     
           
-      FROM    (SELECT ROW_NUMBER()OVER(ORDER BY CMNUM DESC) AS SEQ
+      FROM    (SELECT ROW_NUMBER()OVER(ORDER BY CMLIKE DESC) AS SEQ
                   , CMNUM
                   , ID
                   , IMAGE1
@@ -257,7 +257,7 @@
                
             FROM COMMU
             WHERE COMMUDEL=0)
-      WHERE CMLIKE BETWEEN 1 AND 2
+      WHERE SEQ BETWEEN 1 AND 2
    </select>
    
 
