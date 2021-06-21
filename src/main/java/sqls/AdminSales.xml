@@ -6,48 +6,114 @@
 <mapper namespace="bit.com.a.dao.AdminSalesDao">
 
 <select id="dailySales" resultType="java.lang.Integer">
-	SELECT SUM(PRICE)
+	SELECT NVL(SUM(PRICE),0)
 	FROM(SELECT PRICE FROM ORDER_BUY
 	WHERE SUBSTR(OBDATE,1,8)=SUBSTR(SYSDATE,1,10))
 </select>
 
 <select id="monthlySales" resultType="java.lang.Integer">
-	SELECT SUM(PRICE)
+	SELECT NVL(SUM(PRICE),0)
 	FROM(SELECT PRICE FROM ORDER_BUY
 	WHERE SUBSTR(OBDATE,1,5)=SUBSTR(SYSDATE,1,5))
 </select>
 
+
 <select id="annualSales" resultType="java.lang.Integer">
-	SELECT SUM(PRICE)
+	SELECT NVL(SUM(PRICE),0)
 	FROM(SELECT PRICE FROM ORDER_BUY
 	WHERE SUBSTR(OBDATE,1,2)=SUBSTR(SYSDATE,1,2))
 </select>
 
+
 <select id="totalSales" resultType="java.lang.Integer">
-	SELECT SUM(PRICE)
+	SELECT NVL(SUM(PRICE),0)
 	FROM ORDER_BUY
 </select>
 
 
 <select id="selDailySales" parameterType="java.lang.String" resultType="bit.com.a.dto.PurchasesDto">
-	SELECT SUM(PRICE) AS PRICE, OBDATE
+	SELECT NVL(SUM(PRICE),0) AS PRICE, OBDATE
 	FROM ORDER_BUY
 	GROUP BY OBDATE
 	HAVING SUBSTR(OBDATE,1,5)=#{yearmonth}
 </select>
+
 
 <select id="selMonthlySales" parameterType="java.lang.String" resultType="bit.com.a.dto.PurchasesDto">
 	SELECT SUM(PRICE) AS PRICE, SUBSTR(OBDATE,1,5) AS OBDATE
 	FROM ORDER_BUY
 	WHERE SUBSTR(OBDATE,1,2)=#{year}
 	GROUP BY SUBSTR(OBDATE,1,5)
+	ORDER BY OBDATE 
 </select>
 
+
 <select id="selAnnualSales" parameterType="java.lang.String" resultType="bit.com.a.dto.PurchasesDto">
-	SELECT SUM(PRICE) AS PRICE, SUBSTR(OBDATE,1,2) AS OBDATE
+	SELECT NVL(SUM(PRICE),0) AS PRICE, SUBSTR(OBDATE,1,2) AS OBDATE
 	FROM ORDER_BUY
 	GROUP BY SUBSTR(OBDATE,1,2)
 </select>
+
+
+<select id="salesReport" parameterType="java.lang.String" resultType="bit.com.a.dto.AdminDto">
+	SELECT PRESM, NVL(PRESSALES,0) AS PRESSALES,
+			NVL(LAG(PRESSALES) OVER(ORDER BY PRESM),0) AS PREVSALES,
+			NVL(PRESSALES-(LAG(PRESSALES) OVER(ORDER BY PRESM)),0) AS VARIATION
+	FROM (	
+			SELECT  TO_CHAR(TO_DATE(OBDATE,'YYYY/MM/DD'),'YYMM') PRESM, NVL(SUM(PRICE),0) PRESSALES 
+			FROM ORDER_BUY
+			WHERE OBDATE IS NOT NULL
+			 <![CDATA[
+				AND OBDATE > ADD_MONTHS(TO_DATE(#{yearmonth}, 'YYMM'),-1)
+				AND OBDATE < ADD_MONTHS(TO_DATE(#{yearmonth}, 'YYMM'),1)
+			 ]]>
+			GROUP BY TO_CHAR(TO_DATE(OBDATE,'YYYY/MM/DD'),'YYMM')
+			ORDER BY TO_CHAR(TO_DATE(OBDATE,'YYYY/MM/DD'),'YYMM') DESC
+		)
+		 
+	ORDER BY PRESM DESC
+</select>
+
+
+<!-- <select id="annualSalesChart" parameterType="java.lang.String" resultType="bit.com.a.dto.PurchasesDto">
+	SELECT NVL(SUM(PRICE),0) AS PRICE, SUBSTR(OBDATE, 1,5) AS OBDATE
+	FROM ORDER_BUY
+	WHERE SUBSTR(OBDATE,1,2)=#{year}
+	GROUP BY SUBSTR(OBDATE,1,5)
+	ORDER BY SUBSTR(OBDATE,1,5) ASC
+</select>
+ -->
+<select id="weeklyPie" resultType="bit.com.a.dto.PurchasesDto">
+	SELECT COUNT(OBNUM) AS OBNUM, TO_CHAR(OBDATE,'day') AS OBDATE
+	FROM ORDER_BUY
+	GROUP BY TO_CHAR(OBDATE,'day')
+</select>
+
+<select id="monthlyVarChart" resultType="bit.com.a.dto.AdminDto">
+	WITH MONTHSUM AS (
+	    SELECT SUM(PRICE) AS TOTSALES, SUBSTR(OBDATE,1,5) AS PRESM
+		FROM ORDER_BUY
+		GROUP BY SUBSTR(OBDATE,1,5)
+		ORDER BY PRESM 
+	)
+	SELECT  PRESM, TOTSALES, NVL(LAG(TOTSALES, 1,'0') OVER(ORDER BY PRESM),0) AS PREVSALES, 
+			TOTSALES -  NVL(LAG(TOTSALES, 1,'0') OVER(ORDER BY PRESM),0) AS VARIATION,
+	 		ROUND(NVL(100 * (TOTSALES -  NVL(LAG(TOTSALES, 1,'0') OVER(ORDER BY PRESM), 0)) / 
+	        	  LAG(TOTSALES,1) OVER (ORDER BY PRESM),0),2) AS GROWTH
+	FROM MONTHSUM
+</select>
+
+
+<select id="annualAccumChart" parameterType="java.lang.String" resultType="bit.com.a.dto.AdminDto">
+	SELECT OBMONTH, TOTSALES , SUM(TOTSALES) OVER(ORDER BY OBMONTH ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS ACCUM
+	FROM (
+			SELECT NVL(SUM(PRICE),0) AS TOTSALES , SUBSTR(OBDATE, 1,5) AS OBMONTH
+			FROM ORDER_BUY
+			WHERE SUBSTR(OBDATE,1,2)=#{year}
+			GROUP BY SUBSTR(OBDATE,1,5)
+		)
+</select>
+
 
 
 <!--주문 건수 (오늘/ 이번달/ 이번년도/ 총)  -->

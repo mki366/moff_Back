@@ -104,6 +104,13 @@ public class AdminSalesController {
       return list;
    }
    
+   @RequestMapping(value = "/weeklyPie", method = RequestMethod.POST)
+   public List<PurchasesDto> weeklyPie() {
+      System.out.println("AdminSalesController weeklyPie()"); 
+      List<PurchasesDto> list = service.weeklyPie();
+      return list;
+   }
+   
    //주문 건 수 - 오늘 
    @RequestMapping(value = "/CountDailySales", method = RequestMethod.GET)
    public int CountDailySales() {

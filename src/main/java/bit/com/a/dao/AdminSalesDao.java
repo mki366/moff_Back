@@ -34,6 +34,7 @@ public interface AdminSalesDao {
 	public List<PurchasesDto> annualSalesChart(String year);
 	public List<AdminDto> annualAccumChart(String year);
 	public List<AdminDto> monthlyVarChart();
+	public List<PurchasesDto> weeklyPie();
 	
 	//주문 건 수 - 오늘 
 	public int CountDailySales();

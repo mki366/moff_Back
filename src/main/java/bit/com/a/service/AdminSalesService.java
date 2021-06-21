@@ -63,6 +63,10 @@ public class AdminSalesService {
 		return dao.monthlyVarChart();
 	}
 	
+	public List<PurchasesDto> weeklyPie(){
+		return dao.weeklyPie();
+		
+	}
 	//주문 건 수 - 오늘 
 	public int CountDailySales() {
 		return dao.CountDailySales();
