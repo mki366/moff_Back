@@ -188,7 +188,7 @@
 <select id="orderDetailTB" parameterType="bit.com.a.dto.OrderBuyDto" resultType="java.lang.Integer">	
 	SELECT COUNT(*)
 	FROM ORDER_DETAIL 
-	WHERE OBNUM=( 	SELECT OBNUM
+	WHERE OBNUM IN ( 	SELECT OBNUM
 					FROM ORDER_BUY 
 					WHERE SUBSTR(OBDATE,1,5)= SUBSTR(#{obDate},1,5)
 				) AND OBTAKEBACK=1
@@ -198,7 +198,7 @@
 <select id="orderDetailEX" parameterType="bit.com.a.dto.OrderBuyDto" resultType="java.lang.Integer">
 	SELECT COUNT(*)
 	FROM ORDER_DETAIL 
-	WHERE OBNUM=( 	SELECT OBNUM
+	WHERE OBNUM IN ( 	SELECT OBNUM
 					FROM ORDER_BUY 
 					WHERE SUBSTR(OBDATE,1,5)= SUBSTR(#{obDate},1,5)
 				) AND OBEXCHANGE=1

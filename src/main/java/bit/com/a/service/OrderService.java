@@ -102,7 +102,7 @@ public class OrderService {
 	 * System.out.println("OriPrice의  가져오기 "+rdto.toString()); return rdto; }
 	 */
 	public int setOrderDetail(OrderDetailDto dto){
-		System.out.println("service-setOrderDetail: "+dto.getFilename());
+		System.out.println("service-setOrderDetail: "+dto.getProdOption());
 
 		int len = dao.setOrderDetail(dto);
 		System.out.println(dto.getOdNum());

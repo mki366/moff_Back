@@ -176,7 +176,7 @@ public class OrderController {
 	@RequestMapping(value = "/setOrderDetail", method = RequestMethod.GET)
 	public int setOrderDetail(OrderDetailDto dto) {
 		System.out.println("HelloController setOrderDetail() " + new Date());
-		System.out.println(dto.toString());
+		//System.out.println(dto.toString());
 		//prodNum을 가져옴
 		OrderDetailDto rdto= service.getProdInfo(dto);
 		/*
@@ -189,16 +189,17 @@ public class OrderController {
 		}else {
 			System.out.println("수량 줄이기 실패");
 		}
-		System.out.println("getProdInfo결과 : "+ rdto.getProdName());
+		System.out.println("getProdInfo결과 : "+rdto.getProdOption());
 		
 		//가져온 정보를 다시 세팅
+		dto.setProdOption(rdto.getProdOption());
 		dto.setProdName(rdto.getProdName());
-		System.out.println("망할"+rdto.getPrice());
+		System.out.println("dd"+rdto.getPrice());
 		dto.setPrice(rdto.getPrice());
 		dto.setColor(rdto.getColor());
 		dto.setFilename(rdto.getFilename());
 		dto.setWeight(rdto.getWeight());
-		
+		System.out.println(dto.toString());
 		//orderdetail 넣어주기
 		int b = service.setOrderDetail(dto);
 		System.out.println(b);

@@ -183,7 +183,7 @@ public class AdminSalesController {
 		//반품 갯수
 		@RequestMapping(value = "/orderDetailTB", method = RequestMethod.GET)
 		public int orderDetailTB(OrderBuyDto dto) {
-			System.out.println("AdminSalesController orderDetailTB()");
+			System.out.println("AdminSalesController orderDetailTB()"+dto.getObDate());
 			return service.orderDetailTB(dto);
 		}
 		//교환 갯수

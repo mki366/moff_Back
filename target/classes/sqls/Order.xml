@@ -136,7 +136,7 @@
 </delete>
 
 <select id="getProdInfo" parameterType="bit.com.a.dto.OrderDetailDto" resultType="bit.com.a.dto.OrderDetailDto">
-	SELECT PRODNAME,QUANTITY,NVL(PRICE,ORIPRICE) AS PRICE,COLOR,FILENAME,WEIGHT
+	SELECT PRODNAME,QUANTITY,NVL(PRICE,ORIPRICE) AS PRICE,COLOR,FILENAME,WEIGHT,PRODOPTION
 	FROM PRODUCT
 	WHERE PRODNUM=#{prodNum}
 </select>
@@ -149,7 +149,7 @@
 
 <insert id="setOrderDetail" parameterType="bit.com.a.dto.OrderDetailDto">
 	INSERT INTO ORDER_DETAIL(ODNUM, OBNUM, PRODNUM, PRODNAME, QUANTITY , PRICE,COLOR, PRODOPTION, FILENAME, WEIGHT)
-	VALUES(ODNUM_SEQ.NEXTVAL, #{obNum}, #{prodNum}, #{prodName}, #{quantity}, #{price},#{color},'',#{filename}, #{weight} )
+	VALUES(ODNUM_SEQ.NEXTVAL, #{obNum}, #{prodNum}, #{prodName}, #{quantity}, #{price},#{color},#{prodOption},#{filename}, #{weight} )
 	<selectKey keyProperty="odNum" resultType="int" order="AFTER">
 		SELECT ODNUM_SEQ.CURRVAL  FROM DUAL
 	</selectKey>
