@@ -3,26 +3,26 @@ package bit.com.a.dto;
 
 public class ProductDto {
 
-	 private int prodNum;      // 상품분류
+	 private int prodNum;      // �긽�뭹遺꾨쪟
 	   
-	   private String category;      // 상품분류
-	   private String subCategory;      // 상품세분류
+	   private String category;      // �긽�뭹遺꾨쪟
+	   private String subCategory;      // �긽�뭹�꽭遺꾨쪟
 	   
-	   private String prodName;      // 상품이름
-	   private String color;         // 상품색상
-	   private String prodOption;      // 상품옵션
+	   private String prodName;      // �긽�뭹�씠由�
+	   private String color;         // �긽�뭹�깋�긽
+	   private String prodOption;      // �긽�뭹�샃�뀡
 	   private String info;
 	   
-	   private int weight;            // 상품무게
-	   private int oriPrice;         // 상품정가
+	   private int weight;            // �긽�뭹臾닿쾶
+	   private int oriPrice;         // �긽�뭹�젙媛�
 	   
-	   private int price;            // 상품판매가격
-	   private int quantity;         // 상품재고(수량)
-	   private String rdate;            // 상품등록일
+	   private int price;            // �긽�뭹�뙋留ㅺ�寃�
+	   private int quantity;         // �긽�뭹�옱怨�(�닔�웾)
+	   private String rdate;            // �긽�뭹�벑濡앹씪
 	   
-	   private int deliveryCost;      // 배송비
+	   private int deliveryCost;      // 諛곗넚鍮�
 	   private String filename;
-	   private int readCount;      // 조회수 
+	   private int readCount;      // 議고쉶�닔 
 	   
 	   private String choice;
 	   private String search;
@@ -38,26 +38,27 @@ public class ProductDto {
 	public ProductDto() {
 	}
 	
-	//subcategory만    
+	//subcategory留�    
 	   public ProductDto(String subCategory) {
 	      super();
 	      this.subCategory = subCategory;
 	   }
 
-	   //prodNum만 
+	   //prodNum留� 
 	   public ProductDto(int prodNum) {
 	      super();
 	      this.prodNum = prodNum;
 	   }
 	
 	
-	   public ProductDto(String category, String subCategory, String prodName, String color, String info, int weight,
+	   public ProductDto(String category, String subCategory, String prodName, String color, String prodOption, String info, int weight,
 				int oriPrice, int price, int quantity, int deliveryCost, String filename) {
 			super();
 			this.category = category;
 			this.subCategory = subCategory;
 			this.prodName = prodName;
 			this.color = color;
+			this.prodOption = prodOption;
 			this.info = info;
 			this.weight = weight;
 			this.oriPrice = oriPrice;

@@ -11,7 +11,7 @@ public class ReviewDto {
 	private int star;
 	private String content;
 	private String image;
-	private Date rdate;
+	private String rdate;
 	
 	private int page;
 	private int start;
@@ -25,7 +25,7 @@ public class ReviewDto {
 
 	
 
-	public ReviewDto(int rnum, String id, int prodNum, int star, String content, String image, Date rdate, int page,
+	public ReviewDto(int rnum, String id, int prodNum, int star, String content, String image, String rdate, int page,
 			int start, int end, String rating) {
 		super();
 		this.rnum = rnum;
@@ -99,11 +99,11 @@ public class ReviewDto {
 		this.image = image;
 	}
 
-	public Date getRdate() {
+	public String getRdate() {
 		return rdate;
 	}
 
-	public void setRdate(Date rdate) {
+	public void setRdate(String rdate) {
 		this.rdate = rdate;
 	}
 
