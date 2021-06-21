@@ -18,14 +18,14 @@
 	<select id="getReviewCount" parameterType="bit.com.a.dto.ReviewDto" resultType="java.lang.Integer">
 		SELECT NVL(COUNT(*),0)
 		FROM REVIEW
-		WHERE PRODNUM=#{prodNum}
+		WHERE DEL=0 AND PRODNUM=#{prodNum} 
 	</select>
 	
 	<!-- 디테일에서 평균평점 -->
 	<select id="detailStarAvg" parameterType="bit.com.a.dto.ReviewDto" resultType="java.lang.Double">
 		SELECT ROUND(AVG(STAR),1)
 		FROM REVIEW
-		WHERE PRODNUM=#{prodNum}
+		WHERE DEL=0 AND PRODNUM=#{prodNum}
 	</select>
 	
 	<!-- 리뷰작성 -->
@@ -78,7 +78,7 @@
 	<select id="avgReview" parameterType="java.lang.Integer" resultType="bit.com.a.dto.ReviewDto">
 		SELECT STAR, NVL(COUNT(STAR), 0), ROUND(RATIO_TO_REPORT(COUNT(*)) OVER(),2)*100 || '%' AS RATING
 		FROM REVIEW
-		WHERE PRODNUM=#{prodNum}
+		WHERE DEL=0 AND PRODNUM=#{prodNum}
 		GROUP BY STAR
 	</select>
 	

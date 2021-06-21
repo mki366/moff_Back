@@ -47,25 +47,26 @@ public class AdminProductController {
 		
 		String uploadPath = req.getServletContext().getRealPath("/adminProduct");
 		
-		String filename = fileload1.getOriginalFilename();					// 대표 이미지
+		String filename = fileload1.getOriginalFilename();					// ���몴 �씠誘몄�
 		String filepath1 = uploadPath + File.separator + filename;
 			
-		String imgFilename = fileload2.getOriginalFilename();				// 상세 이미지
+		String imgFilename = fileload2.getOriginalFilename();				// �긽�꽭 �씠誘몄�
 		String filepath2 = uploadPath + File.separator + imgFilename;
 		
-		String colorFilename = fileload3.getOriginalFilename();				// 컬러 이미지
+		String colorFilename = fileload3.getOriginalFilename();				// 而щ윭 �씠誘몄�
 		String filepath3 = uploadPath + File.separator + colorFilename;	
 		
-		System.out.println("------파일업로드 경로------");
+		System.out.println("------�뙆�씪�뾽濡쒕뱶 寃쎈줈------");
 		System.out.println("filepath1" + filepath1);
 		System.out.println("filepath2" + filepath2);
 		System.out.println("filepath3" + filepath3);
 		
-		// product table 입력
+		// product table �엯�젰
 		String category = product.getCategory();
 		String subCategory	= product.getSubCategory();
 		String prodName = product.getProdName();
 		String color = product.getColor();
+		String prodOption = product.getProdOption();
 		String info = product.getInfo();
 		int weight = product.getWeight();
 		int oriPrice = product.getOriPrice();
@@ -73,7 +74,7 @@ public class AdminProductController {
 		int quantity = product.getQuantity();
 		int deliveryCost = product.getDeliveryCost();
 		
-		ProductDto productDto =new ProductDto(category, subCategory, prodName, color, info, weight, oriPrice, price, quantity, deliveryCost, filename);
+		ProductDto productDto =new ProductDto(category, subCategory, prodName, color, prodOption, info, weight, oriPrice, price, quantity, deliveryCost, filename);
 		boolean a = service.productRegi(productDto);
 		System.out.println("--------!!!!!!!!!" + productDto);
 		
@@ -85,7 +86,7 @@ public class AdminProductController {
 		}
 		
 		
-		// color table 입력
+		// color table �엯�젰
 		int prodNum = productDto.getProdNum();
 		colorDto.setProdNum(prodNum);
 		colorDto.setColor(color2);
@@ -99,7 +100,7 @@ public class AdminProductController {
 			System.out.println("colorDto err");
 		}
 		
-		// productImg table 입력
+		// productImg table �엯�젰
 		img.setProdNum(prodNum);
 		img.setInfo(imgInfo);
 		img.setImgFilename(imgFilename);
@@ -137,13 +138,13 @@ public class AdminProductController {
 	}
 	
 	
-	// 상품리스트
+	// �긽�뭹由ъ뒪�듃
 	@RequestMapping(value = "/adminProductList", method = {RequestMethod.GET, RequestMethod.POST})
 	public List<ProductDto> adminProductList(ProductDto product){
 		System.out.println("adminProductList() Controller");
 		
 		int sn = product.getPage();
-		System.out.println("페이지확인: " + sn);
+		System.out.println("�럹�씠吏��솗�씤: " + sn);
 		
 		int start = sn * 10 + 1;
 		int end = (sn + 1) *10;
@@ -159,7 +160,7 @@ public class AdminProductController {
 		return list;
 	}
 		
-	// 총수 adminProductCount
+	// 珥앹닔 adminProductCount
 	@RequestMapping(value = "/adminProductCount", method = {RequestMethod.GET, RequestMethod.POST})
 	public int adminProductCount(ProductDto product) {
 		int count = service.adminProductCount(product);
@@ -170,11 +171,11 @@ public class AdminProductController {
 			pagenum = pagenum +1;
 		}
 		
-		System.out.println(" 리스트 페이지 갯수 확인: " + pagenum);
+		System.out.println(" 由ъ뒪�듃 �럹�씠吏� 媛��닔 �솗�씤: " + pagenum);
 		return pagenum;
 	}
 		
-	// 디테일 "adminProductDetail"
+	// �뵒�뀒�씪 "adminProductDetail"
 	@RequestMapping(value = "/adminProductDetail", method = {RequestMethod.GET, RequestMethod.POST})
 	public ProductDto adminProductDetail(int prodNum) {
 		System.out.println("adminProductDetail() Controller");
@@ -184,7 +185,7 @@ public class AdminProductController {
 		return dto;
 	}
 		
-	// 디테일 이미지 adminImgDetail
+	// �뵒�뀒�씪 �씠誘몄� adminImgDetail
 	@RequestMapping(value = "/adminImgDetail", method = {RequestMethod.GET, RequestMethod.POST})
 	public List<ProductImgDto> adminImgDetail(int prodNum){
 		System.out.println("adminImgDetail() Controller");
@@ -195,7 +196,7 @@ public class AdminProductController {
 		return list;
 	}
 		
-	// 디테일 컬러 adminColorDetail
+	// �뵒�뀒�씪 而щ윭 adminColorDetail
 	@RequestMapping(value = "/adminColorDetail", method = {RequestMethod.GET, RequestMethod.POST})
 	public List<ColorDto> adminColorDetail(int prodNum){
 		System.out.println("adminColorDetail() Controller");
@@ -206,7 +207,7 @@ public class AdminProductController {
 	}
 	
 
-	// 이미지추가 addImage
+	// �씠誘몄�異붽� addImage
 	@RequestMapping(value = "/addProduct", method = RequestMethod.POST)
 	public String addProduct(@ModelAttribute ColorDto colorDto, ProductImgDto img, 
 							@RequestParam("fileload2")
@@ -219,17 +220,17 @@ public class AdminProductController {
 		
 		String uploadPath = req.getServletContext().getRealPath("/adminProduct");
 			
-		String imgFilename = fileload2.getOriginalFilename();				// 상세 이미지
+		String imgFilename = fileload2.getOriginalFilename();				// �긽�꽭 �씠誘몄�
 		String filepath2 = uploadPath + File.separator + imgFilename;
 		
-		String colorFilename = fileload3.getOriginalFilename();				// 컬러 이미지
+		String colorFilename = fileload3.getOriginalFilename();				// 而щ윭 �씠誘몄�
 		String filepath3 = uploadPath + File.separator + colorFilename;	
 		
-		System.out.println("------파일업로드 경로------");
+		System.out.println("------�뙆�씪�뾽濡쒕뱶 寃쎈줈------");
 		System.out.println("filepath2" + filepath2);
 		System.out.println("filepath3" + filepath3);
 		
-		// color table 입력
+		// color table �엯�젰
 		int prodNum = colorDto.getProdNum();
 		String color = colorDto.getColor();
 		
@@ -240,7 +241,7 @@ public class AdminProductController {
 			System.out.println("colorDto err");
 		}
 		
-		// productImg table 입력
+		// productImg table �엯�젰
 		img.setProdNum(prodNum);
 		String info = img.getInfo();
 		
@@ -272,7 +273,7 @@ public class AdminProductController {
 		
 	}
 
-	// 수정에서 디테일불러오기 getAdminProduct
+	// �닔�젙�뿉�꽌 �뵒�뀒�씪遺덈윭�삤湲� getAdminProduct
 	@RequestMapping(value = "/getAdminProduct", method = {RequestMethod.GET, RequestMethod.POST})
 	public ProductDto getAdminProduct(int prodNum) {
 		System.out.println("getAdminProduct() Controller");
@@ -282,7 +283,7 @@ public class AdminProductController {
 		return dto;
 	}
 	
- 	// 수정에서 이미지 불러오기 getAdminImgae
+ 	// �닔�젙�뿉�꽌 �씠誘몄� 遺덈윭�삤湲� getAdminImgae
 	@RequestMapping(value = "/getAdminImgae", method = {RequestMethod.GET, RequestMethod.POST})
 	public List<ProductImgDto> getAdminImgae(int prodNum){
 		System.out.println("getAdminImgae() Controller");
@@ -293,7 +294,7 @@ public class AdminProductController {
 		return list;
 	}
 	
- 	// 수정에서 컬러 getAdminColor
+ 	// �닔�젙�뿉�꽌 而щ윭 getAdminColor
 	@RequestMapping(value = "/getAdminColor", method = {RequestMethod.GET, RequestMethod.POST})
 	public List<ColorDto> getAdminColor(ColorDto colorDto){
 		System.out.println("getAdminColor() Controller");
@@ -303,7 +304,7 @@ public class AdminProductController {
 		return list;
 	}
 	
-	// 상품삭제
+	// �긽�뭹�궘�젣
 	@RequestMapping(value = "/delAdminColor", method = {RequestMethod.GET, RequestMethod.POST})
 	public String delAdminColor(int prodNum) {
 		System.out.println("delProduct() Controller");
@@ -318,13 +319,13 @@ public class AdminProductController {
 	}
 	
 	
-	// 재고 리스트
+	// �옱怨� 由ъ뒪�듃
 	@RequestMapping(value = "/stockList", method = {RequestMethod.GET, RequestMethod.POST})
 	public List<ProductDto> stockList(ProductDto product){
 		System.out.println("stockList() Controller");
 		
 		int sn = product.getPage();
-		System.out.println("stockList 페이지확인: " + sn);
+		System.out.println("stockList �럹�씠吏��솗�씤: " + sn);
 		
 		int start = sn * 10 + 1;
 		int end = (sn + 1) *10;
@@ -339,7 +340,7 @@ public class AdminProductController {
 		return list;
 	}
 	
-	// 총수 adminProductCount
+	// 珥앹닔 adminProductCount
 	@RequestMapping(value = "/stockListCount", method = {RequestMethod.GET, RequestMethod.POST})
 	public int stockListCount(ProductDto product) {
 		int count = service.stockListCount(product);
@@ -350,12 +351,12 @@ public class AdminProductController {
 			pagenum = pagenum +1;
 		}
 		
-		System.out.println("stockList 리스트 페이지 갯수 확인: " + pagenum);
+		System.out.println("stockList 由ъ뒪�듃 �럹�씠吏� 媛��닔 �솗�씤: " + pagenum);
 		return pagenum;
 	}
 		
 	
-	// 재고 수량 변경
+	// �옱怨� �닔�웾 蹂�寃�
 	@RequestMapping(value = "/stockUpdate", method = {RequestMethod.GET, RequestMethod.POST})
 	public String stockUpdate(ProductDto product) {
 		System.out.println("stockUpdate() Controller");
@@ -368,9 +369,9 @@ public class AdminProductController {
 		}
 	}
 	
-	// 다솜//////////////////////////////
+	// �떎�넑//////////////////////////////
 	
-	// 메인 상품 리스트 (조회수순 )
+	// 硫붿씤 �긽�뭹 由ъ뒪�듃 (議고쉶�닔�닚 )
 	   @RequestMapping(value = "/mainRcList", method = {RequestMethod.GET, RequestMethod.POST})
 	   public List<ProductDto> mainRcList(ProductDto product){
 	      System.out.println("mainRcList() " + new Date());

@@ -44,7 +44,7 @@ FROM (
       , ROUND(AVG(NVL(R.STAR, 0)), 1) AS STAR
   FROM PRODUCT P 
       LEFT OUTER JOIN REVIEW R ON P.PRODNUM = R.PRODNUM
-      WHERE 1=1 AND P.CATEGORY NOT IN('주문제작') AND P.SUBCATEGORY NOT IN('chair','bed','desk','storage', '책상', '의자')
+      WHERE 1=1 AND P.CATEGORY NOT IN('주문제작') AND P.SUBCATEGORY NOT IN('chair','bed','desk','storage', '책상', '의자', '책장')
              <if test="search != null and search != ''">
                 <!-- AND DEL=0 -->      
                     AND P.PRODNAME LIKE '%'||#{search}||'%' 
@@ -58,7 +58,7 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
    <select id="getProductCount" parameterType="bit.com.a.dto.ProductDto" resultType="java.lang.Integer">
       SELECT NVL(COUNT(*),0)
       FROM PRODUCT P
-      WHERE 1=1 AND P.CATEGORY NOT IN('주문제작') AND P.SUBCATEGORY NOT IN('chair','bed','desk','storage', '책상', '의자')
+      WHERE 1=1 AND P.CATEGORY NOT IN('주문제작') AND P.SUBCATEGORY NOT IN('chair','bed','desk','storage', '책상', '의자', '책장')
        <if test="search != null and search != ''">
              <!-- AND DEL=0 -->      
                  AND PRODNAME LIKE '%'||#{search}||'%'        
@@ -112,7 +112,7 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
       , ROUND(AVG(NVL(R.STAR, 0)), 1) AS STAR
   FROM PRODUCT P 
       LEFT OUTER JOIN REVIEW R ON P.PRODNUM = R.PRODNUM
-  WHERE 1=1 AND P.CATEGORY NOT IN('주문제작') AND P.SUBCATEGORY NOT IN('chair','bed','desk','storage', '책상', '의자')
+  WHERE 1=1 AND P.CATEGORY NOT IN('주문제작') AND P.SUBCATEGORY NOT IN('chair','bed','desk','storage', '책상', '의자', '책장')
       <if test="color != null and color != ''">
          AND COLOR=#{color}
       </if>
@@ -319,14 +319,22 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
    
    <!-- 메인 리스트(새로운순)  -->
    <select id="mainProductList" parameterType="bit.com.a.dto.ProductDto" resultType="bit.com.a.dto.ProductDto">
-      SELECT PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME, COLOR, PRODOPTION,
+      <!-- SELECT PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME, COLOR, PRODOPTION,
             INFO, WEIGHT, ORIPRICE, PRICE, QUANTITY, RDATE, DELIVERYCOST, FILENAME, READCOUNT
       FROM PRODUCT
       WHERE 1=1 AND CATEGORY NOT IN('주문제작') AND SUBCATEGORY NOT IN('chair','bed','desk','storage', '책상', '의자')
       <![CDATA[
           AND ROWNUM <= 8
        ]]> 
-      ORDER BY PRODNUM DESC
+      ORDER BY PRODNUM DESC -->
+      
+        SELECT PRODNUM, PRODNAME, ORIPRICE, PRICE, QUANTITY,  FILENAME
+        FROM ( SELECT ROW_NUMBER()OVER(ORDER BY PRODNUM DESC) AS SEQ, PRODNUM, PRODNAME, ORIPRICE, PRICE, QUANTITY, FILENAME
+        		FROM PRODUCT
+        		WHERE 1=1 AND CATEGORY NOT IN('주문제작') AND SUBCATEGORY NOT IN('chair','bed','desk','storage', '책상', '의자', '책장')
+        		ORDER BY PRODNUM DESC)
+        WHERE SEQ BETWEEN 1 AND 8
+      
    </select>
    
    <!-- 메인 리스트(리뷰순)  -->
@@ -336,7 +344,7 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
       FROM( SELECT ROW_NUMBER() OVER(ORDER BY READCOUNT DESC) AS RK , PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME, COLOR, PRODOPTION,
             INFO, WEIGHT, ORIPRICE, PRICE, QUANTITY, RDATE, DELIVERYCOST, FILENAME, READCOUNT
             FROM PRODUCT)
-      WHERE 1=1 AND CATEGORY NOT IN('주문제작') AND SUBCATEGORY NOT IN('chair','bed','desk','storage', '책상', '의자')
+      WHERE 1=1 AND CATEGORY NOT IN('주문제작') AND SUBCATEGORY NOT IN('chair','bed','desk','storage', '책상', '의자', '책장')
       <![CDATA[
       AND RK <=8
        ]]> 
@@ -345,7 +353,7 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
    
    <!-- 메인 리스트(베스트순)  -->
    <select id="mainBestList" parameterType="bit.com.a.dto.ProductDto" resultType="bit.com.a.dto.ProductDto">
-      SELECT CNT, p.PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME, 
+<!--       SELECT CNT, p.PRODNUM, CATEGORY, SUBCATEGORY, PRODNAME, 
                         COLOR, PRODOPTION, INFO, WEIGHT, ORIPRICE,PRICE, QUANTITY, RDATE, DELIVERYCOST, FILENAME, READCOUNT
       FROM (SELECT  PRODNUM, COUNT(*) CNT
                FROM ORDER_DETAIL
@@ -356,7 +364,19 @@ GROUP BY P.PRODNUM, P.CATEGORY, P.SUBCATEGORY, P.PRODNAME, P.COLOR, P.PRODOPTION
             AND a.PRODNUM = p.PRODNUM 
             AND CNT <=8
              ]]> 
-         ORDER BY CNT DESC
+         ORDER BY CNT DESC -->
+         
+         SELECT    PRODNUM, PRODNAME, ODCOUNT, ORIPRICE, PRICE, FILENAME
+     	 FROM( SELECT P.ORIPRICE, P.PRICE, P.PRODNUM, P.PRODNAME, P.FILENAME, NVL( COUNT(O.PRODNUM),0 )AS ODCOUNT
+           FROM ORDER_DETAIL o 
+           LEFT OUTER JOIN PRODUCT P ON P.PRODNUM = O.PRODNUM
+           WHERE 1=1 AND CATEGORY NOT IN('주문제작') AND SUBCATEGORY NOT IN('chair','bed','desk','storage', '책상', '의자', '책장')
+           GROUP BY P.PRODNUM, P.PRODNAME, P.ORIPRICE, P.PRICE, P.FILENAME
+           ORDER BY ODCOUNT DESC)
+             <![CDATA[
+            WHERE ROWNUM <=8
+             ]]> 
+         
    </select>
    
    
